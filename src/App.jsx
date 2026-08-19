@@ -94,7 +94,7 @@ export default function App() {
       </nav>
 
       {/* ... (Keep Hero Section and Main Page Content identical) ... */}
-      <section id="home" className="relative w-full h-screen overflow-hidden">
+     <section id="home" className="relative w-full h-[100svh] lg:h-screen overflow-hidden">
         <div className="absolute inset-0 z-0 pointer-events-auto">
           <CanvasErrorBoundary>
             <Scene season={season} />

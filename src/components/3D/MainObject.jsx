@@ -76,16 +76,19 @@ export default function MainObject() {
   }), []);
 
   useEffect(() => {
-    const isMobile = window.innerWidth < 1024;
+    // SURGICAL FIX: Unify mobile detection using Three.js viewport
+    const isMobile = viewport.width < 5;
+    
+    // SURGICAL FIX: Dynamically position the Y-axis based on exact screen height
     const startX = isMobile ? 0 : 10; 
-    const basePosY = isMobile ? -3.8 : 0; // MOBILE FIX: Pushed down further
+    const targetScale = isMobile ? 0.38 : 1; 
+    const basePosY = isMobile ? -(viewport.height / 2) + 1.25 : 0; 
     
     groupRef.current.position.set(startX, basePosY, 0);
     groupRef.current.rotation.y = Math.PI * 0.1;
 
     const handleIntroComplete = () => {
       const targetX = isMobile ? 0 : 3.5;
-      const targetScale = isMobile ? 0.45 : 1; // MOBILE FIX: Scaled smaller to fit
       
       const tl = gsap.timeline({ onComplete: () => setIsInteractive(true) });
       tl.to(glassMaterial, { opacity: 0.9, duration: 1.5, ease: "power2.inOut" }, 0)
@@ -100,14 +103,16 @@ export default function MainObject() {
 
     window.addEventListener('introComplete', handleIntroComplete);
     return () => window.removeEventListener('introComplete', handleIntroComplete);
-  }, [glassMaterial]);
+  }, [glassMaterial, viewport.width, viewport.height]);
 
   useFrame((state, delta) => {
     if (!groupRef.current || !isInteractive) return;
 
     const isMobile = viewport.width < 5;
     const basePosX = isMobile ? 0 : 3.5;
-    const basePosY = isMobile ? -3.8 : 0; // MOBILE FIX: Track updated position
+    
+    // SURGICAL FIX: Maintain dynamic positioning during render loop
+    const basePosY = isMobile ? -(viewport.height / 2) + 1.25 : 0; 
 
     const time = clock.elapsedTime;
     const idleRotX = Math.sin(time * 0.5) * 0.05;

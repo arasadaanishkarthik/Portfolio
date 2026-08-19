@@ -101,17 +101,15 @@ export default function HeroContent({ season, setSeason }) {
   ];
 
   return (
-    <div className="relative w-full h-full max-w-7xl mx-auto px-8">
-      {/* Editorial Metadata Elements */}
-      <div ref={metaTopRef} className="absolute top-24 md:top-32 left-8 text-[10px] font-mono tracking-[0.2em] text-zinc-400">
+    <div className="relative w-full h-full max-w-7xl mx-auto px-6 md:px-8">
+      <div ref={metaTopRef} className="absolute top-24 md:top-32 left-6 md:left-8 text-[10px] font-mono tracking-[0.2em] text-zinc-400">
         01 / INTRODUCTION
       </div>
       <div ref={metaRightRef} className="hidden lg:block absolute right-8 top-1/2 -translate-y-1/2 rotate-90 text-[9px] font-mono tracking-[0.3em] text-zinc-400 whitespace-nowrap origin-right">
         FULL-STACK / CREATIVE / DIGITAL — 01-04
       </div>
       
-      {/* Scroll Indicator */}
-      <div ref={scrollRef} onMouseEnter={onEnter('scroll')} onMouseLeave={onLeave} className="absolute bottom-12 left-8 flex items-center gap-4 cursor-none pointer-events-auto">
+      <div ref={scrollRef} onMouseEnter={onEnter('scroll')} onMouseLeave={onLeave} className="hidden md:flex absolute bottom-12 left-8 items-center gap-4 cursor-none pointer-events-auto">
         <span className="text-[10px] font-mono tracking-[0.2em] text-zinc-400 uppercase">
           Scroll to explore
         </span>
@@ -120,8 +118,7 @@ export default function HeroContent({ season, setSeason }) {
         </div>
       </div>
       
-      {/* Upgraded Season Selector */}
-      <div ref={seasonSelectorRef} className="absolute bottom-12 right-8 flex flex-col items-end pointer-events-auto group/season">
+      <div ref={seasonSelectorRef} className="absolute top-24 md:top-auto md:bottom-12 right-6 md:right-8 flex flex-col items-end pointer-events-auto group/season z-50">
         <div className={`flex flex-col gap-1 overflow-hidden transition-all duration-300 ${seasonMenuOpen ? 'h-[90px] opacity-100 mb-2' : 'h-0 opacity-0 mb-0'}`}>
           {seasons.map((s) => (
             <button 
@@ -136,7 +133,6 @@ export default function HeroContent({ season, setSeason }) {
           ))}
         </div>
         
-        {/* Dynamic Premium Button Styling */}
         <button 
           onClick={() => setSeasonMenuOpen(!seasonMenuOpen)}
           onMouseEnter={onEnter('button')} onMouseLeave={onLeave}
@@ -153,12 +149,14 @@ export default function HeroContent({ season, setSeason }) {
         </button>
       </div>
 
-      <div className="w-full h-full flex flex-col justify-start lg:justify-center lg:grid lg:grid-cols-12 gap-8 items-start lg:items-center pt-36 lg:pt-12">
+      {/* SURGICAL FIX: Reduced mobile top padding (pt-32 instead of pt-36) and adjusted gaps */}
+      <div className="w-full h-full flex flex-col justify-start lg:justify-center lg:grid lg:grid-cols-12 gap-4 lg:gap-8 items-start lg:items-center pt-32 md:pt-40 lg:pt-12">
         <div ref={containerRef} className="col-span-12 lg:col-span-7 flex flex-col items-start pointer-events-auto z-10">
           
-          <div ref={helloRef} className="text-sm font-mono tracking-widest text-indigo-600 mb-4 uppercase">Hello, I'm</div>
+          <div ref={helloRef} className="text-xs md:text-sm font-mono tracking-widest text-indigo-600 mb-3 md:mb-4 uppercase">Hello, I'm</div>
           
-          <h1 className="flex flex-wrap gap-x-4 md:gap-x-6 text-6xl md:text-8xl lg:text-[7.5rem] font-bold tracking-tighter leading-[0.85] text-zinc-900 mb-4 overflow-visible">
+          {/* SURGICAL FIX: Slightly scaled down mobile H1 to ensure clean wrapping */}
+          <h1 className="flex flex-wrap gap-x-3 md:gap-x-6 text-5xl md:text-7xl lg:text-[7.5rem] font-bold tracking-tighter leading-[0.85] text-zinc-900 mb-3 md:mb-4 overflow-visible">
             {nameWords.map((word, wIdx) => (
               <span key={wIdx} className="flex">
                 {word.split('').map((char, cIdx) => {
@@ -173,15 +171,15 @@ export default function HeroContent({ season, setSeason }) {
             ))}
           </h1>
           
-          <h2 ref={roleRef} className="text-xl md:text-2xl font-light tracking-wide text-zinc-800 mb-6 lg:mb-8 border-l-2 border-indigo-600 pl-4">
+          <h2 ref={roleRef} className="text-lg md:text-2xl font-light tracking-wide text-zinc-800 mb-4 lg:mb-8 border-l-2 border-indigo-600 pl-4">
             FULL-STACK DEVELOPER
           </h2>
           
-          <p ref={descRef} className="text-zinc-500 text-sm md:text-lg font-light leading-relaxed mb-8 lg:mb-10 max-w-md">
+          <p ref={descRef} className="text-zinc-500 text-sm md:text-lg font-light leading-relaxed mb-6 lg:mb-10 max-w-sm lg:max-w-md">
             Building sophisticated digital platforms, interactive experiences, and modern web applications with contemporary technologies.
           </p>
           
-          <div ref={buttonsRef} className="flex flex-wrap gap-4 items-center">
+          <div ref={buttonsRef} className="flex flex-wrap gap-3 md:gap-4 items-center">
             <MagneticButton className="group flex items-center gap-2 px-5 py-3 lg:px-6 lg:py-3.5 bg-zinc-900 text-white text-[10px] lg:text-xs font-mono tracking-widest rounded-md shadow-sm border border-zinc-900 transition-colors hover:bg-zinc-800">
               EXPLORE MY WORK
               <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
