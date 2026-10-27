@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head><title>Video Inspector</title>
+<style>
+body { font-family: monospace; background: #111; color: #0f0; padding: 20px; }
+video { max-width: 500px; display: block; margin: 20px 0; border: 2px solid #0f0; }
+#info { white-space: pre; font-size: 14px; line-height: 1.6; background: #000; padding: 16px; border: 1px solid #333; }
+button { background: #0f0; color: #000; border: none; padding: 8px 16px; margin: 4px; cursor: pointer; font-family: monospace; font-weight: bold; }
+button:hover { background: #0c0; }
+.controls { margin: 10px 0; }
+</style>
+</head>
+<body>
+<h2>New Hero Video Inspector</h2>
+<video id="v" controls src="/WhatsApp%20Video%202026-10-22%20at%2021.36.40.mp4"></video>
+<div class="controls">
+<button onclick="v.playbackRate=0.25">0.25x</button>
+<button onclick="v.playbackRate=0.5">0.5x</button>
+<button onclick="v.playbackRate=1">1x</button>
+<button onclick="v.currentTime=Math.max(0,v.currentTime-0.1)">-0.1s</button>
+<button onclick="v.currentTime+=0.1">+0.1s</button>
+</div>
+<div class="controls">
+<button onclick="v.currentTime=0">0.0s</button>
+<button onclick="v.currentTime=0.5">0.5s</button>
+<button onclick="v.currentTime=1.0">1.0s</button>
+<button onclick="v.currentTime=1.5">1.5s</button>
+<button onclick="v.currentTime=2.0">2.0s</button>
+<button onclick="v.currentTime=2.5">2.5s</button>
+<button onclick="v.currentTime=3.0">3.0s</button>
+<button onclick="v.currentTime=3.5">3.5s</button>
+<button onclick="v.currentTime=4.0">4.0s</button>
+<button onclick="v.currentTime=4.5">4.5s</button>
+<button onclick="v.currentTime=5.0">5.0s</button>
+<button onclick="v.currentTime=5.5">5.5s</button>
+<button onclick="v.currentTime=6.0">6.0s</button>
+<button onclick="v.currentTime=6.5">6.5s</button>
+<button onclick="v.currentTime=7.0">7.0s</button>
+<button onclick="v.currentTime=7.5">7.5s</button>
+</div>
+<div id="info">Loading video...</div>
+<script>
+const v = document.getElementById('v');
+const info = document.getElementById('info');
+function updateInfo() {
+    info.textContent = `Duration:     ${v.duration ? v.duration.toFixed(3) : 'loading...'}s
+Resolution:   ${v.videoWidth}x${v.videoHeight}
+Aspect Ratio: ${v.videoWidth && v.videoHeight ? (v.videoWidth/v.videoHeight).toFixed(3) : '?'}
+Current Time: ${v.currentTime.toFixed(3)}s
+Paused:       ${v.paused}
+Ready State:  ${v.readyState}`;
+}
+v.addEventListener('loadedmetadata', updateInfo);
+v.addEventListener('timeupdate', updateInfo);
+v.addEventListener('pause', updateInfo);
+v.addEventListener('seeked', updateInfo);
+v.addEventListener('error', () => { info.textContent = 'Error: ' + (v.error ? v.error.message : 'unknown'); });
+</script>
+</body>
+</html>
