@@ -13,7 +13,7 @@
   </script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link
-    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Allura&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&display=swap"
     rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
@@ -155,24 +155,27 @@
       z-index: 9999
     }
 
-    /* intro overlay: a vermilion thread tangles, then pulls taut under the name; split-panel exit */
-    #intro { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; color: #f4efe6; transition: visibility 0s linear 1.1s }
+    /* intro overlay: a signature draws itself, then the curtain opens into the portfolio */
+    #intro { position: fixed; inset: 0; z-index: 99999; display: grid; place-items: center; color: #f4efe6; background: #050505; transition: visibility 0s linear 1.1s }
     #intro.off { visibility: hidden; pointer-events: none }
     .in-p { position: absolute; left: 0; right: 0; height: 50.5%; background: #050505; transition: transform 1s cubic-bezier(.76, 0, .24, 1) }
     .in-t { top: 0 } .in-b { bottom: 0 }
     #intro.off .in-t { transform: translateY(-101%) }
     #intro.off .in-b { transform: translateY(101%) }
-    .in-c { position: relative; z-index: 2; text-align: center; padding: 0 1rem 2.6rem; transition: opacity .35s }
+    .in-c { position: relative; z-index: 2; width: min(100% - 2rem, 1400px); text-align: center; padding: 0 1rem; transition: opacity .35s }
     #intro.off .in-c { opacity: 0 }
-    .in-n { font: 400 clamp(2.6rem, 10.5vw, 8rem)/1 var(--gf); letter-spacing: .015em; text-transform: uppercase; color: #f4efe6 }
-    .in-w { display: block; overflow: hidden; padding: .05em 0 .07em }
-    .in-w span { display: inline-block; transform: translateY(115%); animation: inUp .9s cubic-bezier(.2, .8, .2, 1) forwards; animation-delay: calc(var(--i) * 45ms + 1.35s) }
-    .in-w:nth-child(2) span { animation-delay: calc(var(--i) * 45ms + 1.65s) }
-    @keyframes inUp { to { transform: none } }
-    .in-r { display: block; margin-top: .9rem; font: 600 .72rem var(--m); font-style: normal; letter-spacing: .4em; color: #ff4b2b; opacity: 0; animation: inFade .7s ease 2.5s forwards }
-    @keyframes inFade { to { opacity: 1 } }
+    .in-signature { display: block; width: 100%; height: auto; overflow: visible }
+    .in-signature text { font-family: 'Allura', cursive !important; font-size: clamp(7rem, 18vw, 15rem); font-weight: 400; letter-spacing: -.04em; fill: transparent; stroke: #ff4b2b; stroke-width: 1.55; paint-order: stroke; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1500; stroke-dashoffset: 1500; filter: drop-shadow(0 0 4px rgba(255, 75, 43, .48)); animation: signatureDraw 2.5s cubic-bezier(.65, 0, .35, 1) .2s forwards, signatureFill .8s ease 2.15s forwards }
+    @keyframes signatureDraw { to { stroke-dashoffset: 0 } }
+    @keyframes signatureFill { to { fill: #ff4b2b; fill-opacity: .14 } }
+    .in-r { display: none }
     .in-th { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 3 }
-    .in-th path { fill: none; stroke: #ff4b2b; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(255, 75, 43, .55)) }
+    .in-th path { fill: none; stroke: #ff4b2b; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(255, 75, 43, .55)); opacity: .9 }
+
+    @media(max-width:600px) {
+      .in-c { width: calc(100% - 1rem); padding-inline: 0 }
+      .in-signature text { font-size: clamp(4.8rem, 22vw, 8rem) }
+    }
 
     /* nav */
     nav {
@@ -727,6 +730,47 @@
       transform: translateY(-6px);
       border-top-color: var(--cy);
       box-shadow: 0 18px 40px var(--glow)
+    }
+
+
+    /* ===== ACHIEVEMENTS — FOCUS / PUSH-BACK CARDS ===== */
+    @media (hover: hover) and (pointer: fine) {
+      #ac {
+        perspective: 1200px;
+        perspective-origin: 50% 40%;
+      }
+
+      #ac .mc.rv {
+        position: relative;
+        transform-style: preserve-3d;
+        will-change: transform, filter, opacity;
+        transition:
+          opacity .7s,
+          transform .6s cubic-bezier(.22, 1, .36, 1),
+          filter .6s cubic-bezier(.22, 1, .36, 1),
+          box-shadow .6s ease,
+          border-top-color .4s ease;
+      }
+
+      /* hovered card: sharp, comes toward the viewer */
+      #ac.has-active .mc.is-active {
+        transform: translateZ(70px) scale(1.04);
+        filter: none;
+        opacity: 1;
+        z-index: 2;
+        border-top-color: var(--cy);
+        box-shadow: 0 24px 50px var(--glow);
+      }
+
+      /* every other card: pushed back, blurred, faded */
+      #ac.has-active .mc.rv.on:not(.is-active) {
+        transform: translateZ(-140px) scale(.94);
+        filter: blur(5px);
+        opacity: .5;
+        z-index: 1;
+        box-shadow: none;
+        pointer-events: auto;
+      }
     }
 
     /* ===== TECHNOLOGIES & TOOLS — 3D TILT-TO-FRONT CARDS ===== */
@@ -1494,6 +1538,14 @@
         opacity: 1
       }
 
+      #ac.has-active .mc,
+      #ac.has-active .mc.is-active,
+      #ac.has-active .mc.rv.on:not(.is-active) {
+        transform: none !important;
+        filter: none !important;
+        opacity: 1 !important;
+      }
+
       /* restore cards to flat / no tilt on reduced-motion */
       .arsenal-card,
       .arsenal-card:hover,
@@ -1863,7 +1915,13 @@
 
 <body>
   <div id="intro" aria-hidden="true"><div class="in-p in-t"></div><div class="in-p in-b"></div>
-    <div class="in-c"><h1 class="in-n"><span class="in-w"><span style="--i:0">A</span><span style="--i:1">R</span><span style="--i:2">A</span><span style="--i:3">S</span><span style="--i:4">A</span><span style="--i:5">D</span><span style="--i:6">A</span></span><span class="in-w"><span style="--i:0">A</span><span style="--i:1">N</span><span style="--i:2">I</span><span style="--i:3">S</span><span style="--i:4">H</span><span style="--i:5">&nbsp;</span><span style="--i:6">K</span><span style="--i:7">A</span><span style="--i:8">R</span><span style="--i:9">T</span><span style="--i:10">H</span><span style="--i:11">I</span><span style="--i:12">K</span></span></h1><i class="in-r">SOFTWARE DEVELOPER</i><svg class="in-th" aria-hidden="true"><path pathLength="1" d=""/></svg></div></div>
+    <div class="in-c">
+      <svg class="in-signature" viewBox="0 0 1200 300" role="img" aria-label="Anish Karthik">
+        <text x="50%" y="188" text-anchor="middle">Anish Karthik</text>
+      </svg>
+      <svg class="in-th" aria-hidden="true"><path pathLength="1" d=""/></svg>
+    </div>
+  </div>
   <div id="bar"></div>
   <nav>
     <div id="links"></div>
@@ -2303,6 +2361,19 @@
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target) } }), { threshold: .1, rootMargin: '0px 0px -40px 0px' });
     $$('.rv').forEach(el => io.observe(el));
 
+    /* ---------- achievements: hovered card comes forward, the rest recede ---------- */
+    (() => {
+      const box = $('#ac');
+      if (!box || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+      const cards = () => [...box.querySelectorAll('.mc')];
+      const set = el => { cards().forEach(c => c.classList.toggle('is-active', c === el)); box.classList.toggle('has-active', !!el) };
+      box.addEventListener('pointerover', e => { const c = e.target.closest('.mc'); if (c && box.contains(c)) set(c) });
+      box.addEventListener('pointerleave', () => set(null));
+      box.addEventListener('focusin', e => { const c = e.target.closest('.mc'); if (c) set(c) });
+      box.addEventListener('focusout', () => set(null));
+    })();
+
+
     /* ---------- GSAP MASTER ENTRANCE TIMELINE (from Code 2) ---------- */
     addEventListener('DOMContentLoaded', () => {
       const showAll = () => { $$('#hi,#n1,#n2,#role,#hd').forEach(e => { e.style.opacity = 1 }); $('#tw').textContent = '00 / INTRODUCTION'; $('#cur').style.display = 'none'; heroEntranceFinished = true };
@@ -2440,30 +2511,16 @@
     })();
   </script>
   <script>
-    /* ---------- intro thread: a vermilion thread draws itself as a tangle, untangles from one end,
-       pulls taut under the name and gets plucked. Runs ~3.3s, then the page takes over. ---------- */
+    /* ---------- intro flourish: a vermilion line settles beneath the signature. ---------- */
     (function () {
       const c = document.querySelector('#intro .in-c'), svg = c && c.querySelector('.in-th'), path = svg && svg.firstElementChild; if (!path) return;
-      const W = c.clientWidth, H = c.clientHeight, N = 150, cx = W / 2, cy = H * .42, R = Math.min(W, H * 2.2) * .2, lineY = H - 8;
+      const W = c.clientWidth, H = c.clientHeight, lineY = H * .52;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`); path.style.strokeDasharray = 1;
-      const A = [], B = [];
-      for (let i = 0; i <= N; i++) {
-        const u = i / N, a = u * Math.PI * 11 + .6, r = R * (.35 + .65 * Math.abs(Math.sin(u * Math.PI * 2.5 + .5)));
-        A.push([cx + r * 1.5 * Math.cos(a) + R * .9 * Math.sin(u * Math.PI * 3), cy + r * .75 * Math.sin(a * 1.15) + R * .25 * Math.cos(u * Math.PI * 5)]);
-        B.push([W * .04 + W * .92 * u, lineY]);
-      }
-      const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v)), ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      const T0 = performance.now(), intro = document.getElementById('intro');
+      const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v)), T0 = performance.now(), intro = document.getElementById('intro');
       function frame(now) {
-        const ms = now - T0, p = clamp((ms - 200) / 1100, 0, 1), m = clamp((ms - 1250) / 1300, 0, 1), tau = Math.max(0, (ms - 2550) / 1000);
-        const pl = tau > 0 ? 14 * Math.exp(-3.5 * tau) * Math.sin(16 * tau) : 0;
+        const ms = now - T0, p = clamp((ms - 1050) / 1500, 0, 1);
         path.style.strokeDashoffset = 1 - (1 - Math.pow(1 - p, 3));
-        let d = '';
-        for (let i = 0; i <= N; i++) {
-          const u = i / N, e = ease(clamp(m * 1.6 - u * .6, 0, 1)), a = A[i], b = B[i];     // untangles from the start of the thread
-          d += (i ? 'L' : 'M') + (a[0] + (b[0] - a[0]) * e).toFixed(1) + ' ' + (a[1] + (b[1] - a[1]) * e + pl * Math.sin(Math.PI * u)).toFixed(1);
-        }
-        path.setAttribute('d', d);
+        path.setAttribute('d', `M ${-W * .02} ${lineY} C ${W * .2} ${lineY - 7}, ${W * .35} ${lineY + 5}, ${W * .51} ${lineY} S ${W * .78} ${lineY - 3}, ${W * 1.02} ${lineY}`);
         if (ms < 3500 && !intro.classList.contains('off')) requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
