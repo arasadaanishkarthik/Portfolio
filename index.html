@@ -11,9 +11,11 @@
       document.documentElement.setAttribute('data-theme', t); document.documentElement.classList.add('js')
     })();
   </script>
+  <link rel="preload" href="fonts/BavariaGates.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/Gimolla.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link
-    href="https://fonts.googleapis.com/css2?family=Allura&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Allura&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@600;700;800&family=Cinzel:wght@500;600;700&family=Rye&display=swap"
     rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
@@ -50,10 +52,24 @@
       --sh: 0 12px 30px rgba(15, 23, 42, .08)
     }
 
+    /* ===== CUSTOM DISPLAY FONTS =====
+       Put the font files in a /fonts folder next to this page, named exactly:
+       Gimolla / Gastie / BavariaGates / CircusAce  (.woff2, .woff, .otf or .ttf).
+       Until they are there, similar-looking Google fonts are used as fallbacks. */
+    @font-face { font-family: 'Gimolla'; src: local('Gimolla'), url('fonts/Gimolla.woff2') format('woff2'), url('fonts/Gimolla.woff') format('woff'), url('fonts/Gimolla.ttf') format('truetype'), url('https://db.onlinewebfonts.com/t/fb6241f16393652486a2eeb5c1560b89.woff2') format('woff2'), url('https://db.onlinewebfonts.com/t/fb6241f16393652486a2eeb5c1560b89.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap }
+    @font-face { font-family: 'Gastie'; src: local('Gastie'), url('fonts/Gastie.woff2') format('woff2'), url('fonts/Gastie.woff') format('woff'), url('fonts/Gastie.otf') format('opentype'), url('fonts/Gastie.ttf') format('truetype'); font-display: swap }
+    @font-face { font-family: 'Bavaria Gates'; src: local('Bavaria Gates'), local('BavariaGates'), url('fonts/BavariaGates.woff2') format('woff2'), url('fonts/BavariaGates.woff') format('woff'), url('fonts/BavariaGates.ttf') format('truetype'), url('https://db.onlinewebfonts.com/t/c58913db7334fb0b6ba3e76cf6003f9f.woff2') format('woff2'), url('https://db.onlinewebfonts.com/t/c58913db7334fb0b6ba3e76cf6003f9f.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap }
+    @font-face { font-family: 'Circus Ace'; src: local('Circus Ace'), local('CircusAce'), url('fonts/CircusAce.woff2') format('woff2'), url('fonts/CircusAce.woff') format('woff'), url('fonts/CircusAce.otf') format('opentype'), url('fonts/CircusAce.ttf') format('truetype'); font-display: swap }
+
     :root {
       --f: 'Plus Jakarta Sans', sans-serif;
       --m: 'JetBrains Mono', monospace;
-      --gf: 'Anton', 'Impact', 'Arial Narrow', sans-serif
+      --gf: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+      /* swap any role to another font by changing one line here */
+      --f-name: 'Bavaria Gates', 'Cinzel', Georgia, serif;
+      --f-side: 'Gastie', 'Playfair Display', Georgia, serif;
+      --f-lux: 'Bavaria Gates', 'Cinzel', Georgia, serif;
+      --f-bold: 'Circus Ace', 'Rye', 'Anton', serif
     }
 
     * {
@@ -119,6 +135,11 @@
 
     section {
       padding: clamp(3.5rem, 8vw, 6.5rem) 0
+    }
+
+    /* keep section headings clear of the floating nav bar */
+    section:not(#home) {
+      padding-top: clamp(6.5rem, 9vw, 8.5rem)
     }
 
     .meta {
@@ -332,124 +353,65 @@
       text-transform: uppercase
     }
 
+    /* profile focus buttons: one shared design for all four (works in dark + light) */
     .pb {
-      position: relative;
-      overflow: hidden;
-      border: 1px solid var(--bd);
-      border-radius: 999px;
-      background: var(--gl);
-      color: var(--tx2);
-      padding: .55rem 1.1rem;
-      font: 600 .8rem var(--m);
-      transition: .35s;
+      --dot: var(--cy);
+      position: relative; overflow: hidden; display: inline-flex; align-items: center; gap: .6rem;
+      border: 1px solid color-mix(in srgb, var(--tx) 22%, transparent); border-radius: 999px;
+      background: color-mix(in srgb, var(--tx) 5%, var(--gl));
+      color: var(--tx); padding: .6rem 1.2rem; font: 600 .8rem var(--m); letter-spacing: .02em;
+      transition: transform .35s cubic-bezier(.22, 1, .36, 1), border-color .3s, background .3s, box-shadow .35s;
       z-index: 0
     }
 
-    .pb span {
-      position: relative;
-      z-index: 2;
-      transition: color .3s
+    .pb[data-p=react] { --dot: #06b6d4 }
+    .pb[data-p=node] { --dot: #10b981 }
+    .pb[data-p=javascript] { --dot: #eab308 }
+    .pb[data-p=fullstack] { --dot: #a855f7 }
+
+    .pb .pd {
+      position: relative; z-index: 2; width: 8px; height: 8px; border-radius: 50%; flex: none;
+      background: var(--dot); box-shadow: 0 0 8px color-mix(in srgb, var(--dot) 70%, transparent);
+      transition: transform .35s cubic-bezier(.22, 1, .36, 1)
     }
 
-    .pb .bg-layer,
-    .pb .dir-fill {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
-      z-index: 1
+    .pb span.pl { position: relative; z-index: 2 }
+
+    /* light sweeps across on hover */
+    .pb::after {
+      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--dot) 30%, transparent) 50%, transparent 70%);
+      transform: translateX(-120%); transition: transform .7s ease
     }
 
-    .pb .text-layer,
-    .pb .dir-text {
-      position: relative;
-      z-index: 2
-    }
-
-    .dual-slide-btn .bg-layer {
-      left: -100%;
-      right: auto;
-      width: 100%;
-      background: var(--cy)
-    }
-
-    .dir-btn .dir-fill {
-      background: linear-gradient(135deg, var(--a1), var(--cy));
-      transform: translate(0, 0)
+    /* colour bar that draws in under the selected button */
+    .pb::before {
+      content: ''; position: absolute; left: 14%; right: 14%; bottom: 0; height: 2px; z-index: 2;
+      background: var(--dot); border-radius: 2px; transform: scaleX(0); transition: transform .45s cubic-bezier(.22, 1, .36, 1)
     }
 
     .pb:hover {
-      border-color: var(--cy);
-      transform: translateY(-2px);
-      color: var(--tx)
+      transform: translateY(-3px); border-color: var(--dot);
+      box-shadow: 0 10px 24px color-mix(in srgb, var(--dot) 26%, transparent)
     }
+
+    .pb:hover::after { transform: translateX(120%) }
+    .pb:hover .pd { transform: scale(1.35) }
+    .pb:active { transform: translateY(-1px) scale(.97) }
+    .pb:focus-visible { outline: 2px solid var(--dot); outline-offset: 3px }
 
     .pb[aria-pressed=true] {
-      color: var(--tx);
-      border-color: var(--pa, var(--cy));
-      background: color-mix(in srgb, var(--pa, var(--cy)) 18%, transparent);
-      box-shadow: 0 0 18px color-mix(in srgb, var(--pa, var(--cy)) 25%, transparent)
+      border-color: var(--dot);
+      background: color-mix(in srgb, var(--dot) 18%, var(--gl));
+      box-shadow: 0 0 0 1px var(--dot), 0 8px 26px color-mix(in srgb, var(--dot) 30%, transparent)
     }
 
-    .pb svg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none
-    }
+    .pb[aria-pressed=true]::before { transform: scaleX(1) }
+    .pb[aria-pressed=true] .pd { animation: pdPulse 1.8s ease-in-out infinite }
+    .pb.pop { animation: pbPop .45s cubic-bezier(.22, 1, .36, 1) }
 
-    .pb svg rect {
-      width: 100%;
-      height: 100%;
-      fill: none;
-      stroke: var(--cy);
-      stroke-width: 2;
-      rx: 999px;
-      stroke-dasharray: 400;
-      stroke-dashoffset: 400;
-      transition: stroke-dashoffset .6s
-    }
-
-    .pb.react:hover svg rect {
-      stroke-dashoffset: 0
-    }
-
-    .pb.node::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--cy);
-      transform: translateY(100%);
-      transition: transform .4s;
-      z-index: 1
-    }
-
-    .pb.node:hover::before {
-      transform: none
-    }
-
-    .pb.node:hover span {
-      color: #000
-    }
-
-    .pb.js::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--a1), var(--cy));
-      clip-path: circle(0% at var(--x, 50%) var(--y, 50%));
-      transition: clip-path .5s;
-      z-index: 1
-    }
-
-    .pb.js:hover::before {
-      clip-path: circle(150% at var(--x, 50%) var(--y, 50%))
-    }
-
-    .pb.js:hover span {
-      color: #fff
-    }
+    @keyframes pdPulse { 50% { transform: scale(1.5); box-shadow: 0 0 14px var(--dot) } }
+    @keyframes pbPop { 0% { transform: scale(.94) } 55% { transform: scale(1.05) } 100% { transform: scale(1) } }
 
     .pt {
       position: absolute;
@@ -758,8 +720,8 @@
         filter: none;
         opacity: 1;
         z-index: 2;
-        border-top-color: var(--cy);
-        box-shadow: 0 24px 50px var(--glow);
+        border-top-color: var(--mc-top, var(--cy));
+        box-shadow: 0 24px 50px var(--mc-sh, var(--glow));
       }
 
       /* every other card: pushed back, blurred, faded */
@@ -851,6 +813,46 @@
         transform: translateY(-6px);
         box-shadow: 0 18px 40px var(--glow);
       }
+    }
+
+
+    /* ===== ARSENAL — FOLDED CARD THAT UNFOLDS INTO 4 CARDS ON SCROLL ===== */
+    #sk { position: relative; }
+    .ar-slot { display: flex; min-width: 0; }
+    .ar-slot > .arsenal-card { flex: 1; min-width: 0; }
+    #arFold, .ar-layer { display: none; }
+
+    @media (min-width: 1081px) {
+      html.ar-on #skills { min-height: 100vh; display: flex; align-items: center; overflow: hidden; }
+      html.ar-on #skills .wrap { width: min(100% - 2.5rem, 1200px); padding-top: 4.5rem; }
+      html.ar-on .ar-slot, html.ar-on #arFold, html.ar-on .ar-layer { will-change: transform, opacity; }
+      html.ar-on #arFold, html.ar-on .ar-layer {
+        display: flex; position: absolute; top: 7%; bottom: 7%; left: 50%;
+        width: clamp(300px, 29%, 380px); margin-left: calc(clamp(300px, 29%, 380px) / -2);
+        border-radius: 22px; border: 1px solid var(--bd); border-top: 2px solid var(--cy);
+        background: var(--gl); pointer-events: none;
+      }
+      html.ar-on .ar-layer { z-index: 3; box-shadow: 0 10px 40px rgba(0, 0, 0, .45); }
+      html.ar-on #arFold {
+        z-index: 5; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 2rem 1rem; overflow: hidden;
+        box-shadow: 0 0 70px var(--glow), var(--sh);
+      }
+      /* soft light that slowly drifts across the card (opacity/transform only = cheap) */
+      html.ar-on #arFold::after {
+        content: ''; position: absolute; top: -20%; bottom: -20%; left: -60%; width: 45%;
+        background: linear-gradient(100deg, transparent, rgba(34, 211, 238, .13), transparent);
+        transform: skewX(-18deg); animation: arSweep 4.2s ease-in-out 1.6s infinite;
+      }
+      @keyframes arSweep { 0% { left: -60% } 55%, 100% { left: 130% } }
+      #arFold .ar-tag { position: relative; font: 600 .72rem var(--m); color: var(--cy); letter-spacing: .22em; text-transform: uppercase; margin-bottom: 1.3rem; }
+      #arFold .ar-rule { position: relative; width: 46px; height: 2px; margin: 1.3rem 0 0; background: linear-gradient(90deg, var(--a1), var(--cy)); transform-origin: 50% 50%; }
+      #arFold .ar-line { position: relative; display: block; overflow: hidden; padding: .02em .06em .14em; margin-bottom: -.1em; font-weight: 800; font-size: clamp(1.75rem, 2.5vw, 2.35rem); line-height: 1.12; color: var(--tx, #fff); white-space: nowrap; letter-spacing: -.02em; }
+      #arFold .ar-ch { display: inline-block; will-change: transform, opacity; }
+      #arFold .ar-ch.amp { color: var(--cy); }
+      #arFold .ar-hint { position: relative; margin-top: 1.3rem; font: 500 .68rem var(--m); color: var(--tx2); letter-spacing: .16em; text-transform: uppercase; }
+      #arFold .ar-hint i { display: block; margin-top: .45rem; color: var(--cy); animation: arBob 1.4s ease-in-out infinite; }
+      @keyframes arBob { 50% { transform: translateY(6px) } }
     }
 
     .ch {
@@ -1123,34 +1125,137 @@
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))
     }
 
+    /* ===== NOTABLE ACHIEVEMENTS SECTION ATMOSPHERIC THEME ===== */
+    #achievements {
+      position: relative;
+      background: radial-gradient(ellipse 90% 70% at 50% 35%, rgba(5, 38, 89, .38) 0%, rgba(2, 16, 36, .48) 55%, transparent 100%);
+    }
+
+    :root[data-theme=light] #achievements {
+      background: radial-gradient(ellipse 90% 70% at 50% 35%, rgba(193, 232, 255, .55) 0%, rgba(125, 160, 202, .2) 55%, transparent 100%);
+    }
+
+    /* ===== NOTABLE ACHIEVEMENTS CARDS — BLUE PALETTE THEME ===== */
     .mc {
       display: flex;
-      flex-direction: column
+      flex-direction: column;
+      border-radius: 24px;
+      background: var(--mc-bg, var(--gl));
+      color: var(--mc-tx, var(--tx));
+      border: 1px solid var(--mc-bd, var(--bd));
+      border-top: 3px solid var(--mc-top, var(--a1));
+      box-shadow: 0 16px 36px var(--mc-sh, var(--sh));
+      position: relative;
+      overflow: hidden;
+      transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s, border-color .3s;
+    }
+
+    .mc:hover {
+      border-top-color: var(--mc-top, var(--cy));
+      box-shadow: 0 22px 50px var(--mc-sh, var(--glow));
+    }
+
+    /* 1. Deep Midnight Blue */
+    #ac .mc:nth-child(1) {
+      --mc-bg: #021024;
+      --mc-tx: #ffffff;
+      --mc-sub: #7DA0CA;
+      --mc-mut: #a6c4e4;
+      --mc-btn: #00f0ff;
+      --mc-top: #5483B3;
+      --mc-bd: rgba(125, 160, 202, .28);
+      --mc-sh: rgba(2, 16, 36, .65);
+    }
+
+    /* 2. Dark Royal Navy */
+    #ac .mc:nth-child(2) {
+      --mc-bg: #052659;
+      --mc-tx: #ffffff;
+      --mc-sub: #C1E8FF;
+      --mc-mut: #bdd6f2;
+      --mc-btn: #00f0ff;
+      --mc-top: #7DA0CA;
+      --mc-bd: rgba(125, 160, 202, .32);
+      --mc-sh: rgba(5, 38, 89, .55);
+    }
+
+    /* 3. Steel Blue */
+    #ac .mc:nth-child(3) {
+      --mc-bg: #5483B3;
+      --mc-tx: #ffffff;
+      --mc-sub: #C1E8FF;
+      --mc-mut: #eaf3fb;
+      --mc-btn: #ffffff;
+      --mc-top: #C1E8FF;
+      --mc-bd: rgba(193, 232, 255, .38);
+      --mc-sh: rgba(84, 131, 179, .48);
+    }
+
+    /* 4. Soft Sky / Periwinkle Blue */
+    #ac .mc:nth-child(4) {
+      --mc-bg: #7DA0CA;
+      --mc-tx: #021024;
+      --mc-sub: #052659;
+      --mc-mut: #0d284f;
+      --mc-btn: #021024;
+      --mc-top: #052659;
+      --mc-bd: rgba(2, 16, 36, .22);
+      --mc-sh: rgba(125, 160, 202, .48);
+    }
+
+    /* 5. Light Ice Blue */
+    #ac .mc:nth-child(5),
+    #ac .mc:nth-child(n+6) {
+      --mc-bg: #C1E8FF;
+      --mc-tx: #021024;
+      --mc-sub: #052659;
+      --mc-mut: #082142;
+      --mc-btn: #021024;
+      --mc-top: #021024;
+      --mc-bd: rgba(2, 16, 36, .2);
+      --mc-sh: rgba(193, 232, 255, .45);
     }
 
     .mc .mh {
       display: flex;
       justify-content: space-between;
-      color: var(--cy);
+      color: var(--mc-sub, var(--cy));
       margin-bottom: 1.4rem;
       font-weight: 700
     }
 
     .mc h3 {
       font-size: 1.3rem;
-      margin-bottom: .4rem
+      margin-bottom: .4rem;
+      color: var(--mc-tx, inherit)
     }
 
     .mc .o {
       font: 400 .83rem var(--m);
-      color: var(--tx2);
+      color: var(--mc-mut, var(--tx2));
       margin-bottom: 1rem
     }
 
     .mc p {
       flex-grow: 1;
       margin-bottom: 1.5rem;
-      font-size: .96rem
+      font-size: .96rem;
+      color: var(--mc-mut, var(--tx))
+    }
+
+    #ac .mc .lk {
+      color: var(--mc-btn, var(--cy));
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-weight: 700;
+      transition: transform .25s ease, gap .25s ease, color .25s ease;
+      cursor: pointer;
+    }
+
+    #ac .mc .lk:hover {
+      transform: translateX(4px);
+      gap: .75rem;
     }
 
     .lk {
@@ -1910,6 +2015,136 @@
       pointer-events: none;
       z-index: 99990
     }
+
+    /* ===== ACHIEVEMENTS — SCROLL-DRIVEN CARD CAROUSEL (cards orbit the heading) ===== */
+    @media (min-width: 1081px) {
+      html.ac-on #achievements { height: 100vh; min-height: 100vh; padding: 0 !important; overflow: hidden; }
+      html.ac-on #achievements .wrap {
+        position: relative; height: 100vh; display: flex; flex-direction: column; align-items: center;
+        justify-content: center; text-align: center; padding-bottom: 26vh;
+      }
+      html.ac-on #achievements .meta, html.ac-on #achievements .title { position: relative; z-index: 50; }
+      html.ac-on #achievements .title { margin-bottom: 0; }
+      html.ac-on #ac { position: absolute; inset: 0; display: block; perspective: none; pointer-events: none; }
+      html.ac-on #ac .mc, html.ac-on #ac .mc.rv {
+        position: absolute; left: 50%; top: 48%; width: clamp(300px, 23vw, 400px); margin: 0;
+        text-align: left; transform-origin: 50% 50%; transform-style: flat;
+        transition: none !important; will-change: transform, opacity, filter;
+        background: var(--mc-bg, linear-gradient(var(--gl), var(--gl)), var(--bg)) !important;
+        color: var(--mc-tx, var(--tx));
+        border: 1px solid var(--mc-bd, var(--bd));
+        border-top: 3px solid var(--mc-top, var(--a1));
+        border-radius: 24px;
+        box-shadow: 0 18px 50px var(--mc-sh, rgba(0, 0, 0, .35));
+      }
+      html.ac-on #ac .mc:hover { box-shadow: 0 24px 60px var(--mc-sh, rgba(0, 0, 0, .45)); border-top-color: var(--mc-sub, var(--cy)); }
+    }
+
+    /* hero: portrait assembled from particles */
+    #hc { transition: opacity .7s ease; }
+    #hp { position: absolute; z-index: 3; pointer-events: none; }
+
+    /* clearer pills in both themes: visible border + slight fill so they never melt into the background */
+    .out, .sb {
+      background: color-mix(in srgb, var(--tx) 5%, var(--gl));
+      border-color: color-mix(in srgb, var(--tx) 22%, transparent);
+      color: var(--tx)
+    }
+    .sb .a { color: var(--tx) }
+    #theme { border-color: color-mix(in srgb, var(--tx) 25%, transparent) }
+
+    /* ===== TECHNOLOGIES & TOOLS — FOREST PALETTE CARD BACKGROUNDS =====
+       palette: #0F1F17  #1E3A2E  #3E5A3F  #6B7F67  #C7CBB8  #3D4337 */
+    #sk .arsenal-card,
+    html.ar-on #arFold,
+    html.ar-on .ar-layer {
+      --f-glow: #d8ee6a;
+      background:
+        radial-gradient(120% 70% at 100% 0%, rgba(216, 238, 106, .16), transparent 55%),
+        linear-gradient(160deg, #0F1F17 0%, #1E3A2E 45%, #3E5A3F 100%);
+      border: 1px solid rgba(199, 203, 184, .16);
+      border-top: 2px solid #6B7F67;
+    }
+    #sk .ar-slot:nth-child(5) .arsenal-card { background: radial-gradient(120% 70% at 100% 0%, rgba(216,238,106,.16), transparent 55%), linear-gradient(160deg, #0F1F17 0%, #1E3A2E 45%, #3E5A3F 100%); }
+    #sk .ar-slot:nth-child(6) .arsenal-card { background: radial-gradient(120% 70% at 0% 0%, rgba(216,238,106,.16), transparent 55%), linear-gradient(160deg, #1E3A2E 0%, #3E5A3F 100%); }
+    #sk .ar-slot:nth-child(7) .arsenal-card { background: radial-gradient(120% 70% at 100% 0%, rgba(216,238,106,.16), transparent 55%), linear-gradient(160deg, #0F1F17 0%, #3D4337 100%); }
+    #sk .ar-slot:nth-child(8) .arsenal-card { background: radial-gradient(120% 70% at 0% 0%, rgba(216,238,106,.16), transparent 55%), linear-gradient(160deg, #1E3A2E 0%, #3D4337 100%); }
+
+    #sk .arsenal-card:hover,
+    #sk .arsenal-card:focus-visible { border-top-color: #d8ee6a; }
+    #sk .arsenal-card:focus-visible { outline-color: #d8ee6a; }
+
+    #sk .arsenal-card .ch { color: #C7CBB8; }
+    #sk .arsenal-card .ch i { color: #d8ee6a; }
+    #sk .arsenal-card .it { color: #C7CBB8; }
+    #sk .arsenal-card .it::before { background: #6B7F67; }
+    #sk .arsenal-card:hover .it::before,
+    #sk .arsenal-card:focus-visible .it::before,
+    #sk .arsenal-card .it:hover::before { background: #d8ee6a; }
+    #sk .arsenal-card .it:hover { color: #d8ee6a; }
+
+    html.ar-on #arFold { border-top-color: #d8ee6a; box-shadow: 0 0 70px rgba(216, 238, 106, .18), var(--sh); }
+    html.ar-on #arFold::after { background: linear-gradient(100deg, transparent, rgba(216, 238, 106, .14), transparent); }
+    #arFold .ar-tag, #arFold .ar-ch.amp, #arFold .ar-hint i { color: #d8ee6a; }
+    #arFold .ar-line { color: #C7CBB8; }
+    #arFold .ar-hint { color: #6B7F67; }
+    #arFold .ar-rule { background: linear-gradient(90deg, #6B7F67, #d8ee6a); }
+
+    /* ===== display font roles ===== */
+    .hname h1, .hname h1 *, .hname h1 .char { font-family: var(--f-name) !important; font-weight: 800 !important; font-synthesis: weight !important; letter-spacing: .02em }
+    #n2, #n2 *, #n2.split .char, #n2.spotlight>div { font-family: 'Bavaria Gates', var(--f-name) !important; font-weight: 900 !important; font-synthesis: weight !important; letter-spacing: .02em }
+    .title, .title .char { font-family: var(--f-side) !important; font-weight: 700; letter-spacing: 0 }
+    .snap h2, .end h2, .end h2 .hl { font-family: var(--f-lux) !important; font-weight: 600; letter-spacing: .01em }
+    .snap h3 { font-family: var(--f-name) !important; font-weight: 800 !important; font-synthesis: weight !important; letter-spacing: .02em }
+    .gt { font-family: var(--f-bold) !important; font-weight: 400 }
+    /* ===== FOUNTAIN PEN BACKGROUND SCROLL EXPERIENCE ===== */
+    :root[data-theme=dark] {
+      --bg: #0B0B0D;
+      --bg2: #111214;
+    }
+
+    body {
+      background: var(--bg);   /* follows light / dark theme */
+      overflow-x: clip;
+    }
+
+    /* canvas sits BEHIND the page (z-index:-1) so it adds no stacking contexts to your sections */
+    #penCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100svh;
+      pointer-events: none;
+      z-index: -1;
+      display: block;
+      background: transparent;
+      animation: penFloat 7s ease-in-out infinite;   /* transform-only: cheap, runs on the compositor */
+    }
+    @keyframes penFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg) }
+      50% { transform: translate3d(0, -12px, 0) rotate(.35deg) }
+    }
+    @media (prefers-reduced-motion: reduce) { #penCanvas { animation: none } }
+
+    section, footer {
+      background: transparent;
+    }
+
+    /* Interactive overlays and UI chrome */
+    nav { z-index: 1000; }
+    #cord { z-index: 1100; }
+    #top { z-index: 999; }
+    #bar { z-index: 9999; }
+    #modal { z-index: 20000; }
+    #pfx { z-index: 99990; }
+    #intro { z-index: 99999; }
+
+    /* Frosted luxury glass for gallery and cards to let the background pen shimmer through */
+    .gal {
+      background: rgba(11, 11, 13, 0.92);   /* no backdrop-filter: blurring a live canvas every frame was very slow */
+    }
   </style>
 </head>
 
@@ -1931,6 +2166,8 @@
     </svg><button class="cd-knob" role="switch" aria-checked="false"
       aria-label="Toggle light / dark theme (pull the cord)"></button></div>
 
+  <canvas id="penCanvas" aria-label="Scroll-controlled luxury fountain pen background assembly" role="img"></canvas>
+
   <section class="hero" id="home">
     <div class="wrap hgrid">
       <div class="hcol">
@@ -1941,13 +2178,10 @@
         </div>
         <div class="role" id="role"><span class="beacon"></span><span id="rt">FULL-STACK DEVELOPER</span></div>
         <div class="pc"><small>Profile focus</small>
-          <button class="pb react dual-slide-btn" data-p="react" aria-pressed="true"><svg>
-              <rect />
-            </svg><span class="bg-layer" aria-hidden="true"></span><span class="text-layer">React</span></button>
-          <button class="pb node" data-p="node"><span>Node.js</span></button>
-          <button class="pb js" data-p="javascript"><span>JavaScript</span></button>
-          <button class="pb fs dir-btn" data-p="fullstack"><span class="dir-fill" aria-hidden="true"></span><span
-              class="dir-text">Full Stack</span></button>
+          <button class="pb" data-p="react" aria-pressed="true"><i class="pd"></i><span class="pl">React</span></button>
+          <button class="pb" data-p="node" aria-pressed="false"><i class="pd"></i><span class="pl">Node.js</span></button>
+          <button class="pb" data-p="javascript" aria-pressed="false"><i class="pd"></i><span class="pl">JavaScript</span></button>
+          <button class="pb" data-p="fullstack" aria-pressed="false"><i class="pd"></i><span class="pl">Full Stack</span></button>
         </div>
         <p id="hd">Building digital experiences that matter. Specializing in full-stack architecture, interactive
           interfaces, and scalable solutions.</p>
@@ -2002,8 +2236,8 @@
 
   <section id="skills">
     <div class="wrap">
-      <div class="meta rv">02 / Arsenal</div>
-      <h2 class="title rv">Technologies &amp; Tools</h2>
+      <div class="meta" id="skMeta">02 / Arsenal</div>
+      <h2 class="title" id="skTitle">Technologies &amp; Tools</h2>
       <div class="grid" id="sk"></div>
     </div>
   </section>
@@ -2131,14 +2365,25 @@
     $('#pcount').textContent = '0' + projects.length + '+ BUILDS DEPLOYED';
     $('#yr').textContent = new Date().getFullYear();
     /* skill cards = 3D tilt-to-front cards */
-    $('#sk').innerHTML = skills.map(s => `
-      <div class="card arsenal-card rv" tabindex="0" role="group" aria-label="${s[0]} skills">
-        <div class="ch"><i class="fas ${s[1]}"></i> ${s[0]}</div>
-        <div class="arsenal-items">
-          ${s[2].map(x => `<div class="it">${x}</div>`).join('')}
+    $('#sk').innerHTML = `
+      <i class="ar-layer" aria-hidden="true"></i><i class="ar-layer" aria-hidden="true"></i><i class="ar-layer" aria-hidden="true"></i>
+      <div id="arFold" aria-hidden="true">
+        <span class="ar-tag">02 / Arsenal</span>
+        <span class="ar-line" data-t="Technologies"></span>
+        <span class="ar-line" data-t="&amp; Tools"></span>
+        <span class="ar-rule"></span>
+        <span class="ar-hint">Scroll to unfold<i class="fas fa-chevron-down"></i></span>
+      </div>` + skills.map(s => `
+      <div class="ar-slot">
+        <div class="card arsenal-card rv" tabindex="0" role="group" aria-label="${s[0]} skills">
+          <div class="ch"><i class="fas ${s[1]}"></i> ${s[0]}</div>
+          <div class="arsenal-items">
+            ${s[2].map(x => `<div class="it">${x}</div>`).join('')}
+          </div>
         </div>
       </div>
     `).join('');
+    $$('#arFold .ar-line').forEach(l => { const t = l.dataset.t.replace('&amp;', '&'); l.innerHTML = [...t].map(c => `<span class="ar-ch${c === '&' ? ' amp' : ''}">${c === ' ' ? '\u00A0' : c}</span>`).join(''); });
     const journey = (id, d) => $(id).innerHTML = d.map(x => `<div class="ji rv"><small class="mono">${x[2]}</small><h3>${x[0]}</h3><h4>${x[1]}</h4><p>${x[3]}</p></div>`).join('');
     journey('#ex', experience); journey('#ed', education);
     $('#ac').innerHTML = achievements.map((a, i) => `<div class="card mc rv"><div class="mh mono"><span>0${i + 1}</span><i class="fas fa-trophy"></i></div><h3>${a[0]}</h3><div class="o">${a[1]} &nbsp;//&nbsp; ${a[2]}</div><p>${a[3]}</p><button class="lk" data-f="${C + a[4]}">View Proof <i class="fas fa-arrow-right"></i></button></div>`).join('');
@@ -2276,17 +2521,7 @@
     /* ---------- profile focus ---------- */
     const profiles = { react: ['REACT MODE', '#00f0ff'], node: ['NODE MODE', '#10b981'], javascript: ['JAVASCRIPT MODE', '#facc15'], fullstack: ['FULL STACK MODE', '#c084fc'] };
     $$('.pb').forEach(b => {
-      b.onclick = () => { const p = profiles[b.dataset.p]; $('#prof').style.setProperty('--pa', p[1]); $('#plabel span').textContent = p[0]; $$('.pb').forEach(x => x.setAttribute('aria-pressed', x === b)) };
-      b.addEventListener('mouseenter', e => { const r = b.getBoundingClientRect(); b.style.setProperty('--x', e.clientX - r.left + 'px'); b.style.setProperty('--y', e.clientY - r.top + 'px') });
-    });
-    $('.pb.fs').addEventListener('mouseenter', function () { /* particle burst */
-      if (typeof gsap === 'undefined' || reduce) return;
-      for (let i = 0; i < 12; i++) {
-        const d = document.createElement('div'); d.className = 'pt'; const s = gsap.utils.random(3, 7);
-        gsap.set(d, { width: s, height: s, x: this.offsetWidth / 2, y: this.offsetHeight / 2 }); this.appendChild(d);
-        const a = gsap.utils.random(0, 6.28), v = gsap.utils.random(20, 60);
-        gsap.to(d, { x: '+=' + Math.cos(a) * v, y: '+=' + Math.sin(a) * v, opacity: 0, duration: gsap.utils.random(.6, 1.2), ease: 'power2.out', onComplete: () => d.remove() });
-      }
+      b.onclick = () => { const p = profiles[b.dataset.p]; $('#prof').style.setProperty('--pa', p[1]); $('#plabel span').textContent = p[0]; $$('.pb').forEach(x => x.setAttribute('aria-pressed', x === b)); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop') };
     });
 
     /* ---------- hero 3D tilt (idles when settled) ---------- */
@@ -2342,7 +2577,72 @@
       hv.addEventListener('canplay', () => { init(); draw() });
       hv.addEventListener('play', () => { ended = false; cancelAnimationFrame(keyRaf); loop() });
       hv.addEventListener('ended', () => { ended = true; cancelAnimationFrame(keyRaf); draw(); gestureOn = false; hname.classList.remove('gesture-pointing') });
-      try { hv.pause(); hv.currentTime = 0 } catch (e) { } setTimeout(() => hv.play().catch(() => { }), reduce ? 0 : 3200);   // start when the intro lifts
+      /* particle portrait: the first video frame is sampled into coloured pixels that fly in and assemble, then the real video fades in */
+      const heroParticles = done => {
+        if (reduce) return done();
+        const prof = $('#prof'), box = hc.parentNode; let tries = 0;
+        const fail = e => { console.warn('particle portrait skipped:', e && e.message); hc.style.opacity = ''; done() };
+        const start = () => {
+          init(); draw();
+          const w = hc.width, h = hc.height, src = ctx.getImageData(0, 0, w, h).data;
+          const COLS = 92, step = w / COLS, rows = Math.floor(h / step), raw = [];
+          for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) {
+            const sx = Math.min(w - 1, Math.floor((c + .5) * step)), sy = Math.min(h - 1, Math.floor((r + .5) * step)), q = (sy * w + sx) * 4;
+            if (src[q + 3] < 140) continue;
+            const R = (src[q] >> 3) << 3 | 4, G = (src[q + 1] >> 3) << 3 | 4, B = (src[q + 2] >> 3) << 3 | 4;
+            raw.push([c * step + step / 2, r * step + step / 2, (R << 16) | (G << 8) | B]);
+          }
+          if (raw.length < 400) throw new Error('no portrait pixels found');
+          raw.sort((a, b) => a[2] - b[2]);                                   // grouped by colour = few fillStyle changes per frame
+          const n = raw.length, tx = new Float32Array(n), ty = new Float32Array(n), sx0 = new Float32Array(n), sy0 = new Float32Array(n),
+            bx = new Float32Array(n), by = new Float32Array(n), dl = new Float32Array(n), du = new Float32Array(n),
+            ox = new Float32Array(n), oy = new Float32Array(n), vx = new Float32Array(n), vy = new Float32Array(n), key = new Int32Array(n);
+          const PW = prof.offsetWidth, PH = prof.offsetHeight, CW = Math.round(PW * 1.5), CH = Math.round(PH * 1.12), CL = -(CW - PW) / 2, CT = -(CH - PH) / 2;
+          const IW = box.offsetWidth, IH = box.offsetHeight, sc = Math.min(IW / w, IH / h), dw = w * sc, dh = h * sc;
+          const offX = box.offsetLeft + (IW - dw) / 2 - CL, offY = box.offsetTop + (IH - dh) / 2 - CT, cell = step * sc;
+          const rnd = (a, b) => a + Math.random() * (b - a), cx = CW / 2, cy = CH / 2;
+          for (let i = 0; i < n; i++) {
+            const p = raw[i]; tx[i] = offX + p[0] * sc; ty[i] = offY + p[1] * sc; key[i] = p[2];
+            const ang = Math.random() * 6.2832, rad = rnd(.45, 1.1) * Math.max(CW, CH) * .5;
+            sx0[i] = cx + Math.cos(ang) * rad * 1.15; sy0[i] = cy + Math.sin(ang) * rad * .8;
+            const dx = tx[i] - sx0[i], dy = ty[i] - sy0[i], len = Math.hypot(dx, dy) || 1, k = rnd(-.45, .45) * len;
+            bx[i] = -dy / len * k; by[i] = dx / len * k;
+            dl[i] = (p[1] / h) * .55 + Math.random() * .6; du[i] = rnd(1.2, 2.1);
+          }
+          const dpr = Math.min(devicePixelRatio || 1, 1.5), cv = document.createElement('canvas'); cv.id = 'hp';
+          cv.width = CW * dpr; cv.height = CH * dpr;
+          Object.assign(cv.style, { left: CL + 'px', top: CT + 'px', width: CW + 'px', height: CH + 'px' });
+          const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); prof.appendChild(cv);
+          const css = new Map(); const col = k => css.get(k) || (css.set(k, '#' + k.toString(16).padStart(6, '0')), css.get(k));
+          const ptr = { x: -9999, y: -9999, on: false }, RAD = Math.max(46, cell * 14), RAD2 = RAD * RAD;
+          const move = e => { const r = cv.getBoundingClientRect(); ptr.x = (e.clientX - r.left) * (CW / r.width); ptr.y = (e.clientY - r.top) * (CH / r.height); ptr.on = true };
+          prof.addEventListener('pointermove', move, { passive: true }); prof.addEventListener('pointerleave', () => { ptr.on = false });
+          const endT = Math.max(...dl) + 2.1 + .5; let t0 = performance.now(), fading = false, raf = 0;
+          const frame = now => {
+            const t = (now - t0) / 1000; g.clearRect(0, 0, CW, CH); let last = -1;
+            for (let i = 0; i < n; i++) {
+              let e = (t - dl[i]) / du[i]; if (e <= 0) continue; if (e > 1) e = 1;
+              const k = 1 - Math.pow(1 - e, 4), sw = Math.sin(k * 3.14159);
+              let x = sx0[i] + (tx[i] - sx0[i]) * k + bx[i] * sw, y = sy0[i] + (ty[i] - sy0[i]) * k + by[i] * sw;
+              if (ptr.on) { const ddx = x + ox[i] - ptr.x, ddy = y + oy[i] - ptr.y, d2 = ddx * ddx + ddy * ddy; if (d2 < RAD2 && d2 > 1) { const d = Math.sqrt(d2), f = (1 - d / RAD) * 5; vx[i] += ddx / d * f; vy[i] += ddy / d * f } }
+              vx[i] -= ox[i] * .07; vy[i] -= oy[i] * .07; vx[i] *= .86; vy[i] *= .86; ox[i] += vx[i]; oy[i] += vy[i];
+              if (key[i] !== last) { g.fillStyle = col(key[i]); last = key[i] }
+              const s = cell * .9 * (1 + (1 - k) * .55);
+              g.fillRect(x + ox[i] - s / 2, y + oy[i] - s / 2, s, s);
+            }
+            if (t > endT && !fading) {                                         // portrait is built: crossfade into the real video and start it
+              fading = true; cv.style.transition = 'opacity .8s ease'; cv.style.opacity = 0; hc.style.opacity = 1; done();
+              setTimeout(() => { cancelAnimationFrame(raf); cv.remove(); prof.removeEventListener('pointermove', move) }, 900);
+            }
+            raf = requestAnimationFrame(frame);
+          };
+          raf = requestAnimationFrame(frame);
+        };
+        const go = () => { if (hv.readyState < 2 && tries++ < 40) return setTimeout(go, 100); try { start() } catch (e) { fail(e) } };
+        go();
+      };
+      if (!reduce) hc.style.opacity = 0;                                       // hidden until the particles have built the portrait
+      try { hv.pause(); hv.currentTime = 0 } catch (e) { } setTimeout(() => heroParticles(() => hv.play().catch(() => { })), reduce ? 0 : 3200);   // start when the intro lifts
     }
 
     /* ---------- real navbar height -> --nav-h ---------- */
@@ -2353,7 +2653,7 @@
     const spy = () => {
       const st = scrollY, max = document.documentElement.scrollHeight - innerHeight;
       $('#bar').style.width = (max > 0 ? st / max * 100 : 0) + '%'; $('#top').classList.toggle('on', st > 500);
-      let cur = 'home'; $$('section').forEach(s => { if (st >= s.offsetTop - s.offsetHeight / 2.5) cur = s.id });
+      let cur = 'home'; $$('section').forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * .4) cur = s.id });
       $$('#links a').forEach(a => { const on = a.dataset.s === cur; a.classList.toggle('on', on); if (on && cur !== spy.l && !matchMedia('(min-width:1001px)').matches) a.scrollIntoView({ inline: 'center', block: 'nearest' }) }); spy.l = cur;
     };
     let spyQ = false; addEventListener('scroll', () => { if (spyQ) return; spyQ = true; requestAnimationFrame(() => { spyQ = false; spy() }) }, { passive: true }); spy();
@@ -2361,12 +2661,124 @@
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target) } }), { threshold: .1, rootMargin: '0px 0px -40px 0px' });
     $$('.rv').forEach(el => io.observe(el));
 
+    /* ---------- arsenal: 4 cards folded into one card, unfolded by scrolling ---------- */
+    (() => {
+      if (reduce || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      gsap.registerPlugin(ScrollTrigger);
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 1081px)', () => {
+        const sec = $('#skills'), grid = $('#sk'), fold = $('#arFold'), slots = $$('#sk .ar-slot');
+        const chars = $$('#arFold .ar-ch'), meta = $('#skMeta'), title = $('#skTitle');
+        const heads = $$('#sk .ch'), items = $$('#sk .it');
+        document.documentElement.classList.add('ar-on');
+        $$('#sk .arsenal-card').forEach(c => c.classList.add('on'));
+
+        const layers = $$('#sk .ar-layer'), tag = $('#arFold .ar-tag'), rule = $('#arFold .ar-rule'), hint = $('#arFold .ar-hint');
+        // stacked "folded" cards fan out behind the front card
+        const fan = [{ r: -7, x: -26, y: 12 }, { r: 6, x: 24, y: 8 }, { r: -2.5, x: -8, y: 20 }];
+        gsap.set(layers, { transformPerspective: 1200, rotation: i => fan[i].r, x: i => fan[i].x, y: i => fan[i].y, opacity: 0, scale: .94 });
+        gsap.set(fold, { opacity: 0, scale: .9, y: 40 });
+        gsap.set([tag, hint], { opacity: 0, y: 14 });
+        gsap.set(rule, { scaleX: 0 });
+        gsap.set(chars, { transformPerspective: 600 });
+
+        // entrance: card scales in, layers settle behind it, letters rise out of their masks, then a light wave runs through the letters
+        const wave = gsap.timeline({ repeat: -1, repeatDelay: 2.2, paused: true });
+        wave.to(chars, { y: -7, color: '#22d3ee', duration: .28, ease: 'power2.out', stagger: { each: .045 } })
+            .to(chars, { y: 0, color: (i, el) => el.classList.contains('amp') ? '#22d3ee' : '', duration: .45, ease: 'elastic.out(1,.5)', stagger: { each: .045 } }, .12);
+        const intro = gsap.timeline({ paused: true, onComplete: () => wave.play() });
+        intro.to(fold, { opacity: 1, scale: 1, y: 0, duration: .9, ease: 'expo.out' }, 0)
+             .to(layers, { opacity: 1, scale: 1, duration: .9, stagger: .1, ease: 'expo.out' }, .1)
+             .fromTo(chars, { yPercent: 115, rotation: 10, opacity: 0 }, { yPercent: 0, rotation: 0, opacity: 1, duration: .85, ease: 'expo.out', stagger: .035 }, .3)
+             .to(tag, { opacity: 1, y: 0, duration: .6, ease: 'power3.out' }, .25)
+             .to(rule, { scaleX: 1, duration: .7, ease: 'power3.out' }, .9)
+             .to(hint, { opacity: 1, y: 0, duration: .6, ease: 'power3.out' }, 1.05);
+        ScrollTrigger.create({ trigger: sec, start: 'top 85%', once: true, onEnter: () => intro.play() });
+        // if the page loads already scrolled into the section, don't leave it hidden
+        if (ScrollTrigger.positionInViewport && sec.getBoundingClientRect().top < innerHeight * .85) intro.play();
+
+        const pos = el => el.offsetLeft + el.offsetWidth / 2;             // offset values ignore transforms
+        const dx = (i, el) => grid.clientWidth / 2 - pos(el);
+        const side = i => (i < 2 ? 1 : -1);                               // left cards hinge from their right edge, and vice versa
+
+        gsap.set(slots, { transformPerspective: 1400, transformOrigin: (i) => (i < 2 ? '100% 50%' : '0% 50%') });
+        gsap.set([heads, items], { opacity: 0 });
+        gsap.set([meta, title], { opacity: 0, y: 30 });
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power2.inOut', force3D: true },
+          scrollTrigger: {
+            trigger: sec, start: 'top top', end: '+=170%', scrub: .25, pin: true, pinSpacing: true,
+            anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 1,
+            onUpdate: self => { if (self.progress > .04) { if (!wave.paused()) wave.pause() } else if (!intro.isActive() && intro.progress() === 1 && wave.paused()) wave.play() }
+          }
+        });
+        // timeline length is 1.35: the stack fans out, cards unfold, text is complete by ~0.9, then a rest on the finished layout
+        tl.to(layers, { rotation: i => fan[i].r * 2.2, x: i => fan[i].x * 3.2, y: i => fan[i].y * 1.4, duration: .14, ease: 'power2.out' }, 0)
+          .to([tag, hint, rule], { opacity: 0, duration: .1, ease: 'none' }, .08)
+          .to(chars, { x: () => gsap.utils.random(-110, 110), y: () => gsap.utils.random(-80, 80), rotation: () => gsap.utils.random(-140, 140), opacity: 0, duration: .26, stagger: { each: .008, from: 'center' }, ease: 'power2.in', overwrite: 'auto' }, .1)
+          .fromTo(slots, { x: dx, rotationY: i => side(i) * -78, scaleX: .25, opacity: 0 },
+            { x: 0, rotationY: 0, scaleX: 1, opacity: 1, duration: .55, stagger: .03, ease: 'power3.inOut', immediateRender: true }, .16)
+          .to(fold, { scaleX: 3.4, scaleY: .96, opacity: 0, duration: .4, ease: 'power2.in' }, .22)
+          .to(layers, { opacity: 0, scale: 1.3, duration: .35, ease: 'power2.in' }, .22)
+          .to(heads, { opacity: 1, duration: .15, stagger: .03, ease: 'none' }, .5)
+          .to(items, { opacity: 1, duration: .2, stagger: .01, ease: 'none' }, .55)
+          .to([meta, title], { opacity: 1, y: 0, duration: .15, stagger: .05, ease: 'power2.out' }, .6)
+          .to({}, { duration: .35 }, .95);                                // hold: everything fully visible before the next section
+        return () => document.documentElement.classList.remove('ar-on');
+      });
+      ScrollTrigger.sort();
+      addEventListener('load', () => ScrollTrigger.refresh());
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+    })();
+
+    /* ---------- achievements: cards orbit the heading as you scroll (viewed from above: front = bottom, sharp; back = top, small and blurred) ---------- */
+    (() => {
+      if (reduce || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      gsap.registerPlugin(ScrollTrigger);
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 1081px)', () => {
+        const sec = $('#achievements'), box = $('#ac'), root = document.documentElement;
+        const cards = [...box.querySelectorAll('.mc')], n = cards.length; if (n < 3) return;
+        root.classList.add('ac-on');
+        cards.forEach(c => { c.classList.remove('rv'); c.classList.add('on') });
+        const TAU = Math.PI * 2, LAPS = 1, st = { p: 0, enter: 0 }, easeIn = gsap.parseEase('power2.out');
+        const render = () => {
+          const vw = innerWidth, vh = innerHeight, Rx = Math.min(vw * .30, 560), Ry = vh * .34;
+          for (let i = 0; i < n; i++) {
+            const a = -Math.PI / n + i * TAU / n + st.p * TAU * LAPS;
+            const x = Math.sin(a) * Rx, z = Math.cos(a), d = (z + 1) / 2;               // z: 1 = front, -1 = back
+            const y = z * Ry - vh * .02 + (1 - st.enter) * vh * .4;
+            const sc = .6 + .4 * d, bl = Math.pow(1 - d, 1.5) * 10, op = (.18 + .82 * Math.pow(d, 1.3)) * st.enter, c = cards[i];
+            c.style.transform = `translate3d(${x.toFixed(1)}px,${y.toFixed(1)}px,0) translate(-50%,-50%) scale(${sc.toFixed(3)})`;
+            c.style.opacity = op.toFixed(3);
+            c.style.filter = bl < .3 ? 'none' : `blur(${bl.toFixed(1)}px)`;
+            c.style.zIndex = Math.round(d * 100);
+            c.style.pointerEvents = d > .78 && st.enter > .8 ? 'auto' : 'none';
+          }
+        };
+        render();
+        ScrollTrigger.create({ trigger: sec, start: 'top 95%', end: 'top top', scrub: true, onUpdate: s => { st.enter = easeIn(s.progress); render() }, onRefresh: s => { st.enter = easeIn(s.progress); render() } });
+        gsap.to(st, {
+          p: 1, ease: 'none', onUpdate: render,
+          scrollTrigger: { trigger: sec, start: 'top top', end: '+=320%', pin: true, scrub: .5, anticipatePin: 1, invalidateOnRefresh: true }
+        });
+        addEventListener('resize', render);
+        return () => {
+          root.classList.remove('ac-on'); removeEventListener('resize', render);
+          cards.forEach(c => { c.classList.add('rv'); c.removeAttribute('style') });
+        };
+      });
+      ScrollTrigger.sort();
+      addEventListener('load', () => ScrollTrigger.refresh());
+    })();
+
     /* ---------- achievements: hovered card comes forward, the rest recede ---------- */
     (() => {
       const box = $('#ac');
       if (!box || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
       const cards = () => [...box.querySelectorAll('.mc')];
-      const set = el => { cards().forEach(c => c.classList.toggle('is-active', c === el)); box.classList.toggle('has-active', !!el) };
+      const set = el => { if (document.documentElement.classList.contains('ac-on')) return; cards().forEach(c => c.classList.toggle('is-active', c === el)); box.classList.toggle('has-active', !!el) };
       box.addEventListener('pointerover', e => { const c = e.target.closest('.mc'); if (c && box.contains(c)) set(c) });
       box.addEventListener('pointerleave', () => set(null));
       box.addEventListener('focusin', e => { const c = e.target.closest('.mc'); if (c) set(c) });
@@ -2413,7 +2825,7 @@
         if (sec.id === 'home') {
           [['.hcol', -1], ['.hv', 1]].forEach(([q, side]) => { const el = sec.querySelector(q); if (el) items.push({ el, side, e: 0, x: 0, boot: true }) });
         } else {
-          const el = sec.querySelector(':scope > .wrap'); if (el) items.push({ el, side: i % 2 ? 1 : -1, e: 0, x: 0 });
+          const el = sec.querySelector(':scope > .wrap'); if (el) items.push({ el, side: i % 2 ? 1 : -1, e: 0, x: 0, id: sec.id });
         }
       });
       const boot = { v: 0 }; let run = false, idle = 0, lastY = -1;
@@ -2424,8 +2836,12 @@
       function tick() {
         const y = scrollY, vh = innerHeight, vw = root.clientWidth, m = innerWidth < 769 ? .5 : 1, yMoved = y !== lastY; lastY = y; let moving = yMoved;
         for (const it of items) {
+          if (it.id === 'projects' || ((it.id === 'skills' && root.classList.contains('ar-on')) || (it.id === 'achievements' && root.classList.contains('ac-on')))) {   // pinned section: its own scroll animation runs, so no fly-through fade
+            if (it.on !== false) { const el = it.el; el.style.transform = el.style.opacity = el.style.transformOrigin = el.style.willChange = ''; it.on = false }
+            continue
+          }
           const top = it.t - y, bottom = top + it.h;
-          let te = clamp(1 - top / (vh * CFG.enterAt), 0, 1); if (it.boot) te = Math.min(te, boot.v);
+          let te = clamp((vh * CFG.enterAt - top) / (vh * .6), 0, 1); if (it.boot) te = Math.min(te, boot.v);
           const tx = clamp((vh * CFG.exitAt - bottom) / (vh * CFG.exitAt), 0, 1);
           it.e += (te - it.e) * CFG.ease; it.x += (tx - it.x) * CFG.ease;
           if (Math.abs(te - it.e) < .001) it.e = te; if (Math.abs(tx - it.x) < .001) it.x = tx;
@@ -2525,6 +2941,166 @@
       }
       requestAnimationFrame(frame);
     })();
+  </script>
+  <script>
+  /* ===== FountainPenExperience — lightweight scroll-driven pen (blobs + small keyed sprite cache) ===== */
+  (function FountainPenExperience() {
+    const CONFIG = {
+      TOTAL_FRAMES: 239,
+      FRAME_PATH: 'assets/frames/fountain-pen/', FRAME_PREFIX: 'pen_', FRAME_EXTENSION: 'webp', PAD: 4,
+      FRAME_WIDTH: 1080, FRAME_HEIGHT: 1920,
+      FETCH_CONCURRENCY: 8,   // network downloads (compressed bytes only)
+      MAX_DPR: 2,
+      /* ---- placement / travel (fractions of viewport width, desktop) ---- */
+      START_X: 0.90,          // pen at top of page: empty space right of the photo
+      END_X: 0.12,            // pen at bottom of page (swap the two to travel left -> right)
+      PEN_HEIGHT: 0.80,       // pen height as a fraction of viewport height
+      KEY_MAX_H: 720,         // sprite resolution: lower = faster / less memory, higher = sharper
+      CACHE_FRAMES: 36,       // how many processed frames stay in memory
+      HOLD_FROM: '#projects', HOLD_TO: '#training'   // pen pauses between these two sections
+    };
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canvas = document.getElementById('penCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const root = document.documentElement, N = CONFIG.TOTAL_FRAMES;
+    const isLight = () => root.getAttribute('data-theme') === 'light';
+    const isDesktop = () => innerWidth > 760;
+    const frameURL = i => CONFIG.FRAME_PATH + CONFIG.FRAME_PREFIX + String(i + 1).padStart(CONFIG.PAD, '0') + '.' + CONFIG.FRAME_EXTENSION;
+    const SW = Math.round(CONFIG.KEY_MAX_H * CONFIG.FRAME_WIDTH / CONFIG.FRAME_HEIGHT), SH = CONFIG.KEY_MAX_H;
+
+    /* ---------- 1. Download compressed frames only (a few MB total) — nothing decoded up front ---------- */
+    const blobs = new Array(N).fill(null);
+    function preload() {
+      let next = 0, active = 0;
+      const pump = () => {
+        while (active < CONFIG.FETCH_CONCURRENCY && next < N) {
+          const i = next++; active++;
+          fetch(frameURL(i)).then(r => r.ok ? r.blob() : null).catch(() => null).then(b => {
+            blobs[i] = b; active--;
+            if (Math.abs(i - Math.round(pos)) <= 6) { lastKey = ''; schedule() }
+            pump();
+          });
+        }
+      };
+      pump();
+    }
+
+    /* ---------- 2. Turn a frame into a small cut-out sprite (background removed) ---------- */
+    function lightKey(d, w, h, wx, wy) {                      // light theme: keep the WHOLE pen (incl. black lacquer), drop only the backdrop
+      const n = w * h, mxA = new Uint8Array(n), goldA = new Uint8Array(n), bg = new Uint8Array(n), st = new Int32Array(n);
+      for (let p = 0, i = 0; p < n; p++, i += 4) { const r = d[i], g = d[i + 1], b = d[i + 2], m = r > g ? (r > b ? r : b) : (g > b ? g : b); mxA[p] = m; goldA[p] = (r - b > 25 && m > 70) ? 1 : 0 }
+      const T = 112, R = 5, G = 9;
+      /* "solid" = bright pixels + edges (even faint ones on black lacquer); grow it by R to seal the outline */
+      const solid = new Uint8Array(n), tmp = new Uint8Array(n), seal = new Uint8Array(n);
+      for (let y = 1; y < h - 1; y++) for (let x = 1, p = y * w + 1; x < w - 1; x++, p++) {
+        const gr = Math.abs(mxA[p + 1] - mxA[p - 1]) + Math.abs(mxA[p + w] - mxA[p - w]);
+        solid[p] = (mxA[p] >= T || gr >= G) ? 1 : 0;
+      }
+      for (let y = 0; y < h; y++) for (let x = 0, row = y * w; x < w; x++) { let v = 0; for (let k = Math.max(0, x - R), e = Math.min(w - 1, x + R); k <= e; k++) if (solid[row + k]) { v = 1; break } tmp[row + x] = v }
+      for (let x = 0; x < w; x++) for (let y = 0; y < h; y++) { let v = 0; for (let k = Math.max(0, y - R), e = Math.min(h - 1, y + R); k <= e; k++) if (tmp[k * w + x]) { v = 1; break } seal[y * w + x] = v }
+      let sp = 0;
+      const push = p => { if (!bg[p] && !seal[p]) { bg[p] = 1; st[sp++] = p } };
+      for (let x = 0; x < w; x++) { push(x); push((h - 1) * w + x) } for (let y = 0; y < h; y++) { push(y * w); push(y * w + w - 1) }
+      while (sp) { const p = st[--sp], x = p % w; if (x > 0) push(p - 1); if (x < w - 1) push(p + 1); if (p >= w) push(p - w); if (p < n - w) push(p + w) }
+      /* un-seal: let the backdrop creep back R px over plain dark pixels so there is no dark fringe round the pen (stops at real edges) */
+      for (let it = 0; it < R; it++) {
+        sp = 0;
+        for (let y = 1; y < h - 1; y++) for (let x = 1, p = y * w + 1; x < w - 1; x++, p++) {
+          if (!bg[p] && !solid[p] && mxA[p] < T && (bg[p - 1] || bg[p + 1] || bg[p - w] || bg[p + w])) st[sp++] = p;
+        }
+        if (!sp) break; while (sp) bg[st[--sp]] = 1;
+      }
+      const lab = new Int32Array(n), keep = [0]; let L = 0;     // drop floating dust blobs: keep a piece only if it has real highlights or gold
+      for (let s0 = 0; s0 < n; s0++) {
+        if (bg[s0] || lab[s0]) continue; L++; let mxm = 0, gc = 0; lab[s0] = L; sp = 0; st[sp++] = s0;
+        while (sp) {
+          const p = st[--sp], x = p % w; if (mxA[p] > mxm) mxm = mxA[p]; gc += goldA[p];
+          let q;
+          if (x > 0 && !bg[q = p - 1] && !lab[q]) { lab[q] = L; st[sp++] = q } if (x < w - 1 && !bg[q = p + 1] && !lab[q]) { lab[q] = L; st[sp++] = q }
+          if (p >= w && !bg[q = p - w] && !lab[q]) { lab[q] = L; st[sp++] = q } if (p < n - w && !bg[q = p + w] && !lab[q]) { lab[q] = L; st[sp++] = q }
+        }
+        keep[L] = (mxm >= 125 || gc > 12) ? 1 : 0;
+      }
+      for (let y = 0, p = 0, i = 3; y < h; y++) for (let x = 0; x < w; x++, p++, i += 4) d[i] = (!bg[p] && keep[lab[p]] && !(x > wx && y > wy)) ? 255 : 0;
+    }
+    let pid = 0;
+    function buildSprite(bmp) {
+      const w = bmp.width, h = bmp.height, cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const c = cv.getContext('2d', { willReadFrequently: true }); c.drawImage(bmp, 0, 0); if (bmp.close) bmp.close();
+      const id = c.getImageData(0, 0, w, h), wx = Math.floor(w * .64), wy = Math.floor(h * .84);
+      lightKey(id.data, w, h, wx, wy);   // same silhouette cut-out in both themes: the whole pen stays solid
+      c.putImageData(id, 0, 0); cv.pid = ++pid; return cv;
+    }
+
+    /* ---------- 3. Small LRU cache + on-demand decode (never more than CACHE_FRAMES in memory) ---------- */
+    const cache = new Map(), pending = new Set();
+    function request(i) {
+      if (i < 0 || i >= N || cache.has(i) || pending.has(i) || !blobs[i] || pending.size >= 4) return;
+      pending.add(i);
+      createImageBitmap(blobs[i], { resizeWidth: SW, resizeHeight: SH, resizeQuality: 'high' }).then(bmp => {
+        cache.set(i, buildSprite(bmp));
+        while (cache.size > CONFIG.CACHE_FRAMES) cache.delete(cache.keys().next().value);
+        pending.delete(i); lastKey = ''; schedule();
+      }).catch(() => { blobs[i] = null; pending.delete(i) });
+    }
+    function nearestCached(t) { let best = null, bd = 1e9; for (const [k, v] of cache) { const d = Math.abs(k - t); if (d < bd) { bd = d; best = v } } return best }
+
+    /* ---------- 4. Rendering (transparent canvas, glow/shadow drawn on the small sprite only) ---------- */
+    let pos = 0, prog = 0, queued = false, lastKey = '', lastT = 0;
+    function resize() {
+      const dpr = Math.min(window.devicePixelRatio || 1, CONFIG.MAX_DPR);
+      canvas.width = Math.round(innerWidth * dpr); canvas.height = Math.round(innerHeight * dpr); lastKey = ''; schedule();
+    }
+    function schedule() { if (!queued) { queued = true; requestAnimationFrame(draw) } }
+    function draw() {
+      queued = false;
+      const t = Math.max(0, Math.min(N - 1, Math.round(pos)));
+      let spr = cache.get(t);
+      if (spr) { cache.delete(t); cache.set(t, spr) } else { request(t); spr = nearestCached(t) }
+      const dir = t >= lastT ? 1 : -1; lastT = t;
+      for (let k = 1; k <= 5; k++) request(t + dir * k); request(t - dir);
+      if (!spr) return;
+      const key = spr.pid + '|' + prog.toFixed(4) + '|' + canvas.width + 'x' + canvas.height + (isLight() ? 'L' : 'D');
+      if (key === lastKey) return; lastKey = key;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const ph = canvas.height * CONFIG.PEN_HEIGHT, pw = ph * (spr.width / spr.height), k = canvas.height / 1000;
+      const cx = canvas.width * (isDesktop() ? CONFIG.START_X + (CONFIG.END_X - CONFIG.START_X) * prog : .5);
+      ctx.save(); ctx.imageSmoothingQuality = 'high';
+      ctx.shadowColor = isLight() ? 'rgba(0,0,0,.35)' : 'rgba(198,161,91,.38)';
+      ctx.shadowBlur = 30 * k; ctx.shadowOffsetY = isLight() ? 16 * k : 0;
+      ctx.drawImage(spr, cx - pw / 2, (canvas.height - ph) / 2, pw, ph); ctx.restore();
+    }
+
+    /* ---------- 5. Scroll mapping: pen holds while Projects scrolls, resumes at "The Route" ---------- */
+    let holdA = 0, holdB = 0, target = 0, cur = 0, looping = false;
+    function measureHold() {
+      const a = document.querySelector(CONFIG.HOLD_FROM), b = document.querySelector(CONFIG.HOLD_TO);
+      if (!a || !b) { holdA = holdB = 0; return }
+      holdA = a.getBoundingClientRect().top + scrollY; holdB = Math.max(holdA, b.getBoundingClientRect().top + scrollY);
+    }
+    function scrollToTarget() {
+      const max = Math.max(1, root.scrollHeight - innerHeight), y = Math.max(0, Math.min(max, scrollY));
+      const hold = Math.max(0, Math.min(holdB, max) - Math.min(holdA, max));
+      const eff = y < holdA ? y : y < holdB ? holdA : y - hold;
+      target = Math.max(0, Math.min(1, eff / Math.max(1, max - hold)));
+      if (!looping) { looping = true; requestAnimationFrame(step) }
+    }
+    function step() {
+      cur += (target - cur) * 0.14; if (Math.abs(target - cur) < 0.0004) cur = target;
+      prog = cur; pos = cur * (N - 1); schedule();
+      if (cur !== target) requestAnimationFrame(step); else looping = false;
+    }
+
+    /* ---------- Boot ---------- */
+    resize(); measureHold();
+    if (reduce) { pos = N - 1; prog = 1 } else { scrollToTarget(); addEventListener('scroll', scrollToTarget, { passive: true }) }
+    preload();
+    addEventListener('resize', () => { resize(); measureHold(); scrollToTarget() });
+    addEventListener('load', () => { measureHold(); scrollToTarget(); if (window.ScrollTrigger) ScrollTrigger.refresh() });
+    if (window.ScrollTrigger) ScrollTrigger.addEventListener('refresh', () => { measureHold(); scrollToTarget() });
+    new MutationObserver(() => { cache.clear(); pending.clear(); lastKey = ''; schedule() }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  })();
   </script>
 </body>
 
