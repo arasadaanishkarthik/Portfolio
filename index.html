@@ -11,8 +11,6 @@
       document.documentElement.setAttribute('data-theme', t); document.documentElement.classList.add('js')
     })();
   </script>
-  <link rel="preload" href="fonts/BavariaGates.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/Gimolla.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <link
     href="https://fonts.googleapis.com/css2?family=Allura&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&family=Cormorant+Garamond:wght@500;600;700&family=Playfair+Display:wght@600;700;800&family=Cinzel:wght@500;600;700&family=Rye&display=swap"
@@ -52,24 +50,15 @@
       --sh: 0 12px 30px rgba(15, 23, 42, .08)
     }
 
-    /* ===== CUSTOM DISPLAY FONTS =====
-       Put the font files in a /fonts folder next to this page, named exactly:
-       Gimolla / Gastie / BavariaGates / CircusAce  (.woff2, .woff, .otf or .ttf).
-       Until they are there, similar-looking Google fonts are used as fallbacks. */
-    @font-face { font-family: 'Gimolla'; src: local('Gimolla'), url('fonts/Gimolla.woff2') format('woff2'), url('fonts/Gimolla.woff') format('woff'), url('fonts/Gimolla.ttf') format('truetype'), url('https://db.onlinewebfonts.com/t/fb6241f16393652486a2eeb5c1560b89.woff2') format('woff2'), url('https://db.onlinewebfonts.com/t/fb6241f16393652486a2eeb5c1560b89.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap }
-    @font-face { font-family: 'Gastie'; src: local('Gastie'), url('fonts/Gastie.woff2') format('woff2'), url('fonts/Gastie.woff') format('woff'), url('fonts/Gastie.otf') format('opentype'), url('fonts/Gastie.ttf') format('truetype'); font-display: swap }
-    @font-face { font-family: 'Bavaria Gates'; src: local('Bavaria Gates'), local('BavariaGates'), url('fonts/BavariaGates.woff2') format('woff2'), url('fonts/BavariaGates.woff') format('woff'), url('fonts/BavariaGates.ttf') format('truetype'), url('https://db.onlinewebfonts.com/t/c58913db7334fb0b6ba3e76cf6003f9f.woff2') format('woff2'), url('https://db.onlinewebfonts.com/t/c58913db7334fb0b6ba3e76cf6003f9f.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap }
-    @font-face { font-family: 'Circus Ace'; src: local('Circus Ace'), local('CircusAce'), url('fonts/CircusAce.woff2') format('woff2'), url('fonts/CircusAce.woff') format('woff'), url('fonts/CircusAce.otf') format('opentype'), url('fonts/CircusAce.ttf') format('truetype'); font-display: swap }
-
     :root {
       --f: 'Plus Jakarta Sans', sans-serif;
       --m: 'JetBrains Mono', monospace;
       --gf: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
       /* swap any role to another font by changing one line here */
-      --f-name: 'Bavaria Gates', 'Cinzel', Georgia, serif;
-      --f-side: 'Gastie', 'Playfair Display', Georgia, serif;
-      --f-lux: 'Bavaria Gates', 'Cinzel', Georgia, serif;
-      --f-bold: 'Circus Ace', 'Rye', 'Anton', serif
+      --f-name: 'Cinzel', Georgia, serif;
+      --f-side: 'Playfair Display', Georgia, serif;
+      --f-lux: 'Cinzel', Georgia, serif;
+      --f-bold: 'Rye', 'Anton', Georgia, serif
     }
 
     * {
@@ -2706,7 +2695,7 @@
         gsap.set([meta, title], { opacity: 0, y: 30 });
 
         const tl = gsap.timeline({
-          defaults: { ease: 'power2.inOut', force3D: true },
+          defaults: { ease: 'power2.inOut' },
           scrollTrigger: {
             trigger: sec, start: 'top top', end: '+=170%', scrub: .25, pin: true, pinSpacing: true,
             anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 1,
@@ -2791,7 +2780,7 @@
       const showAll = () => { $$('#hi,#n1,#n2,#role,#hd').forEach(e => { e.style.opacity = 1 }); $('#tw').textContent = '00 / INTRODUCTION'; $('#cur').style.display = 'none'; heroEntranceFinished = true };
       if (reduce || typeof gsap === 'undefined') { $('#intro').style.display = 'none'; showAll(); return }
       gsap.registerPlugin(TextPlugin, SplitText);
-      setTimeout(() => {
+      const startEntrance = () => setTimeout(() => {
         $('#intro').classList.add('off');
         const tl = gsap.timeline({ delay: .5, onComplete: () => { heroEntranceFinished = true } });
         // A1 typewriter
@@ -2810,6 +2799,8 @@
         // A4 description reveal
         tl.fromTo('#hd', { filter: 'blur(20px)', opacity: 0, scale: .9 }, { filter: 'blur(0px)', opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' }, '>');
       }, 3400);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(startEntrance);
+      else startEntrance();
     });
   </script>
 
