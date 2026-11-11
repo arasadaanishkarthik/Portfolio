@@ -264,9 +264,10 @@
       paint-order: stroke;
       stroke-linecap: round;
       stroke-linejoin: round;
-      stroke-dasharray: none;
-      stroke-dashoffset: 0;
-      filter: drop-shadow(0 0 4px rgba(255, 75, 43, .48))
+      stroke-dasharray: 1500;
+      stroke-dashoffset: 1500;
+      filter: drop-shadow(0 0 4px rgba(255, 75, 43, .48));
+      animation: signatureDraw 2.5s cubic-bezier(.65, 0, .35, 1) .2s forwards, signatureFill .8s ease 2.15s forwards
     }
 
     @keyframes signatureDraw {
@@ -3045,7 +3046,7 @@
         <div id="prof">
           <div class="glow"></div>
           <div class="imgc">
-            <img id="heroPic" src="anish-portrait.webp" alt="Portrait of Anish Karthik in a navy suit" width="1109"
+            <img id="heroPic" src="assets/images/anish-portrait.webp" alt="Portrait of Anish Karthik in a navy suit" width="1109"
               height="1418" decoding="async" fetchpriority="high">
           </div>
           <div id="plabel" class="mono"><i></i><span>REACT MODE</span></div>
@@ -4038,17 +4039,13 @@
         if (typeof SplitText !== 'undefined') gsap.registerPlugin(SplitText);
       } catch (e) { }
 
-      const startEntrance = () => {
+      const startEntrance = () => setTimeout(() => {
         if (window.dismissIntro) window.dismissIntro();
         else { const introEl = $('#intro'); if (introEl) introEl.classList.add('off'); }
         $('#tw').textContent = '00 / INTRODUCTION';
         $('#cur').style.display = 'none';
-        ['#hi', '#n1', '#n2', '#role', '#hd'].forEach(selector => {
-          const element = $(selector);
-          if (element) element.style.opacity = '1';
-        });
         window.heroEntranceFinished = true;
-      };
+      }, 3400);
 
       const fontsPromise = (document.fonts && document.fonts.ready)
         ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))])
