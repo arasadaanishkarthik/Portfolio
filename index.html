@@ -2965,6 +2965,323 @@
       background: rgba(11, 11, 13, 0.92);
       /* no backdrop-filter: blurring a live canvas every frame was very slow */
     }
+
+    /* final responsive safeguards */
+    @media (max-width: 600px) {
+      html {
+        overflow-x: hidden;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .wrap {
+        width: min(100% - 2rem, 1200px);
+      }
+
+      section {
+        padding-block: 4rem;
+      }
+
+      section:not(#home) {
+        padding-top: 5.5rem;
+      }
+
+      nav {
+        top: .5rem;
+        width: calc(100vw - 1rem);
+        max-width: calc(100vw - 1rem);
+        padding-right: 2.2rem;
+      }
+
+      #links {
+        width: 100%;
+        min-width: 0;
+        gap: 0;
+      }
+
+      #links a {
+        padding-inline: .58rem;
+      }
+
+      #theme {
+        position: absolute;
+        right: .35rem;
+        width: 30px;
+        height: 30px;
+      }
+
+      #cord {
+        right: .35rem;
+        transform: scale(.78);
+        transform-origin: top right;
+      }
+
+      .cd-tip {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 6rem;
+        padding-bottom: 3rem;
+      }
+
+      .hgrid {
+        width: 100%;
+        gap: 1.5rem;
+      }
+
+      .hcol {
+        width: 100%;
+        min-width: 0;
+      }
+
+      .meta {
+        max-width: 100%;
+        font-size: .68rem;
+        letter-spacing: .11em;
+      }
+
+      .hname {
+        width: 100%;
+        margin-bottom: 1rem;
+      }
+
+      .hname h1 {
+        width: 100%;
+        font-size: clamp(1.7rem, 9.5vw, 2.8rem);
+        line-height: 1.08;
+        letter-spacing: .015em;
+        white-space: normal;
+        overflow-wrap: normal;
+        word-break: normal;
+      }
+
+      #n2 {
+        display: block;
+        word-spacing: .08em;
+      }
+
+      .role {
+        font-size: .85rem;
+        letter-spacing: 1.2px;
+        margin-bottom: 1.2rem;
+      }
+
+      .pc {
+        width: 100%;
+        gap: .5rem;
+        margin-bottom: 1.4rem;
+      }
+
+      .pc small {
+        text-align: left;
+      }
+
+      .pb {
+        min-width: 0;
+        padding: .58rem .75rem;
+        justify-content: center;
+        font-size: .72rem;
+      }
+
+      #hd {
+        max-width: 36rem;
+        margin-bottom: 1.5rem;
+        font-size: .98rem;
+        line-height: 1.7;
+      }
+
+      .btns,
+      .soc {
+        width: 100%;
+      }
+
+      .btns a {
+        width: 100%;
+        min-height: 46px;
+      }
+
+      .soc {
+        gap: .55rem;
+      }
+
+      .sb {
+        flex: 1 1 0;
+        min-width: 0;
+        padding-inline: .75rem;
+      }
+
+      .hv {
+        width: 100%;
+      }
+
+      #prof {
+        height: clamp(300px, 72svh, 430px);
+      }
+
+      .imgc {
+        height: min(100%, 400px);
+        max-width: 78%;
+      }
+
+      #plabel {
+        bottom: -4px;
+        padding: .5rem .85rem;
+        font-size: .66rem;
+        letter-spacing: 1.2px;
+      }
+
+      .title {
+        font-size: clamp(1.8rem, 9vw, 2.6rem);
+        line-height: 1.12;
+        overflow-wrap: normal;
+      }
+
+      .og p {
+        font-size: .98rem;
+        line-height: 1.7;
+      }
+
+      .idc,
+      .nodes,
+      .card {
+        padding: 1.35rem;
+      }
+
+      .grid,
+      #sk {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1rem;
+      }
+
+      .arsenal-card {
+        min-width: 0;
+        padding: 1.5rem 1.25rem;
+      }
+
+      .arsenal-items {
+        gap: .8rem;
+      }
+
+      .it {
+        min-width: 0;
+        font-size: .88rem;
+      }
+
+      .flt {
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .flt button {
+        font-size: .72rem;
+        letter-spacing: .08em;
+      }
+
+      .gtrack {
+        padding-inline: .75rem;
+      }
+
+      .gal-static .gtrack {
+        width: calc(100% - 1rem);
+        padding-inline: 0;
+      }
+
+      .gal-static .gi {
+        padding: .9rem;
+        border-radius: 12px;
+      }
+
+      .gal-static .gt {
+        font-size: clamp(1.15rem, 7vw, 1.45rem);
+        line-height: 1.2;
+        min-height: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .gal-static .gd {
+        font-size: .86rem;
+        line-height: 1.55;
+      }
+
+      .gal-static .gk {
+        flex-wrap: wrap;
+        gap: .7rem 1rem;
+      }
+
+      .gal-static .gk a {
+        font-size: .7rem;
+      }
+
+      .jl {
+        margin-left: .5rem;
+        padding-left: 1.25rem;
+      }
+
+      .ji::before {
+        left: calc(-1.25rem - 8px);
+      }
+
+      .cg {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .cc {
+        min-height: 0;
+      }
+
+      .end h2 {
+        font-size: clamp(2rem, 10vw, 3rem);
+        line-height: 1.1;
+      }
+
+      form {
+        width: 100%;
+      }
+
+      #top {
+        right: 1rem;
+        bottom: 1rem;
+        width: 44px;
+        height: 44px;
+      }
+
+      #intro .in-c {
+        width: calc(100% - 1rem);
+        padding-inline: 0;
+        overflow: hidden;
+      }
+
+      .in-signature text {
+        font-size: clamp(3rem, 16vw, 6rem);
+        letter-spacing: 0;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .hname h1 {
+        font-size: clamp(1.5rem, 9vw, 2.1rem);
+      }
+
+      .pb {
+        padding-inline: .55rem;
+      }
+
+      .pb .pl {
+        overflow-wrap: anywhere;
+      }
+
+      #prof {
+        height: 320px;
+      }
+
+      .imgc {
+        max-width: 82%;
+      }
+    }
   </style>
 </head>
 
