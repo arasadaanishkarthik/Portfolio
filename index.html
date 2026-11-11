@@ -99,8 +99,12 @@
       color: var(--tx);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      transition: background .6s, color .6s;
+      transition: background-color .28s ease, color .28s ease;
       overflow-x: hidden
+    }
+
+    .card, .gal, nav, .wrap, .gi {
+      transition: background-color .28s ease, border-color .28s ease, color .28s ease;
     }
 
     a {
@@ -253,16 +257,16 @@
       font-size: clamp(7rem, 18vw, 15rem);
       font-weight: 400;
       letter-spacing: -.04em;
-      fill: transparent;
+      fill: #ff4b2b;
+      fill-opacity: .14;
       stroke: #ff4b2b;
       stroke-width: 1.55;
       paint-order: stroke;
       stroke-linecap: round;
       stroke-linejoin: round;
-      stroke-dasharray: 1500;
-      stroke-dashoffset: 1500;
-      filter: drop-shadow(0 0 4px rgba(255, 75, 43, .48));
-      animation: signatureDraw 2.5s cubic-bezier(.65, 0, .35, 1) .2s forwards, signatureFill .8s ease 2.15s forwards
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      filter: drop-shadow(0 0 4px rgba(255, 75, 43, .48))
     }
 
     @keyframes signatureDraw {
@@ -286,7 +290,7 @@
       position: absolute;
       inset: 0;
       width: 100%;
-      height: 100%;
+      height: min(100%, 540px);
       overflow: visible;
       pointer-events: none;
       z-index: 3
@@ -401,10 +405,6 @@
       transition: transform .42s cubic-bezier(.25, 1, .5, 1)
     }
 
-    .hname.gesture-pointing {
-      transform: translateY(clamp(16px, 2.2vw, 26px))
-    }
-
     .hname h1 {
       position: relative;
       font-size: clamp(2.2rem, 4.3vw, 4.25rem);
@@ -424,7 +424,7 @@
     html.js #n2,
     html.js #role,
     html.js #hd {
-      opacity: 0
+      opacity: 1
     }
 
     .role {
@@ -748,22 +748,20 @@
 
     .imgc {
       position: relative;
-      height: 100%;
-      aspect-ratio: 288/640;
+      height: min(100%, 460px);
+      aspect-ratio: 1109/1418;
       max-width: 100%;
       z-index: 2
     }
 
-    #hc {
+    #heroPic {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 18px 32px rgba(0, 0, 0, .28)) drop-shadow(0 4px 12px rgba(0, 0, 0, .18))
-    }
-
-    #hv {
-      display: none
+      filter: drop-shadow(0 18px 32px rgba(0, 0, 0, .28)) drop-shadow(0 4px 12px rgba(0, 0, 0, .18));
+      -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 84%, transparent 100%)
     }
 
     #plabel {
@@ -936,9 +934,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 2rem;
-      /* perspective is set on the container so each card transforms independently */
-      perspective: 1000px;
-      perspective-origin: 50% 40%;
+      perspective: none;
     }
 
     @media (max-width: 1080px) {
@@ -965,28 +961,15 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      /* 3D tilt: initial state */
-      transform-style: preserve-3d;
-      transform: rotateX(-50deg) rotateZ(40deg);
-      box-shadow:
-        /* dimensional shadow that creates depth behind the tilted card */
-        -6px 6px 0 rgba(0, 0, 0, .18),
-        -12px 12px 0 rgba(0, 0, 0, .14),
-        -18px 18px 0 rgba(0, 0, 0, .10),
-        -24px 24px 0 rgba(0, 0, 0, .06);
-      transition:
-        transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
-        box-shadow 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
-        border-top-color 0.4s ease;
-      /* ensure cards don't escape the container on hover */
-      will-change: transform, box-shadow;
+      box-shadow: var(--sh);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-top-color 0.4s ease;
       outline: none;
     }
 
     /* Hover & keyboard focus: rotate face-forward, come toward viewer */
     .arsenal-card:hover,
     .arsenal-card:focus-visible {
-      transform: rotateX(0deg) rotateZ(0deg) translateZ(200px);
+      transform: translateY(-6px);
       border-top-color: var(--cy);
       box-shadow: none;
     }
@@ -2671,17 +2654,6 @@
       }
     }
 
-    /* hero: portrait assembled from particles */
-    #hc {
-      transition: opacity .7s ease;
-    }
-
-    #hp {
-      position: absolute;
-      z-index: 3;
-      pointer-events: none;
-    }
-
     /* clearer pills in both themes: visible border + slight fill so they never melt into the background */
     .out,
     .sb {
@@ -2703,13 +2675,6 @@
       outline-offset: 4px;
     }
 
-    .hv video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
     .sr-only {
       position: absolute;
       width: 1px;
@@ -2728,23 +2693,6 @@
       color: var(--tx2);
       font: 600 .78rem var(--m);
       letter-spacing: .04em;
-    }
-
-    #hvFallback {
-      position: absolute;
-      inset: auto 1rem 1rem;
-      z-index: 4;
-      padding: .65rem .9rem;
-      border: 1px solid var(--bd);
-      border-radius: 12px;
-      background: var(--gl);
-      color: var(--tx2);
-      font: .78rem var(--m);
-      text-align: center;
-    }
-
-    #hvFallback[hidden] {
-      display: none;
     }
 
     #formStatus {
@@ -3020,13 +2968,13 @@
 </head>
 
 <body>
-  <div id="intro" role="region" aria-label="Introductory signature presentation. Click or tap to enter immediately."
+  <div id="intro" role="region" aria-label="Welcome presentation. Click or tap to enter immediately."
     tabindex="0" title="Click or tap to enter portfolio">
     <div class="in-p in-t"></div>
     <div class="in-p in-b"></div>
     <div class="in-c">
-      <svg class="in-signature" viewBox="0 0 1200 300" role="img" aria-label="Anish Karthik">
-        <text x="50%" y="188" text-anchor="middle">Anish Karthik</text>
+      <svg class="in-signature" viewBox="0 0 1200 300" role="img" aria-label="Welcome">
+        <text x="50%" y="188" text-anchor="middle">WELCOME</text>
       </svg>
       <svg class="in-th" aria-hidden="true">
         <path pathLength="1" d="" />
@@ -3089,7 +3037,7 @@
         <p id="hd">Building digital experiences that matter. Specializing in full-stack architecture, interactive
           interfaces, and scalable solutions.</p>
         <div class="btns"><a href="#projects" class="cta">Explore Work <i class="fas fa-arrow-right"></i></a><a
-            href="resume.html" target="_blank" rel="noopener" class="out"><i class="fas fa-file-arrow-down"></i>
+            href="Anish_Karthik_CV.pdf" download="Anish_Karthik_CV.pdf" class="out"><i class="fas fa-file-arrow-down"></i>
             Resume</a></div>
         <div class="soc" id="hs"></div>
       </div>
@@ -3097,13 +3045,8 @@
         <div id="prof">
           <div class="glow"></div>
           <div class="imgc">
-            <video id="hv" src="assets/videos/hero-pointing-optimized.mp4" autoplay muted playsinline loop
-              preload="metadata" poster="assets/videos/hero-pointing-poster.jpg"
-              aria-label="Anish Karthik presenting his portfolio">
-              <p>Your browser does not support the portfolio video.</p>
-            </video>
-            <p id="hvFallback" hidden>Portrait video unavailable. The portfolio remains fully usable.</p>
-            <canvas id="hc" aria-hidden="true"></canvas>
+            <img id="heroPic" src="anish-portrait.webp" alt="Portrait of Anish Karthik in a navy suit" width="1109"
+              height="1418" decoding="async" fetchpriority="high">
           </div>
           <div id="plabel" class="mono"><i></i><span>REACT MODE</span></div>
         </div>
@@ -3117,12 +3060,17 @@
       <h2 class="title rv">How it started</h2>
       <div class="og">
         <div class="rv">
-          <p>I am a B.Tech CSE student at Lovely Professional University with a deep passion for software engineering
-            and problem-solving. My journey began with an insatiable curiosity about how things work on the internet,
-            which quickly evolved into a dedicated pursuit of full-stack development.</p>
-          <p>I focus on writing clean, elegant, and efficient code. Whether I'm designing seamless user interfaces or
-            architecting robust backend databases, I thrive on turning complex problems into simple, beautiful digital
-            experiences.</p>
+          <p>I am a B.Tech Computer Science and Engineering student at Lovely Professional University with a strong
+            passion for software engineering, full-stack development, and problem-solving. Driven by curiosity about
+            how technology works, I have developed a keen interest in building scalable, responsive, and user-centric
+            web applications.</p>
+          <p>With hands-on experience in React.js, Next.js, TypeScript, Node.js, Express.js, and modern web
+            technologies, I enjoy transforming ideas into functional digital products. From crafting intuitive user
+            interfaces to developing robust backend systems and integrating APIs, I focus on writing clean, efficient,
+            and maintainable code.</p>
+          <p>Beyond development, I actively strengthen my Data Structures and Algorithms skills using C++ and
+            continuously explore emerging technologies. I thrive on tackling challenging problems, learning new tools,
+            and building meaningful solutions that combine creativity, performance, and functionality.</p>
           <div class="idc"><small>DIGITAL BUILDER ID</small>
             <h4>Full-Stack Development</h4>
             <h4>Interactive Interfaces</h4>
@@ -3166,58 +3114,43 @@
     </div>
   </section>
 
-  <section id="training">
-    <div class="wrap">
-      <div class="meta rv">04 / Journey</div>
-      <h2 class="title rv">The Route</h2>
-      <div class="jl" id="ex"></div>
-    </div>
-  </section>
   <section id="achievements">
     <div class="wrap">
-      <div class="meta rv">05 / Milestones</div>
+      <div class="meta rv">04 / Milestones</div>
       <h2 class="title rv">Notable Achievements</h2>
       <div class="grid mg" id="ac"></div>
     </div>
   </section>
   <section id="certifications">
     <div class="wrap">
-      <div class="meta rv">06 / Qualifications</div>
+      <div class="meta rv">05 / Qualifications</div>
       <h2 class="title rv">My Certifications</h2>
       <div class="grid cg" id="ce"></div>
     </div>
   </section>
   <section id="education">
     <div class="wrap">
-      <div class="meta rv">07 / Foundation</div>
+      <div class="meta rv">06 / Foundation</div>
       <h2 class="title rv">Academic History</h2>
       <div class="jl" id="ed"></div>
     </div>
   </section>
 
-  <section id="resume">
-    <div class="wrap">
-      <div class="meta rv">08 / Snapshot</div>
-      <div class="snap rv">
-        <h3>ARASADA ANISH KARTHIK</h3>
-        <h2>Software Developer</h2>
-        <p>Education // Skills // Projects // Experience</p><a href="resume.html" target="_blank" rel="noopener"
-          class="cta"><i class="fas fa-file-download"></i> View Document</a>
-      </div>
-    </div>
-  </section>
-
   <section id="contact">
     <div class="wrap">
-      <div class="meta rv">09 / Next Chapter</div>
+      <div class="meta rv">07 / Next Chapter</div>
       <div class="end rv">
         <h2>Let's create something<br><span class="hl">meaningful.</span></h2>
         <p>Have an idea, project, or opportunity? Let's build it.</p>
         <form id="form" novalidate><label for="contactName">Name</label><input id="contactName" name="name" type="text"
-            placeholder="Name" autocomplete="name" minlength="2" required><label for="contactEmail">Email</label><input
-            id="contactEmail" name="email" type="email" placeholder="Email" autocomplete="email" required><label
-            for="contactMessage">Message</label><textarea id="contactMessage" name="message" placeholder="Message"
-            minlength="10" required></textarea>
+            placeholder="Name" autocomplete="name" minlength="2" maxlength="100" required><label for="contactEmail">Email</label><input
+            id="contactEmail" name="email" type="email" placeholder="Email" autocomplete="email" maxlength="254" required><label
+            for="contactSubject">Subject</label><input id="contactSubject" name="subject" type="text" placeholder="Subject"
+            maxlength="160" required><label for="contactMessage">Message</label><textarea id="contactMessage" name="message"
+            placeholder="Message" minlength="10" maxlength="5000" required></textarea>
+          <label class="sr-only" for="contactCompany">Company</label><input id="contactCompany" name="company" type="text"
+            tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0"
+            maxlength="100">
           <div style="text-align:right"><button type="submit" class="cta">Send Message <i
                 class="fas fa-arrow-right"></i></button></div>
           <p id="formStatus" role="status" aria-live="polite"></p>
@@ -3251,27 +3184,26 @@
     const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const P = { email: "anishkarthik07@gmail.com", github: "https://github.com/arasadaanishkarthik", linkedin: "https://www.linkedin.com/in/arasadaanishkarthik/" };
-    const skills = [["Languages", "fa-code", ["C++", "Python", "C", "DBMS", "JavaScript"]], ["Tools / Platforms", "fa-tools", ["MongoDB", "Git", "GitHub", "MySQL", "React", "Vite", "Node.js", "Express.js"]], ["Technical Skills", "fa-laptop-code", ["Data Structures & Algorithms", "Problem-Solving", "REST APIs", "Full-Stack Development"]], ["Soft Skills", "fa-users", ["Leadership", "Communication", "Teamwork", "Adaptability", "Logical Thinking"]]];
+    const skills = [["Languages", "fa-code", ["C++", "Java", "Python", "C", "DBMS", "JavaScript"]], ["Tools / Platforms", "fa-tools", ["MongoDB", "Git", "GitHub", "MySQL", "React", "Vite", "Node.js", "Express.js"]], ["Technical Skills", "fa-laptop-code", ["Data Structures & Algorithms", "Problem-Solving", "REST APIs", "Full-Stack Development"]], ["Soft Skills", "fa-users", ["Leadership", "Communication", "Team Player", "Adaptability", "Logical Thinking"]]];
     const G = "https://github.com/arasadaanishkarthik/", I = "assets/images/projects/";
     const projects = [
-      ["Finance-Brunch", "Finance application repository built with a TypeScript frontend, backend, and API workspace.", ["TypeScript", "React", "Tailwind CSS"], "chart", "Finance-Brunch", 0, ["Full Stack"]],
+      ["Finance-Brunch", "Finance application repository built with a TypeScript frontend, backend, and API workspace.", ["TypeScript", "React", "Tailwind CSS"], "chart", "Finance-Brunch", "https://www.financebrunch.in/", ["Full Stack"]],
+      ["Krupa's Dental", "Dental hospital website with appointment and clinic-management features, documented with a public deployment.", ["HTML", "CSS", "JavaScript", "Node.js"], "health", "Krupa-Dental", "https://krupa-dental.onrender.com/", ["Full Stack", "Frontend"]],
+      ["RealEstate", "Luxury real-estate platform repository built with vanilla HTML, CSS, and JavaScript.", ["HTML", "CSS", "JavaScript"], "building", "RealEstate", "https://arasadaanishkarthik.github.io/RealEstate/", ["Frontend"]],
+      ["TripTastic", "Travel-planning project repository for a group itinerary experience.", ["JavaScript"], "route", "TripTastic", "https://triptastic-1.onrender.com/", ["Frontend", "AI"]],
       ["Rakhi4Cousins", "Interactive 3D Raksha Bandhan experience using Three.js, procedural particles, and front-end interactions.", ["HTML", "JavaScript", "Three.js"], "cube", "Rakhi4Cousins", 0, ["Frontend"]],
       ["Celebrate.it", "Luxury interactive digital exhibition and cinematic photo gallery built as a public showcase.", ["React", "Vite", "Tailwind CSS", "GSAP"], "spark", "Celebrate.it", 0, ["Frontend"]],
       ["Family Website Public", "Public-safe interactive digital exhibition and photo storytelling showcase.", ["React", "Vite", "Tailwind CSS", "GSAP"], "frames", "family-website-public", 0, ["Frontend"]],
       ["AI Wealth Manager", "AI wealth management application for exploring financial decisions, with a documented public deployment.", ["React", "JavaScript", "Vite"], "ai", "Ai-Wealth-Manager", "https://arasadaanishkarthik.github.io/Ai-Wealth-Manager/#/dashboard", ["Full Stack", "AI"]],
-      ["Krupa's Dental", "Dental hospital website with appointment and clinic-management features, documented with a public deployment.", ["HTML", "CSS", "JavaScript", "Node.js"], "health", "Krupa-Dental", "https://arasadaanishkarthik.github.io/Krupa-Dental/", ["Full Stack", "Frontend"]],
-      ["RealEstate", "Luxury real-estate platform repository built with vanilla HTML, CSS, and JavaScript.", ["HTML", "CSS", "JavaScript"], "building", "RealEstate", 0, ["Frontend"]],
-      ["TripTastic", "Travel-planning project repository for a group itinerary experience.", ["JavaScript"], "route", "TripTastic", 0, ["Frontend", "AI"]],
       ["GrantSys", "GrantSys project repository.", ["HTML"], "docs", "GrantSys", 0, ["Frontend"]],
       ["Stockflow", "Modular inventory management system for products, stock movements, receipts, deliveries, transfers, adjustments, and warehouses.", ["JavaScript"], "boxes", "stockflow", 0, ["Full Stack"]],
       ["Food-Management", "Food-management project repository.", ["JavaScript"], "plate", "Food-Management", 0, ["Frontend"]],
       ["The Final Clue", "The Final Clue project repository.", ["HTML"], "magnify", "The-Final-Clue", 0, ["Frontend"]]];
-    const experience = [["MERN Stack & DevOps Bootcamp", "Lovely Professional University", "Aug 2026", "Intensive training program focusing on hands-on full-stack development and deployment experience. Successfully completed the program with an A grade."], ["Dev Storm Hackathon", "LPU (Participant)", "Aug 2026", "Qualified for the 3rd round by independently developing TripTastic, an AI-powered group travel planner."]];
     const C = "assets/images/certificates/";
-    const achievements = [["DevStorm Hackathon", "LPU / SPIRIT", "Aug 2026", "Qualified for the 3rd round. Built and presented an AI-powered group travel planner.", "Devstorm_Hackathon_Page_1.jpeg"], ["Code2Career AI Hackathon", "Coding Ninjas LPU", "2026", "Participated in the AI/technology-focused hackathon, demonstrating technical creativity and problem-solving skills.", "code2career_page_1.jpg"], ["ALFUSION – Advitiya'26", "IIT Ropar", "2026", "Active involvement and demonstration of technical creativity at IIT Ropar's external technical event.", "iit_roopar_page_1.jpg"], ["HackTheBlock × LPU", "BlockseBlock", "2026", "Participated in the web3 and blockchain focused HackTheBlock technical hackathon.", "Hack the block.jpeg"], ["Open Source Contributors Drive", "GitHub Students Club, LPU", "Sep 2024", "Contributed to open-source projects, showcasing coding and logical problem-solving abilities within a community environment.", "githhub certifiate.jpeg"]];
+    const achievements = [["DevStorm Hackathon", "LPU / SPIRIT", "Aug 2026", "Qualified for Round 3 of the Dev Storm Hackathon by developing TripTastic, a group travel planner for personalized multiday itineraries.", "Devstorm_Hackathon_Page_1.jpeg"], ["ALFUSION – Advitiya'26", "IIT Ropar", "2026", "Active involvement and demonstration of technical creativity at IIT Ropar's external technical event.", "iit_roopar_page_1.jpg"], ["LeetCode Problem Solving", "C++", "", "Solved 50+ Data Structures and Algorithms problems on LeetCode using C++.", ""], ["Matiks Streak", "Daily practice", "", "Maintained a 250-day consecutive streak on Matiks.", ""]];
     const certs = [["AI-Driven MERN Stack Bootcamp", "Lovely Professional University", "Aug 2026", "Mern Stack.png"], ["Database Management System Part - 1", "Infosys Springboard", "Aug 2026", "infosys_certificate_page_1.jpg"], ["Web Development – 18-Hour Live MOOC", "Rising Tech Pro", "Mar 2025", "Web development.jpeg"], ["Linux Commands and Shell Scripting", "Skill era", "Nov 2024", "Linux.jpeg"], ["Programming in JAVA", "iamneo / LPU", "May 2026", "java_certificate_page_1.jpg"], ["Computer Programming (72 Hours)", "iamneo / LPU", "May 2025", "computer_programming_page_1.jpg"], ["How to get into AI", "University of Leeds / FutureLearn", "Mar 2025", "AI_Fundamentals_Page/AI_Fundamentals_Page_1.jpeg"], ["AI and Machine Learning Webinar", "DataSense", "Feb 2025", "data sense.jpeg"]];
     const education = [["B.Tech Computer Science and Engineering", "Lovely Professional University", "Aug 2026 – Present", "Current CGPA: 7.02"], ["Intermediate", "Narayana College", "Jun 2022 – Jun 2024", "Percentage: 92%"], ["SSC", "Narayana School", "Jun 2021 - May 2022", "Percentage: 90.5%"]];
-    const sections = [["home", "Home"], ["about", "About"], ["skills", "Skills"], ["projects", "Projects"], ["training", "Training"], ["achievements", "Achievements"], ["certifications", "Certifications"], ["education", "Education"], ["resume", "Resume"], ["contact", "Contact"]];
+    const sections = [["home", "Home"], ["about", "About"], ["skills", "Skills"], ["projects", "Projects"], ["achievements", "Achievements"], ["certifications", "Certifications"], ["education", "Education"], ["contact", "Contact"]];
 
     /* ---------- render ---------- */
     $('#links').innerHTML = sections.map(s => `<a href="#${s[0]}" data-s="${s[0]}">${s[1]}</a>`).join('');
@@ -3301,8 +3233,8 @@
     `).join('');
     $$('#arFold .ar-line').forEach(l => { const t = l.dataset.t.replace('&amp;', '&'); l.innerHTML = [...t].map(c => `<span class="ar-ch${c === '&' ? ' amp' : ''}">${c === ' ' ? '\u00A0' : c}</span>`).join(''); });
     const journey = (id, d) => $(id).innerHTML = d.map(x => `<div class="ji rv"><small class="mono">${x[2]}</small><h3>${x[0]}</h3><h4>${x[1]}</h4><p>${x[3]}</p></div>`).join('');
-    journey('#ex', experience); journey('#ed', education);
-    $('#ac').innerHTML = achievements.map((a, i) => `<div class="card mc rv"><div class="mh mono"><span>0${i + 1}</span><i class="fas fa-trophy"></i></div><h3>${a[0]}</h3><div class="o">${a[1]} &nbsp;//&nbsp; ${a[2]}</div><p>${a[3]}</p><button class="lk" data-f="${C + a[4]}" data-l="${a[0]}">View Proof <i class="fas fa-arrow-right"></i></button></div>`).join('');
+    journey('#ed', education);
+    $('#ac').innerHTML = achievements.map((a, i) => `<div class="card mc rv"><div class="mh mono"><span>0${i + 1}</span><i class="fas fa-trophy"></i></div><h3>${a[0]}</h3><div class="o">${a[1]}${a[2] ? ` &nbsp;//&nbsp; ${a[2]}` : ''}</div><p>${a[3]}</p>${a[4] ? `<button class="lk" data-f="${C + a[4]}" data-l="${a[0]}">View Proof <i class="fas fa-arrow-right"></i></button>` : ''}</div>`).join('');
     $('#ce').innerHTML = certs.map(c => `<div class="card cc rv" tabindex="0" role="button" data-f="${C + c[3]}" data-l="${c[0]}"><img src="${encodeURI(C + c[3])}" alt="${c[0]}" loading="lazy" decoding="async" fetchpriority="low" onerror="this.closest('.cc').classList.add('noimg')"><div class="ci"><b>${c[0]}</b><div class="o"><i class="fas fa-building" style="color:var(--a1)"></i> ${c[1]}</div><div class="dt"><i class="fas fa-calendar-check" style="color:var(--a1)"></i> ${c[2]}</div><span class="lk">View Certificate <i class="fas fa-external-link-alt"></i></span></div></div>`).join('');
 
     /* ---------- predefined project artwork from project pics / local assets ---------- */
@@ -3738,7 +3670,7 @@
 
     /* ---------- contact ---------- */
     const form = $('#form'), formStatus = $('#formStatus'), submit = form.querySelector('button[type="submit"]');
-    form.addEventListener('submit', e => {
+    form.addEventListener('submit', async e => {
       e.preventDefault();
       formStatus.className = '';
       if (!form.checkValidity()) {
@@ -3749,12 +3681,24 @@
       }
       if (submit.disabled) return;
       submit.disabled = true;
-      const data = new FormData(form), subject = encodeURIComponent('Portfolio enquiry from ' + data.get('name'));
-      const body = encodeURIComponent('Name: ' + data.get('name') + '\nEmail: ' + data.get('email') + '\n\n' + data.get('message'));
-      window.location.href = 'mailto:' + P.email + '?subject=' + subject + '&body=' + body;
-      formStatus.className = 'success';
-      formStatus.textContent = 'Your email client has been prepared. Please review and click Send to deliver the message.';
-      setTimeout(() => { submit.disabled = false; }, 2000);
+      formStatus.textContent = 'Sending your message…';
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form)))
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error || 'Unable to send your message right now.');
+        form.reset();
+        formStatus.className = 'success';
+        formStatus.textContent = 'Thanks! Your message has been sent successfully.';
+      } catch (error) {
+        formStatus.className = 'error';
+        formStatus.textContent = error.message || 'Unable to send your message right now. Please try again.';
+      } finally {
+        submit.disabled = false;
+      }
     });
 
     /* ---------- theme ---------- */
@@ -3762,46 +3706,114 @@
     (function () {
       const box = $('#cord'), svg = box.querySelector('svg'), path = svg.querySelector('path'), knob = box.querySelector('.cd-knob'), tip = box.querySelector('.cd-tip'), root = document.documentElement;
       const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const N = 9, SEG = 20, AX = 34, AY = -6, REST = AY + N * SEG, PULL = 40;
+      const N = 9, SEG = 20, AX = 34, AY = -6, REST = AY + N * SEG, PULL = 35;
       const P = Array.from({ length: N + 1 }, (_, i) => ({ x: AX, y: AY + i * SEG, px: AX, py: AY + i * SEG }));
       let drag = false, tx = AX, ty = REST, run = false, calm = 0;
+      let svgRect = null;
+      const getSvgRect = () => { if (!svgRect) svgRect = svg.getBoundingClientRect(); return svgRect; };
+      window.addEventListener('resize', () => { svgRect = null; }, { passive: true });
+
       const sync = () => knob.setAttribute('aria-checked', root.dataset.theme === 'light');
       function apply(n) {
-        const go = () => { root.dataset.theme = n; try { localStorage.setItem('portfolio-theme', n) } catch (e) { } sync() };
-        if (document.startViewTransition && !reduce) {             // new theme spreads out in a circle from the knob
-          const r = knob.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, R = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-          document.startViewTransition(go).ready.then(() => root.animate({ clipPath: [`circle(0 at ${x}px ${y}px)`, `circle(${R}px at ${x}px ${y}px)`] }, { duration: 750, easing: 'cubic-bezier(.4,0,.2,1)', pseudoElement: '::view-transition-new(root)' })).catch(() => { });
-        } else go();
-        tip.classList.add('hide');
+        root.dataset.theme = n;
+        try { localStorage.setItem('portfolio-theme', n); } catch (e) { }
+        sync();
+        if (tip) tip.classList.add('hide');
       }
       const toggle = () => apply(root.dataset.theme === 'dark' ? 'light' : 'dark');
+
       function draw() {
         let d = `M${P[0].x} ${P[0].y}`;
-        for (let i = 1; i < N; i++) d += ` Q${P[i].x.toFixed(1)} ${P[i].y.toFixed(1)} ${((P[i].x + P[i + 1].x) / 2).toFixed(1)} ${((P[i].y + P[i + 1].y) / 2).toFixed(1)}`;
+        for (let i = 1; i < N; i++) {
+          const mx = ((P[i].x + P[i + 1].x) * 0.5).toFixed(1);
+          const my = ((P[i].y + P[i + 1].y) * 0.5).toFixed(1);
+          d += ` Q${P[i].x.toFixed(1)} ${P[i].y.toFixed(1)} ${mx} ${my}`;
+        }
         path.setAttribute('d', d + ` L${P[N].x.toFixed(1)} ${P[N].y.toFixed(1)}`);
-        knob.style.transform = `translate(${P[N].x.toFixed(1)}px,${P[N].y.toFixed(1)}px)`;
+        knob.style.transform = `translate3d(${P[N].x.toFixed(1)}px,${P[N].y.toFixed(1)}px,0)`;
       }
+
       function step() {
         let e = 0;
-        for (let i = 1; i <= N; i++) { const p = P[i], vx = (p.x - p.px) * .985, vy = (p.y - p.py) * .985; p.px = p.x; p.py = p.y; p.x += vx; p.y += vy + .6; e += Math.abs(vx) + Math.abs(vy) }
-        if (drag) { const h = P[N]; h.x = h.px = tx; h.y = h.py = ty }
-        for (let k = 0; k < 16; k++) for (let i = 0; i < N; i++) {
-          const a = P[i], b = P[i + 1], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1, f = (d - SEG) / d;
-          const pinB = drag && i === N - 1;
-          if (i === 0) { b.x -= dx * f; b.y -= dy * f } else if (pinB) { a.x += dx * f; a.y += dy * f } else { a.x += dx * f / 2; a.y += dy * f / 2; b.x -= dx * f / 2; b.y -= dy * f / 2 }
+        for (let i = 1; i <= N; i++) {
+          const p = P[i], vx = (p.x - p.px) * 0.98, vy = (p.y - p.py) * 0.98;
+          p.px = p.x; p.py = p.y;
+          p.x += vx; p.y += vy + 0.6;
+          e += Math.abs(vx) + Math.abs(vy);
         }
-        draw(); return e;
+        if (drag) {
+          const h = P[N];
+          h.x = h.px = tx;
+          h.y = h.py = ty;
+        }
+        for (let k = 0; k < 8; k++) {
+          for (let i = 0; i < N; i++) {
+            const a = P[i], b = P[i + 1], dx = b.x - a.x, dy = b.y - a.y;
+            const d = Math.hypot(dx, dy) || 1, f = (d - SEG) / d;
+            const pinB = drag && i === N - 1;
+            if (i === 0) { b.x -= dx * f; b.y -= dy * f; }
+            else if (pinB) { a.x += dx * f; a.y += dy * f; }
+            else { a.x += dx * f * 0.5; a.y += dy * f * 0.5; b.x -= dx * f * 0.5; b.y -= dy * f * 0.5; }
+          }
+        }
+        draw();
+        return e;
       }
-      function loop() { const e = step(); calm = (!drag && e < .05) ? calm + 1 : 0; if (calm > 40) { run = false; return } requestAnimationFrame(loop) }
-      const kick = () => { calm = 0; if (!run) { run = true; requestAnimationFrame(loop) } };
-      draw(); sync();
-      if (reduce) { knob.onclick = toggle; return }
-      const local = e => { const r = svg.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top] };
-      knob.addEventListener('pointerdown', e => { drag = true; knob.classList.add('on'); knob.setPointerCapture(e.pointerId);[tx, ty] = local(e); e.preventDefault(); kick() });
-      knob.addEventListener('pointermove', e => { if (!drag) return; const [x, y] = local(e); tx = Math.max(AX - 60, Math.min(AX + 60, x)); ty = Math.max(60, Math.min(REST + 100, y)) });
-      const end = () => { if (!drag) return; drag = false; knob.classList.remove('on'); if (P[N].y - REST > PULL) toggle(); kick() };
-      knob.addEventListener('pointerup', end); knob.addEventListener('pointercancel', end);
-      knob.addEventListener('click', e => { if (e.detail !== 0) return; P[N].y += 70; toggle(); kick() });   // keyboard / assistive tech
+
+      function loop() {
+        const e = step();
+        calm = (!drag && e < 0.05) ? calm + 1 : 0;
+        if (calm > 30) { run = false; return; }
+        requestAnimationFrame(loop);
+      }
+
+      const kick = () => {
+        calm = 0;
+        if (!run) { run = true; requestAnimationFrame(loop); }
+      };
+
+      draw();
+      sync();
+
+      if (reduce) { knob.onclick = toggle; return; }
+
+      knob.addEventListener('pointerdown', e => {
+        drag = true;
+        svgRect = svg.getBoundingClientRect();
+        knob.classList.add('on');
+        knob.setPointerCapture(e.pointerId);
+        tx = e.clientX - svgRect.left;
+        ty = e.clientY - svgRect.top;
+        e.preventDefault();
+        kick();
+      });
+
+      knob.addEventListener('pointermove', e => {
+        if (!drag) return;
+        const r = getSvgRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        tx = Math.max(AX - 50, Math.min(AX + 50, x));
+        ty = Math.max(60, Math.min(REST + 110, y));
+        kick(); // Wakes up cord animation immediately on pointer motion!
+      }, { passive: true });
+
+      const end = () => {
+        if (!drag) return;
+        drag = false;
+        knob.classList.remove('on');
+        if (P[N].y - REST > PULL) toggle();
+        kick();
+      };
+
+      knob.addEventListener('pointerup', end);
+      knob.addEventListener('pointercancel', end);
+      knob.addEventListener('click', e => {
+        if (e.detail !== 0) return;
+        P[N].y += 65;
+        toggle();
+        kick();
+      });
     })();
 
     /* ---------- profile focus ---------- */
@@ -3828,147 +3840,51 @@
       hero.addEventListener('mouseleave', () => { tx = ty = 0; heroRect = null; wake(); });
     }
 
-    /* ---------- HERO CANVAS CHROMA KEY (from Code 1) ---------- */
-    let heroEntranceFinished = false, gestureOn = false, keyRaf = null, ended = false;
-    const hv = $('#hv'), hc = $('#hc'), hname = $('.hname'), hvFallback = $('#hvFallback');
-    let _bg, _q, _n = 0;
-    function chromaKey(ctx, w, h) {
-      const img = ctx.getImageData(0, 0, w, h), d = img.data, n = w * h;
-      if (_n !== n) { _bg = new Uint8Array(n); _q = new Int32Array(n * 2); _n = n } else _bg.fill(0);
-      const bg = _bg, q = _q; let qh = 0, qt = 0;
-      const mark = (x, y) => { if (x < 0 || x >= w || y < 0 || y >= h) return; const i = y * w + x; if (bg[i]) return; bg[i] = 1; q[qt++] = x; q[qt++] = y };
-      const T = Math.round(h * .145), B = Math.round(h * .125), S = Math.round(w * .07);
-      for (let y = 0; y < T; y++)for (let x = 0; x < w; x++)mark(x, y);
-      for (let y = h - B; y < h; y++)for (let x = 0; x < w; x++)mark(x, y);
-      for (let y = 0; y < h; y++) { for (let x = 0; x < S; x++)mark(x, y); for (let x = w - S; x < w; x++)mark(x, y) }
-      for (let x = S; x < w - S; x++)for (let y = T; y < h - B; y++) { const p = (y * w + x) * 4; if (d[p] > 4 || d[p + 1] > 4 || d[p + 2] > 4) break; mark(x, y) }
-      const dark = i => { const p = i * 4; return d[p] <= 4 && d[p + 1] <= 4 && d[p + 2] <= 4 };
-      while (qh < qt) {
-        const x = q[qh++], y = q[qh++]; let i;
-        if (x + 1 < w) { i = y * w + x + 1; if (!bg[i] && dark(i)) { bg[i] = 1; q[qt++] = x + 1; q[qt++] = y } }
-        if (x > 0) { i = y * w + x - 1; if (!bg[i] && dark(i)) { bg[i] = 1; q[qt++] = x - 1; q[qt++] = y } }
-        if (y + 1 < h) { i = (y + 1) * w + x; if (!bg[i] && dark(i)) { bg[i] = 1; q[qt++] = x; q[qt++] = y + 1 } }
-        if (y > 0) { i = (y - 1) * w + x; if (!bg[i] && dark(i)) { bg[i] = 1; q[qt++] = x; q[qt++] = y - 1 } }
-      }
-      for (let i = 0; i < n; i++)if (bg[i]) d[i * 4 + 3] = 0;
-      ctx.putImageData(img, 0, 0);
-    }
-    function gesture() {
-      if (!heroEntranceFinished || reduce) return;
-      const on = hv.currentTime < 2.3; if (on === gestureOn) return; gestureOn = on; hname.classList.toggle('gesture-pointing', on);
-    }
-    if (hv && hc) {
-      const ctx = hc.getContext('2d', { willReadFrequently: true }); let ready = false;
-      hv.addEventListener('error', () => { hvFallback.hidden = false; hc.style.opacity = 1; });
-      const init = () => { if (ready) return; hc.width = hv.videoWidth || 288; hc.height = hv.videoHeight || 640; ready = true };
-      const draw = () => {
-        init(); ctx.clearRect(0, 0, hc.width, hc.height); ctx.drawImage(hv, 0, 0, hc.width, hc.height);
-        try { chromaKey(ctx, hc.width, hc.height) } catch (e) { console.warn('Chroma key skipped (serve over http/https):', e.message) }
-      };
-      let heroVis = true, lastK = 0;   // only work while the hero is on screen, ~30fps
-      const loop = (t = performance.now()) => { if (ended || hv.paused || !heroVis || document.hidden) { keyRaf = null; return; } if (t - lastK >= 42) { lastK = t; draw(); gesture(); } keyRaf = requestAnimationFrame(loop); };
-      new IntersectionObserver(([e]) => {
-        heroVis = e.isIntersecting;
-        if (!heroVis) {
-          if (!ended && !hv.paused) { try { hv.pause(); } catch (err) { } }
-        } else {
-          if (!ended && hv.paused) { try { hv.play().catch(() => { }); } catch (err) { } }
-          if (!ended && !keyRaf && !hv.paused) loop();
-        }
-      }).observe($('#home'));
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          if (!ended && !hv.paused) { try { hv.pause(); } catch (err) { } }
-        } else {
-          if (heroVis && !ended && hv.paused) { try { hv.play().catch(() => { }); } catch (err) { } }
-          if (heroVis && !ended && !keyRaf && !hv.paused) loop();
-        }
-      });
-      hv.addEventListener('loadedmetadata', init);
-      hv.addEventListener('canplay', () => { init(); draw() });
-      hv.addEventListener('play', () => { ended = false; cancelAnimationFrame(keyRaf); loop() });
-      hv.addEventListener('ended', () => { ended = true; cancelAnimationFrame(keyRaf); draw(); gestureOn = false; hname.classList.remove('gesture-pointing') });
-      /* particle portrait: the first video frame is sampled into coloured pixels that fly in and assemble, then the real video fades in */
-      const heroParticles = done => {
-        if (reduce) return done();
-        const prof = $('#prof'), box = hc.parentNode; let tries = 0;
-        const fail = e => { console.warn('particle portrait skipped:', e && e.message); hc.style.opacity = ''; done() };
-        const start = () => {
-          init(); draw();
-          const w = hc.width, h = hc.height, src = ctx.getImageData(0, 0, w, h).data;
-          const COLS = 92, step = w / COLS, rows = Math.floor(h / step), raw = [];
-          for (let r = 0; r < rows; r++) for (let c = 0; c < COLS; c++) {
-            const sx = Math.min(w - 1, Math.floor((c + .5) * step)), sy = Math.min(h - 1, Math.floor((r + .5) * step)), q = (sy * w + sx) * 4;
-            if (src[q + 3] < 140) continue;
-            const R = (src[q] >> 3) << 3 | 4, G = (src[q + 1] >> 3) << 3 | 4, B = (src[q + 2] >> 3) << 3 | 4;
-            raw.push([c * step + step / 2, r * step + step / 2, (R << 16) | (G << 8) | B]);
-          }
-          if (raw.length < 400) throw new Error('no portrait pixels found');
-          raw.sort((a, b) => a[2] - b[2]);                                   // grouped by colour = few fillStyle changes per frame
-          const n = raw.length, tx = new Float32Array(n), ty = new Float32Array(n), sx0 = new Float32Array(n), sy0 = new Float32Array(n),
-            bx = new Float32Array(n), by = new Float32Array(n), dl = new Float32Array(n), du = new Float32Array(n),
-            ox = new Float32Array(n), oy = new Float32Array(n), vx = new Float32Array(n), vy = new Float32Array(n), key = new Int32Array(n);
-          const PW = prof.offsetWidth, PH = prof.offsetHeight, CW = Math.round(PW * 1.5), CH = Math.round(PH * 1.12), CL = -(CW - PW) / 2, CT = -(CH - PH) / 2;
-          const IW = box.offsetWidth, IH = box.offsetHeight, sc = Math.min(IW / w, IH / h), dw = w * sc, dh = h * sc;
-          const offX = box.offsetLeft + (IW - dw) / 2 - CL, offY = box.offsetTop + (IH - dh) / 2 - CT, cell = step * sc;
-          const rnd = (a, b) => a + Math.random() * (b - a), cx = CW / 2, cy = CH / 2;
-          for (let i = 0; i < n; i++) {
-            const p = raw[i]; tx[i] = offX + p[0] * sc; ty[i] = offY + p[1] * sc; key[i] = p[2];
-            const ang = Math.random() * 6.2832, rad = rnd(.45, 1.1) * Math.max(CW, CH) * .5;
-            sx0[i] = cx + Math.cos(ang) * rad * 1.15; sy0[i] = cy + Math.sin(ang) * rad * .8;
-            const dx = tx[i] - sx0[i], dy = ty[i] - sy0[i], len = Math.hypot(dx, dy) || 1, k = rnd(-.45, .45) * len;
-            bx[i] = -dy / len * k; by[i] = dx / len * k;
-            dl[i] = (p[1] / h) * .55 + Math.random() * .6; du[i] = rnd(1.2, 2.1);
-          }
-          const dpr = Math.min(devicePixelRatio || 1, 1.5), cv = document.createElement('canvas'); cv.id = 'hp';
-          cv.width = CW * dpr; cv.height = CH * dpr;
-          Object.assign(cv.style, { left: CL + 'px', top: CT + 'px', width: CW + 'px', height: CH + 'px' });
-          const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); prof.appendChild(cv);
-          const css = new Map(); const col = k => css.get(k) || (css.set(k, '#' + k.toString(16).padStart(6, '0')), css.get(k));
-          const ptr = { x: -9999, y: -9999, on: false }, RAD = Math.max(46, cell * 14), RAD2 = RAD * RAD;
-          const move = e => { const r = cv.getBoundingClientRect(); ptr.x = (e.clientX - r.left) * (CW / r.width); ptr.y = (e.clientY - r.top) * (CH / r.height); ptr.on = true };
-          const leave = () => { ptr.on = false };
-          prof.addEventListener('pointermove', move, { passive: true }); prof.addEventListener('pointerleave', leave);
-          const endT = Math.max(...dl) + 2.1 + .5; let t0 = performance.now(), fading = false, raf = 0;
-          const frame = now => {
-            const t = (now - t0) / 1000; g.clearRect(0, 0, CW, CH); let last = -1;
-            for (let i = 0; i < n; i++) {
-              let e = (t - dl[i]) / du[i]; if (e <= 0) continue; if (e > 1) e = 1;
-              const k = 1 - Math.pow(1 - e, 4), sw = Math.sin(k * 3.14159);
-              let x = sx0[i] + (tx[i] - sx0[i]) * k + bx[i] * sw, y = sy0[i] + (ty[i] - sy0[i]) * k + by[i] * sw;
-              if (ptr.on) { const ddx = x + ox[i] - ptr.x, ddy = y + oy[i] - ptr.y, d2 = ddx * ddx + ddy * ddy; if (d2 < RAD2 && d2 > 1) { const d = Math.sqrt(d2), f = (1 - d / RAD) * 5; vx[i] += ddx / d * f; vy[i] += ddy / d * f } }
-              vx[i] -= ox[i] * .07; vy[i] -= oy[i] * .07; vx[i] *= .86; vy[i] *= .86; ox[i] += vx[i]; oy[i] += vy[i];
-              if (key[i] !== last) { g.fillStyle = col(key[i]); last = key[i] }
-              const s = cell * .9 * (1 + (1 - k) * .55);
-              g.fillRect(x + ox[i] - s / 2, y + oy[i] - s / 2, s, s);
-            }
-            if (t > endT && !fading) {                                         // portrait is built: crossfade into the real video and start it
-              fading = true; cv.style.transition = 'opacity .8s ease'; cv.style.opacity = 0; hc.style.opacity = 1; done();
-              setTimeout(() => { cancelAnimationFrame(raf); cv.remove(); prof.removeEventListener('pointermove', move); prof.removeEventListener('pointerleave', leave) }, 900);
-            }
-            raf = requestAnimationFrame(frame);
-          };
-          raf = requestAnimationFrame(frame);
-        };
-        const go = () => { if (hv.readyState < 2 && tries++ < 40) return setTimeout(go, 100); try { start() } catch (e) { fail(e) } };
-        go();
-      };
-      if (!reduce) hc.style.opacity = 0;                                       // hidden until the particles have built the portrait
-      try { hv.pause(); hv.currentTime = 0 } catch (e) { } setTimeout(() => heroParticles(() => hv.play().catch(() => { })), reduce ? 0 : 3200);   // start when the intro lifts
-    }
-
     /* ---------- real navbar height -> --nav-h ---------- */
     const navEl = $('nav'), setNav = () => document.documentElement.style.setProperty('--nav-h', navEl.offsetHeight + 'px');
     setNav(); if ('ResizeObserver' in window) new ResizeObserver(setNav).observe(navEl); addEventListener('resize', setNav);
 
     /* ---------- scroll: progress, spy, reveal ---------- */
+    const sectionsList = $$('section');
+    const navLinksList = $$('#links a');
+    let sectionTops = [];
+    const updateSectionTops = () => {
+      sectionTops = sectionsList.map(s => ({ id: s.id, top: s.offsetTop }));
+    };
+    updateSectionTops();
+    addEventListener('resize', updateSectionTops, { passive: true });
+
+    const progressBar = $('#bar'), topBtn = $('#top');
     const spy = () => {
       const st = scrollY, max = document.documentElement.scrollHeight - innerHeight;
-      $('#bar').style.width = (max > 0 ? st / max * 100 : 0) + '%'; $('#top').classList.toggle('on', st > 500);
-      let cur = 'home'; $$('section').forEach(s => { if (s.getBoundingClientRect().top <= innerHeight * .4) cur = s.id });
-      $$('#links a').forEach(a => { const on = a.dataset.s === cur; a.classList.toggle('on', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); if (on && cur !== spy.l && !matchMedia('(min-width:1001px)').matches) a.scrollIntoView({ inline: 'center', block: 'nearest' }) }); spy.l = cur;
+      if (progressBar) progressBar.style.width = (max > 0 ? (st / max * 100).toFixed(1) : 0) + '%';
+      if (topBtn) topBtn.classList.toggle('on', st > 500);
+      const target = st + innerHeight * .4;
+      let cur = 'home';
+      for (let i = 0; i < sectionTops.length; i++) {
+        if (target >= sectionTops[i].top) cur = sectionTops[i].id;
+      }
+      if (cur !== spy.l) {
+        navLinksList.forEach(a => {
+          const on = a.dataset.s === cur;
+          a.classList.toggle('on', on);
+          if (on) {
+            a.setAttribute('aria-current', 'page');
+            if (!matchMedia('(min-width:1001px)').matches) a.scrollIntoView({ inline: 'center', block: 'nearest' });
+          } else {
+            a.removeAttribute('aria-current');
+          }
+        });
+        spy.l = cur;
+      }
     };
-    let spyQ = false; addEventListener('scroll', () => { if (spyQ) return; spyQ = true; requestAnimationFrame(() => { spyQ = false; spy() }) }, { passive: true }); spy();
+    let spyQ = false;
+    addEventListener('scroll', () => {
+      if (spyQ) return;
+      spyQ = true;
+      requestAnimationFrame(() => { spyQ = false; spy(); });
+    }, { passive: true });
+    spy();
     $('#top').onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target) } }), { threshold: .1, rootMargin: '0px 0px -40px 0px' });
     $$('.rv').forEach(el => io.observe(el));
@@ -4122,43 +4038,17 @@
         if (typeof SplitText !== 'undefined') gsap.registerPlugin(SplitText);
       } catch (e) { }
 
-      const startEntrance = () => setTimeout(() => {
+      const startEntrance = () => {
         if (window.dismissIntro) window.dismissIntro();
         else { const introEl = $('#intro'); if (introEl) introEl.classList.add('off'); }
-        const tl = gsap.timeline({ delay: .5, onComplete: () => { window.heroEntranceFinished = true; } });
-        // A1 typewriter
-        gsap.set('#hi', { opacity: 1 });
-        if (typeof TextPlugin !== 'undefined') {
-          tl.to('#tw', { text: '00 / INTRODUCTION', duration: 1.2, ease: 'none' }).to('#cur', { opacity: 0, duration: .1 }, '+=.2');
-        } else {
-          $('#tw').textContent = '00 / INTRODUCTION';
-          $('#cur').style.display = 'none';
-        }
-        // A2 ink bleed, then spotlight reveal for ANISH KARTHIK
-        gsap.set(['#n1', '#n2'], { opacity: 1 });
-        const anishNameElement = $('#n2');
-        anishNameElement.classList.add('spotlight');
-        if (typeof SplitText !== 'undefined' && SplitText.create) {
-          try {
-            const split = SplitText.create(anishNameElement, { type: 'chars' });
-            tl.from('#n1', { filter: 'blur(20px)', opacity: 0, scale: .9, duration: 1.5, ease: 'power2.out' }, '>')
-              .from(split.chars, { opacity: .1, scale: .8, filter: 'blur(4px)', stagger: { each: .06, from: 'center' }, duration: .4, ease: 'power2.out' }, '>');
-          } catch (e) {
-            tl.from(['#n1', '#n2'], { filter: 'blur(20px)', opacity: 0, scale: .9, duration: 1.5, ease: 'power2.out' }, '>');
-          }
-        } else {
-          tl.from(['#n1', '#n2'], { filter: 'blur(20px)', opacity: 0, scale: .9, duration: 1.5, ease: 'power2.out' }, '>');
-        }
-        // A3 role decode
-        gsap.set('#role', { opacity: 1 });
-        if (typeof TextPlugin !== 'undefined') {
-          tl.to('#rt', { text: { value: 'FULL-STACK DEVELOPER', chars: 'XO!#▓▒░█' }, duration: 1.5, ease: 'none' }, '>');
-        } else {
-          $('#rt').textContent = 'FULL-STACK DEVELOPER';
-        }
-        // A4 description reveal
-        tl.fromTo('#hd', { filter: 'blur(20px)', opacity: 0, scale: .9 }, { filter: 'blur(0px)', opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' }, '>');
-      }, 3400);
+        $('#tw').textContent = '00 / INTRODUCTION';
+        $('#cur').style.display = 'none';
+        ['#hi', '#n1', '#n2', '#role', '#hd'].forEach(selector => {
+          const element = $(selector);
+          if (element) element.style.opacity = '1';
+        });
+        window.heroEntranceFinished = true;
+      };
 
       const fontsPromise = (document.fonts && document.fonts.ready)
         ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))])
@@ -4202,6 +4092,14 @@
             continue
           }
           const top = it.t - y, bottom = top + it.h;
+          // Viewport culling: only animate sections currently in or near viewport
+          if (top > vh * 1.15 || bottom < -vh * 0.25) {
+            if (it.on !== false) {
+              it.el.style.transform = it.el.style.opacity = it.el.style.transformOrigin = it.el.style.willChange = '';
+              it.on = false;
+            }
+            continue;
+          }
           let te = clamp((vh * CFG.enterAt - top) / (vh * .6), 0, 1); if (it.boot) te = Math.min(te, boot.v);
           const tx = clamp((vh * CFG.exitAt - bottom) / (vh * CFG.exitAt), 0, 1);
           it.e += (te - it.e) * CFG.ease; it.x += (tx - it.x) * CFG.ease;
@@ -4263,43 +4161,57 @@
   </script>
   <script>
     /* ---------- cursor particles: move the mouse and small glowing dots burst out and fade ----------
-       One canvas, a fixed-size particle pool, and the loop sleeps as soon as the last particle dies. */
+       One canvas, a lightweight particle pool, and sleeps when mouse is still. */
     (function () {
       if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
       const root = document.documentElement, cv = document.createElement('canvas'); cv.id = 'pfx'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
-      const cx = cv.getContext('2d'), MAX = 140; let W = 0, H = 0, dpr = 1, pal = ['#00f0ff', '#3b82f6', '#8b5cf6'], lx = -1, ly = -1, run = false, last = 0;
+      const cx = cv.getContext('2d'), MAX = 40; let W = 0, H = 0, dpr = 1, lx = -1, ly = -1, run = false, last = 0;
+      let pal = ['#00f0ff', '#3b82f6', '#8b5cf6'];
       const P = [];
-      function size() { dpr = Math.min(devicePixelRatio || 1, 1.5); W = innerWidth; H = innerHeight; cv.width = W * dpr; cv.height = H * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0) }
-      function colors() { const cs = getComputedStyle(root); pal = ['--cy', '--a1', '--a2'].map(v => cs.getPropertyValue(v).trim() || '#00f0ff') }
-      size(); colors(); addEventListener('resize', size);
+      function size() { dpr = Math.min(devicePixelRatio || 1, 1.25); W = innerWidth; H = innerHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+      function colors() {
+        const dark = root.dataset.theme !== 'light';
+        pal = dark ? ['#00f0ff', '#3b82f6', '#8b5cf6'] : ['#0284c7', '#2563eb', '#7c3aed'];
+      }
+      size(); colors(); addEventListener('resize', size, { passive: true });
       new MutationObserver(colors).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
       function emit(x, y, n) {
         for (let i = 0; i < n && P.length < MAX; i++) {
-          const a = Math.random() * 6.283, v = .3 + Math.random() * 1.6;
-          P.push({ x: x + (Math.random() - .5) * 6, y: y + (Math.random() - .5) * 6, vx: Math.cos(a) * v, vy: Math.sin(a) * v - .3, r: 1.2 + Math.random() * 2.6, life: 0, max: 650 + Math.random() * 650, c: pal[(Math.random() * pal.length) | 0] });
+          const a = Math.random() * 6.283, v = 0.3 + Math.random() * 1.2;
+          P.push({ x: x + (Math.random() - 0.5) * 4, y: y + (Math.random() - 0.5) * 4, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 0.2, r: 1.2 + Math.random() * 2, life: 0, max: 450 + Math.random() * 400, c: pal[(Math.random() * pal.length) | 0] });
         }
       }
       function frame(t) {
-        const dt = Math.min(40, t - last) / 16.7; last = t;
+        const dt = Math.min(32, t - last) / 16.7; last = t;
         cx.clearRect(0, 0, W, H);
-        const dark = root.getAttribute('data-theme') !== 'light'; cx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
+        const dark = root.dataset.theme !== 'light';
+        cx.globalCompositeOperation = dark ? 'lighter' : 'source-over';
         for (let i = P.length - 1; i >= 0; i--) {
-          const p = P[i]; p.life += dt * 16.7; const k = p.life / p.max;
-          if (k >= 1) { P[i] = P[P.length - 1]; P.pop(); continue }
-          p.vx *= .965; p.vy = p.vy * .965 + .012 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
-          cx.globalAlpha = (1 - k) * (dark ? .9 : .75); cx.fillStyle = p.c;
-          cx.beginPath(); cx.arc(p.x, p.y, p.r * (1 - k * .6), 0, 6.283); cx.fill();
+          const p = P[i];
+          p.life += dt * 16.7;
+          const k = p.life / p.max;
+          if (k >= 1) { P[i] = P[P.length - 1]; P.pop(); continue; }
+          p.vx *= 0.96; p.vy = p.vy * 0.96 + 0.015 * dt; p.x += p.vx * dt; p.y += p.vy * dt;
+          cx.globalAlpha = (1 - k) * (dark ? 0.85 : 0.65);
+          cx.fillStyle = p.c;
+          cx.beginPath();
+          cx.arc(p.x, p.y, p.r * (1 - k * 0.5), 0, 6.283);
+          cx.fill();
         }
-        if (P.length && !document.hidden) requestAnimationFrame(frame); else { run = false; cx.clearRect(0, 0, W, H) }
+        if (P.length && !document.hidden) requestAnimationFrame(frame);
+        else { run = false; cx.clearRect(0, 0, W, H); }
       }
       addEventListener('mousemove', e => {
         const x = e.clientX, y = e.clientY;
-        if (lx >= 0) { const d = Math.hypot(x - lx, y - ly); if (d > 2) emit(x, y, Math.min(4, 1 + (d / 14) | 0)) }
+        if (lx >= 0) {
+          const d = Math.hypot(x - lx, y - ly);
+          if (d > 8) emit(x, y, d > 28 ? 2 : 1);
+        }
         lx = x; ly = y;
-        if (!run && P.length) { run = true; last = performance.now(); requestAnimationFrame(frame) }
+        if (!run && P.length) { run = true; last = performance.now(); requestAnimationFrame(frame); }
       }, { passive: true });
-      document.addEventListener('mouseleave', () => { lx = -1 });
+      document.addEventListener('mouseleave', () => { lx = -1; });
     })();
   </script>
   <script>
