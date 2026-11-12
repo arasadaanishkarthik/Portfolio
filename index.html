@@ -2655,6 +2655,121 @@
       }
     }
 
+    /* ===== CERTIFICATIONS: SCROLL-STEPPED QUEUE (current certificate large, neighbours small, copy beside it) ===== */
+    @media (min-width: 1081px) {
+      html.ce-on #certifications {
+        height: 100vh;
+        min-height: 100vh;
+        padding: 0 !important;
+        overflow: hidden;
+      }
+
+      html.ce-on #certifications .wrap {
+        position: relative;
+        width: 100%;
+        max-width: none;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
+
+      html.ce-on #certifications .meta,
+      html.ce-on #certifications .title {
+        position: absolute;
+        left: var(--cel, 6vw);
+        margin: 0;
+        text-align: left;
+        z-index: 5;
+      }
+
+      html.ce-on #certifications .meta { top: var(--cemt, 90px); }
+      html.ce-on #certifications .title { top: calc(var(--cemt, 90px) + 2rem); }
+
+      html.ce-on #ce {
+        position: absolute;
+        display: block;
+        perspective: none;
+        pointer-events: none;
+      }
+
+      /* every certificate is laid out once at the large size and only moved and scaled */
+      html.ce-on #ce .cc,
+      html.ce-on #ce .cc.rv {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        display: block;
+        height: auto;
+        transform-origin: 0 0;
+        transform-style: flat;
+        transition: none !important;
+        will-change: transform, opacity;
+        border-radius: 16px;
+        overflow: hidden;
+        pointer-events: auto;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, .35);
+      }
+
+      html.ce-on #ce .cc .ci { display: none; }
+
+      html.ce-on #ce .cc img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border: 0;
+        background: var(--gl);
+        transition: none;
+      }
+
+      html.ce-on #ce .cc:hover img { transform: none; }
+      html.ce-on #ce .cc.noimg::before { position: absolute; inset: 0; height: 100%; font-size: 1.3rem; }
+
+      /* copy column: lines swap through masks */
+      .cec {
+        position: absolute;
+        top: 0;
+        pointer-events: none;
+        color: var(--tx);
+      }
+
+      .cec .mk { overflow: hidden; padding-bottom: .18em; margin-bottom: -.18em; }
+      .cec .mk > * { display: block; will-change: transform; }
+
+      .cec .cec-m { font: 600 .78rem var(--m); letter-spacing: .08em; color: var(--a1); margin-bottom: .9rem; }
+      .cec .cec-t { font: 700 clamp(1.25rem, 1.9vw, 1.7rem)/1.2 var(--f); margin: 0 0 .9rem; color: var(--tx); }
+      .cec .cec-d { font: 400 .9rem/1.6 var(--m); color: var(--tx2); margin: 0 0 1.3rem; }
+
+      .cec .lk {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        pointer-events: auto;
+        cursor: pointer;
+        color: var(--cy);
+      }
+
+      /* step number rolls instead of fading */
+      .cen {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        display: flex;
+        align-items: flex-end;
+        gap: .5rem;
+        color: var(--tx);
+        pointer-events: none;
+      }
+
+      .cen-w { height: 1em; overflow: hidden; font: 400 clamp(3rem, 5.4vw, 5.2rem)/1 var(--f-side); }
+      .cen-t { will-change: transform; }
+      .cen-t span { display: block; height: 1em; line-height: 1; }
+      .cen-of { font: 500 .8rem var(--m); color: var(--tx2); padding-bottom: .5rem; }
+    }
+
     /* clearer pills in both themes: visible border + slight fill so they never melt into the background */
     .out,
     .sb {
@@ -3562,7 +3677,7 @@
       ["The Final Clue", "The Final Clue project repository.", ["HTML"], "magnify", "The-Final-Clue", 0, ["Frontend"]]];
     const C = "assets/images/certificates/";
     const achievements = [["DevStorm Hackathon", "LPU / SPIRIT", "Aug 2026", "Qualified for Round 3 of the Dev Storm Hackathon by developing TripTastic, a group travel planner for personalized multiday itineraries.", "Devstorm_Hackathon_Page_1.jpeg"], ["ALFUSION – Advitiya'26", "IIT Ropar", "2026", "Active involvement and demonstration of technical creativity at IIT Ropar's external technical event.", "iit_roopar_page_1.jpg"], ["LeetCode Problem Solving", "C++", "", "Solved 50+ Data Structures and Algorithms problems on LeetCode using C++.", ""], ["Matiks Streak", "Daily practice", "", "Maintained a 250-day consecutive streak on Matiks.", ""]];
-    const certs = [["AI-Driven MERN Stack Bootcamp", "Lovely Professional University", "Aug 2026", "Mern Stack.png"], ["Database Management System Part - 1", "Infosys Springboard", "Aug 2026", "infosys_certificate_page_1.jpg"], ["Web Development – 18-Hour Live MOOC", "Rising Tech Pro", "Mar 2025", "Web development.jpeg"], ["Linux Commands and Shell Scripting", "Skill era", "Nov 2024", "Linux.jpeg"], ["Programming in JAVA", "iamneo / LPU", "May 2026", "java_certificate_page_1.jpg"], ["Computer Programming (72 Hours)", "iamneo / LPU", "May 2025", "computer_programming_page_1.jpg"], ["How to get into AI", "University of Leeds / FutureLearn", "Mar 2025", "AI_Fundamentals_Page/AI_Fundamentals_Page_1.jpeg"], ["AI and Machine Learning Webinar", "DataSense", "Feb 2025", "data sense.jpeg"]];
+    const certs = [["AI-Driven MERN Stack Bootcamp", "Lovely Professional University", "Aug 2026", "Mern Stack.png"], ["Database Management System Part - 1", "Infosys Springboard", "Aug 2026", "infosys_certificate_page_1.jpg"], ["Web Development – 18-Hour Live MOOC", "Rising Tech Pro", "Mar 2025", "Web development.jpeg"], ["Linux Commands and Shell Scripting", "Skill era", "Nov 2024", "Linux.jpeg"], ["Programming in JAVA", "iamneo / LPU", "May 2026", "java_certificate_page_1.jpg"], ["Computer Programming (72 Hours)", "iamneo / LPU", "May 2025", "computer_programming_page_1.jpg"], ["How to get into AI", "University of Leeds / FutureLearn", "Mar 2025", "AI_Fundamentals_Page/AI_Fundamentals_Page_1.jpeg"], ["AI and Machine Learning Webinar", "DataSense", "Feb 2025", "data sense.jpeg"], ["Cloud Computing", "NPTEL / IIT Kharagpur", "Jul–Oct 2026", "nptel_page-0001.jpg"]];
     const education = [["B.Tech Computer Science and Engineering", "Lovely Professional University", "Aug 2026 – Present", "Current CGPA: 7.02"], ["Intermediate", "Narayana College", "Jun 2022 – Jun 2024", "Percentage: 92%"], ["SSC", "Narayana School", "Jun 2021 - May 2022", "Percentage: 90.5%"]];
     const sections = [["home", "Home"], ["about", "About"], ["skills", "Skills"], ["projects", "Projects"], ["achievements", "Achievements"], ["certifications", "Certifications"], ["education", "Education"], ["contact", "Contact"]];
 
@@ -4367,6 +4482,125 @@
       addEventListener('load', () => ScrollTrigger.refresh());
     })();
 
+    /* ---------- certifications: the scroll only picks the current certificate, each step plays as its own short move ---------- */
+    (() => {
+      if (reduce || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      gsap.registerPlugin(ScrollTrigger);
+      const mm = gsap.matchMedia();
+      mm.add('(min-width: 1081px)', () => {
+        const sec = $('#certifications'), box = $('#ce'), title = sec.querySelector('.title'), root = document.documentElement;
+        const cards = [...box.querySelectorAll('.cc')], n = cards.length; if (n < 2) return;
+        const pad = v => String(v).padStart(2, '0'), txt = el => el.textContent.replace(/\s+/g, ' ').trim();
+        const info = cards.map(c => ({ t: txt(c.querySelector('b')), o: txt(c.querySelector('.o')), d: txt(c.querySelector('.dt')), f: c.dataset.f, l: c.dataset.l }));
+
+        root.classList.add('ce-on');
+        cards.forEach(c => { c.classList.remove('rv'); c.classList.add('on'); c.tabIndex = -1 });
+
+        const copy = document.createElement('div'); copy.className = 'cec';
+        copy.innerHTML = '<div class="mk"><span class="cec-m"></span></div><div class="mk"><h3 class="cec-t"></h3></div><div class="mk"><p class="cec-d"></p></div><div class="mk"><button class="lk" type="button">View Certificate <i class="fas fa-external-link-alt"></i></button></div>';
+        const [mM, mT, mD, mB] = [...copy.querySelectorAll('.mk > *')];
+        const num = document.createElement('div'); num.className = 'cen';
+        num.innerHTML = `<div class="cen-w"><div class="cen-t">${info.map((_, i) => `<span>${pad(i + 1)}</span>`).join('')}</div></div><span class="cen-of">/ ${pad(n)}</span>`;
+        box.append(copy, num);
+        const numT = num.querySelector('.cen-t');
+
+        const S = .2, MOVE = 1.2, L = { W: 0, H: 0, gap: 0, leftW: 0 };
+        let idx = 0, target = 0, busy = false, copyTl = null, st = null, hold = null;
+
+        const layout = () => {
+          const vw = root.clientWidth, vh = innerHeight;
+          sec.style.setProperty('--cemt', Math.round(Math.max(84, vh * .09)) + 'px');
+          sec.style.setProperty('--cel', '4vw');
+          const top = Math.round(title.offsetTop + title.offsetHeight + Math.max(20, vh * .03));
+          const gap = Math.round(Math.max(18, vw * .016)), copyW = Math.round(Math.min(400, Math.max(260, vw * .24))), numW = Math.round(Math.max(96, vw * .08)), avail = vw * .9;
+          let H = Math.max(220, Math.min(vh - top - Math.max(28, vh * .06), 540));
+          let W = Math.min(H * 1.4, avail - copyW - 2 * gap - numW);
+          if (W * S > numW) W = Math.min(W, (avail - copyW - 2 * gap) / (1 + S));
+          H = Math.round(W / 1.4); W = Math.round(W);
+          const leftW = Math.round(Math.max(numW, W * S)), compW = leftW + gap + W + gap + copyW, left = Math.max(Math.round(vw * .04), Math.round((vw - compW) / 2));
+          Object.assign(L, { W, H, gap, leftW });
+          sec.style.setProperty('--cel', left + 'px');
+          Object.assign(box.style, { left: left + 'px', top: top + 'px', width: compW + 'px', height: H + 'px' });
+          cards.forEach(c => { c.style.width = W + 'px'; c.style.height = H + 'px' });
+          Object.assign(copy.style, { left: (leftW + gap + W + gap) + 'px', width: copyW + 'px' });
+        };
+
+        // 0 large, +1 small at lower right, -1 small at upper left, the rest wait out of sight
+        const spot = k => {
+          const x0 = L.leftW + L.gap, sm = k > 1 || k < -1 ? S * .7 : S;
+          if (k === 0) return { x: x0, y: 0, scale: 1, opacity: 1 };
+          if (k > 0) return { x: x0 + L.W + L.gap, y: L.H - L.H * sm, scale: sm, opacity: k === 1 ? 1 : 0 };
+          return { x: x0 - L.gap - L.W * sm, y: 0, scale: sm, opacity: k === -1 ? 1 : 0 };
+        };
+
+        const place = animate => {
+          cards.forEach((c, i) => {
+            const k = i - idx, t = spot(k);
+            c.style.zIndex = k === 0 ? 3 : (Math.abs(k) === 1 ? 2 : 1);
+            c.style.pointerEvents = Math.abs(k) > 1 ? 'none' : 'auto';
+            if (animate) gsap.to(c, { ...t, duration: MOVE, ease: 'power3.inOut', overwrite: 'auto' });
+            else gsap.set(c, { ...t, transformOrigin: '0 0' });
+          });
+          const h = numT.offsetHeight / n;
+          if (animate) gsap.to(numT, { y: -idx * h, duration: MOVE * .8, ease: 'power3.inOut', overwrite: 'auto' });
+          else gsap.set(numT, { y: -idx * h });
+        };
+
+        const fill = i => {
+          mM.textContent = info[i].d; mT.textContent = info[i].t; mD.textContent = info[i].o;
+          mB.dataset.f = info[i].f; mB.dataset.l = info[i].l;
+        };
+        const swap = (i, dir) => {
+          if (copyTl) copyTl.kill();
+          const parts = [mM, mT, mD, mB];
+          copyTl = gsap.timeline()
+            .to(parts, { yPercent: -115 * dir, duration: .4, stagger: .05, ease: 'power2.in', overwrite: 'auto' })
+            .add(() => fill(i))
+            .fromTo(parts, { yPercent: 115 * dir }, { yPercent: 0, duration: .8, stagger: .07, ease: 'power3.out' });
+        };
+
+        // the scroll sets a target; the queue moves toward it one certificate at a time, so none is ever skipped
+        const advance = () => {
+          if (busy || idx === target) return;
+          const dir = target > idx ? 1 : -1; idx += dir; busy = true; place(true); swap(idx, dir);
+          hold = gsap.delayedCall(MOVE * .8, () => { busy = false; advance() });
+        };
+        const go = i => { target = i; advance() };
+
+        layout(); fill(0); place(false);
+
+        const steps = n - 1;
+        st = ScrollTrigger.create({
+          trigger: sec, start: 'top top', end: '+=' + (steps * 100) + '%', pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+          snap: { snapTo: 1 / steps, duration: { min: .3, max: .7 }, delay: .15, ease: 'power1.inOut' },
+          onUpdate: self => go(Math.min(steps, Math.max(0, Math.round(self.progress * steps))))
+        });
+
+        // a small certificate scrolls to its step; the large one opens the viewer through the existing handler
+        const toStep = i => scrollTo({ top: st.start + (i / steps) * (st.end - st.start), behavior: 'smooth' });
+        const onClick = e => {
+          const c = e.target.closest('.cc'); if (!c) return;
+          const i = cards.indexOf(c);
+          if (i !== idx) { e.stopPropagation(); toStep(i) }
+        };
+        box.addEventListener('click', onClick, true);
+
+        const relayout = () => { layout(); place(false) };
+        addEventListener('resize', relayout);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { relayout(); ScrollTrigger.refresh() });
+
+        return () => {
+          if (copyTl) copyTl.kill(); if (hold) hold.kill();
+          root.classList.remove('ce-on'); removeEventListener('resize', relayout); box.removeEventListener('click', onClick, true);
+          copy.remove(); num.remove();
+          sec.style.removeProperty('--cel'); sec.style.removeProperty('--cemt'); box.removeAttribute('style');
+          cards.forEach(c => { c.classList.add('rv'); c.tabIndex = 0; c.removeAttribute('style') });
+        };
+      });
+      ScrollTrigger.sort();
+      addEventListener('load', () => ScrollTrigger.refresh());
+    })();
+
     /* ---------- achievements: hovered card comes forward, the rest recede ---------- */
     (() => {
       const box = $('#ac');
@@ -4444,7 +4678,7 @@
       function tick() {
         const y = scrollY, vh = innerHeight, vw = root.clientWidth, m = innerWidth < 769 ? .5 : 1, yMoved = y !== lastY; lastY = y; let moving = yMoved;
         for (const it of items) {
-          if (it.id === 'projects' || ((it.id === 'skills' && root.classList.contains('ar-on')) || (it.id === 'achievements' && root.classList.contains('ac-on')))) {   // pinned section: its own scroll animation runs, so no fly-through fade
+          if (it.id === 'projects' || ((it.id === 'skills' && root.classList.contains('ar-on')) || (it.id === 'achievements' && root.classList.contains('ac-on')) || (it.id === 'certifications' && root.classList.contains('ce-on')))) {   // pinned section: its own scroll animation runs, so no fly-through fade
             if (it.on !== false) { const el = it.el; el.style.transform = el.style.opacity = el.style.transformOrigin = el.style.willChange = ''; it.on = false }
             continue
           }
