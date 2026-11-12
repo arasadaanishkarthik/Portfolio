@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
     content="Portfolio of Arasada Anish Karthik, a full-stack developer building accessible, interactive digital experiences.">
-  <meta name="theme-color" content="#0b0b0d">
+  <meta name="theme-color" content="#050505">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Arasada Anish Karthik | Full-Stack Developer">
   <meta property="og:description"
@@ -42,18 +42,19 @@
     }
 
     :root[data-theme=dark] {
-      --bg: #000;
-      --bg2: #000;
-      --tx: #f8fafc;
-      --tx2: #94a3b8;
-      --mu: #64748b;
-      --a1: #3b82f6;
-      --a2: #8b5cf6;
-      --cy: #00f0ff;
-      --glow: rgba(0, 240, 255, .3);
-      --gl: rgba(11, 17, 34, .78);
+      /* Obsidian Glow: #050505 base, #3A0CA3 accent */
+      --bg: #050505;
+      --bg2: #0a0612;
+      --tx: #f5f3fa;
+      --tx2: #b3accb;
+      --mu: #7f7898;
+      --a1: #3A0CA3;
+      --a2: #3A0CA3;
+      --cy: #9b7bff;
+      --glow: rgba(58, 12, 163, .45);
+      --gl: rgba(14, 8, 28, .78);
       --bd: rgba(255, 255, 255, .09);
-      --sh: 0 16px 36px rgba(0, 0, 0, .4)
+      --sh: 0 16px 36px rgba(0, 0, 0, .5)
     }
 
     :root[data-theme=light] {
@@ -95,7 +96,7 @@
     }
 
     body {
-      background: var(--bg);
+      background: var(--bg) !important;
       color: var(--tx);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -1617,7 +1618,7 @@
     /* ===== NOTABLE ACHIEVEMENTS SECTION ATMOSPHERIC THEME ===== */
     #achievements {
       position: relative;
-      background: radial-gradient(ellipse 90% 70% at 50% 35%, rgba(5, 38, 89, .38) 0%, rgba(2, 16, 36, .48) 55%, transparent 100%);
+      background: radial-gradient(ellipse 90% 70% at 50% 35%, rgba(58, 12, 163, .28) 0%, rgba(5, 5, 5, .4) 55%, transparent 100%);
     }
 
     :root[data-theme=light] #achievements {
@@ -2722,10 +2723,13 @@
         object-fit: contain;
         border: 0;
         background: var(--gl);
-        transition: none;
+        transform: perspective(1200px) rotateX(var(--ce-rx, 0deg)) rotateY(var(--ce-ry, 0deg)) scale(1.015);
+        transform-origin: center;
+        will-change: transform;
+        transition: transform .08s ease-out;
       }
 
-      html.ce-on #ce .cc:hover img { transform: none; }
+      html.ce-on #ce .cc:hover img { transform: perspective(1200px) rotateX(var(--ce-rx, 0deg)) rotateY(var(--ce-ry, 0deg)) scale(1.015); }
       html.ce-on #ce .cc.noimg::before { position: absolute; inset: 0; height: 100%; font-size: 1.3rem; }
 
       /* copy column: lines swap through masks */
@@ -2892,96 +2896,55 @@
       }
     }
 
-    /* ===== TECHNOLOGIES & TOOLS — FOREST PALETTE CARD BACKGROUNDS =====
-       palette: #0F1F17  #1E3A2E  #3E5A3F  #6B7F67  #C7CBB8  #3D4337 */
-    #sk .arsenal-card,
-    html.ar-on #arFold,
-    html.ar-on .ar-layer {
-      --f-glow: #d8ee6a;
-      background:
-        radial-gradient(120% 70% at 100% 0%, rgba(216, 238, 106, .16), transparent 55%),
-        linear-gradient(160deg, #0F1F17 0%, #1E3A2E 45%, #3E5A3F 100%);
-      border: 1px solid rgba(199, 203, 184, .16);
-      border-top: 2px solid #6B7F67;
+    /* ===== TECHNOLOGIES & TOOLS: neutral palette  #1c1c1c  #daddd8  #ecebe4  #eef0f2  #fafaff ===== */
+    #sk .arsenal-card {
+      background: #fafaff;
+      border: 1px solid rgba(28, 28, 28, .12);
+      border-top: 2px solid #1c1c1c;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, .28);
     }
 
-    #sk .ar-slot:nth-child(5) .arsenal-card {
-      background: radial-gradient(120% 70% at 100% 0%, rgba(216, 238, 106, .16), transparent 55%), linear-gradient(160deg, #0F1F17 0%, #1E3A2E 45%, #3E5A3F 100%);
-    }
-
-    #sk .ar-slot:nth-child(6) .arsenal-card {
-      background: radial-gradient(120% 70% at 0% 0%, rgba(216, 238, 106, .16), transparent 55%), linear-gradient(160deg, #1E3A2E 0%, #3E5A3F 100%);
-    }
-
-    #sk .ar-slot:nth-child(7) .arsenal-card {
-      background: radial-gradient(120% 70% at 100% 0%, rgba(216, 238, 106, .16), transparent 55%), linear-gradient(160deg, #0F1F17 0%, #3D4337 100%);
-    }
-
-    #sk .ar-slot:nth-child(8) .arsenal-card {
-      background: radial-gradient(120% 70% at 0% 0%, rgba(216, 238, 106, .16), transparent 55%), linear-gradient(160deg, #1E3A2E 0%, #3D4337 100%);
-    }
+    #sk .ar-slot:nth-child(5) .arsenal-card { background: #fafaff; }
+    #sk .ar-slot:nth-child(6) .arsenal-card { background: #eef0f2; }
+    #sk .ar-slot:nth-child(7) .arsenal-card { background: #ecebe4; }
+    #sk .ar-slot:nth-child(8) .arsenal-card { background: #daddd8; }
 
     #sk .arsenal-card:hover,
-    #sk .arsenal-card:focus-visible {
-      border-top-color: #d8ee6a;
-    }
+    #sk .arsenal-card:focus-visible { border-top-color: #1c1c1c; }
+    #sk .arsenal-card:focus-visible { outline-color: #1c1c1c; }
 
-    #sk .arsenal-card:focus-visible {
-      outline-color: #d8ee6a;
-    }
-
-    #sk .arsenal-card .ch {
-      color: #C7CBB8;
-    }
-
-    #sk .arsenal-card .ch i {
-      color: #d8ee6a;
-    }
-
-    #sk .arsenal-card .it {
-      color: #C7CBB8;
-    }
-
-    #sk .arsenal-card .it::before {
-      background: #6B7F67;
-    }
+    #sk .arsenal-card .ch { color: #1c1c1c; }
+    #sk .arsenal-card .ch i { color: #1c1c1c; }
+    #sk .arsenal-card .it { color: #3b3b39; }
+    #sk .arsenal-card .it::before { background: rgba(28, 28, 28, .45); }
 
     #sk .arsenal-card:hover .it::before,
     #sk .arsenal-card:focus-visible .it::before,
-    #sk .arsenal-card .it:hover::before {
-      background: #d8ee6a;
-    }
+    #sk .arsenal-card .it:hover::before { background: #1c1c1c; }
 
-    #sk .arsenal-card .it:hover {
-      color: #d8ee6a;
-    }
+    #sk .arsenal-card .it:hover { color: #1c1c1c; }
 
+    /* the folded stack that opens into the cards */
     html.ar-on #arFold {
-      border-top-color: #d8ee6a;
-      box-shadow: 0 0 70px rgba(216, 238, 106, .18), var(--sh);
+      background: #1c1c1c;
+      border: 1px solid rgba(250, 250, 255, .14);
+      border-top: 2px solid #daddd8;
+      box-shadow: 0 0 60px rgba(250, 250, 255, .06), var(--sh);
     }
 
-    html.ar-on #arFold::after {
-      background: linear-gradient(100deg, transparent, rgba(216, 238, 106, .14), transparent);
-    }
+    html.ar-on .ar-layer { border: 1px solid rgba(28, 28, 28, .12); border-top: 2px solid #1c1c1c; }
+    html.ar-on .ar-layer:nth-of-type(1) { background: #daddd8; }
+    html.ar-on .ar-layer:nth-of-type(2) { background: #ecebe4; }
+    html.ar-on .ar-layer:nth-of-type(3) { background: #eef0f2; }
+
+    html.ar-on #arFold::after { background: linear-gradient(100deg, transparent, rgba(250, 250, 255, .08), transparent); }
 
     #arFold .ar-tag,
     #arFold .ar-ch.amp,
-    #arFold .ar-hint i {
-      color: #d8ee6a;
-    }
-
-    #arFold .ar-line {
-      color: #C7CBB8;
-    }
-
-    #arFold .ar-hint {
-      color: #6B7F67;
-    }
-
-    #arFold .ar-rule {
-      background: linear-gradient(90deg, #6B7F67, #d8ee6a);
-    }
+    #arFold .ar-hint i { color: #daddd8; }
+    #arFold .ar-line { color: #fafaff; }
+    #arFold .ar-hint { color: #daddd8; opacity: .7; }
+    :root[data-theme] #arFold .ar-rule { background: #daddd8; }
 
     /* ===== display font roles ===== */
     .hname h1,
@@ -3031,8 +2994,8 @@
     }
 
     :root[data-theme=dark] {
-      --bg: #0B0B0D;
-      --bg2: #111214;
+      --bg: #050505;
+      --bg2: #0a0612;
     }
 
     body {
@@ -3440,10 +3403,67 @@
         max-width: 82%;
       }
     }
+    /* Obsidian Glow: flat accents in dark mode, no gradients */
+    :root[data-theme=dark] .hl { background: none; -webkit-text-fill-color: var(--cy); color: var(--cy) }
+    :root[data-theme=dark] .cta { background: var(--a1); box-shadow: 0 10px 25px rgba(58, 12, 163, .45) }
+    :root[data-theme=dark] #bar,
+    :root[data-theme=dark] .nodes .l { background: var(--cy) }
+    :root[data-theme=dark] .meta::after { background: var(--cy) }
+    /* Achievements and Certifications are both pinned: the certifications section is opaque and layered above, so nothing from the section above can show through */
+    @media (min-width: 1081px) {
+      html.ar-on #skills,
+      html.ac-on #achievements,
+      html.ce-on #certifications {
+        position: relative;
+        isolation: isolate;
+        background: var(--bg);
+      }
+
+      html.ac-on #achievements { z-index: 2 }
+      html.ce-on #certifications { z-index: 3 }
+      html[data-theme=light].ac-on #achievements { background: var(--bg) !important }
+    }
+    /* ===== LIGHT MODE BACKGROUND: layered colour waves (sage, warm grey, sky, mint) drifting slowly ===== */
+    .bgw { display: none }
+
+    :root[data-theme=light] .bgw {
+      display: block;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      background: linear-gradient(180deg, #fafaff 0%, #eef0f2 38%, #ecebe4 72%, #e4ebe6 100%);
+    }
+
+    .bgw-l { position: absolute; left: 0; width: 200%; height: 38vh; will-change: transform }
+    .bgw-l path { fill: currentColor }
+
+    .bgw-l.w1 { top: 4%;  color: rgba(191, 219, 254, .50); animation: bgwDrift 46s linear infinite }
+    .bgw-l.w2 { top: 24%; color: rgba(218, 221, 216, .70); animation: bgwDrift 62s linear infinite reverse }
+    .bgw-l.w3 { top: 44%; color: rgba(207, 232, 220, .60); animation: bgwDrift 54s linear infinite }
+    .bgw-l.w4 { top: 62%; color: rgba(193, 232, 255, .50); animation: bgwDrift 72s linear infinite reverse }
+    .bgw-l.w5 { bottom: -6%; color: rgba(236, 235, 228, .95); animation: bgwDrift 40s linear infinite }
+
+    @keyframes bgwDrift {
+      from { transform: translate3d(0, 0, 0) }
+      to { transform: translate3d(-50%, 0, 0) }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bgw-l { animation: none }
+    }
+
+    /* Pinned scenes need an opaque surface in both themes so adjacent sections cannot show through. */
+    html[data-theme=light].ce-on #certifications {
+      background-color: var(--bg);
+      background-image: none;
+    }
   </style>
 </head>
 
 <body>
+<div class="bgw" aria-hidden="true"><svg class="bgw-l w1" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,160 C240,90 480,230 720,160 C960,90 1200,230 1440,160 C1680,90 1920,230 2160,160 C2400,90 2640,230 2880,160 V320 H0 Z"/></svg><svg class="bgw-l w2" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,160 C240,65 480,255 720,160 C960,65 1200,255 1440,160 C1680,65 1920,255 2160,160 C2400,65 2640,255 2880,160 V320 H0 Z"/></svg><svg class="bgw-l w3" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,160 C240,100 480,220 720,160 C960,100 1200,220 1440,160 C1680,100 1920,220 2160,160 C2400,100 2640,220 2880,160 V320 H0 Z"/></svg><svg class="bgw-l w4" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,160 C240,75 480,245 720,160 C960,75 1200,245 1440,160 C1680,75 1920,245 2160,160 C2400,75 2640,245 2880,160 V320 H0 Z"/></svg><svg class="bgw-l w5" viewBox="0 0 2880 320" preserveAspectRatio="none"><path d="M0,160 C240,105 480,215 720,160 C960,105 1200,215 1440,160 C1680,105 1920,215 2160,160 C2400,105 2640,215 2880,160 V320 H0 Z"/></svg></div>
   <div id="intro" role="region" aria-label="Welcome presentation. Click or tap to enter immediately."
     tabindex="0" title="Click or tap to enter portfolio">
     <div class="in-p in-t"></div>
@@ -4082,7 +4102,7 @@
         gsap.to(proxy, {
           pos: maxPos, ease: 'none', onUpdate: render, scrollTrigger: {
             id: 'gal', trigger: gal, start: 'top top',
-            end: () => '+=' + maxPos * innerHeight * (innerWidth < 769 ? .4 : .55), pin: true, scrub: .6, anticipatePin: 1, invalidateOnRefresh: true, onRefresh: layout
+            end: () => '+=' + maxPos * innerHeight * (innerWidth < 769 ? .4 : .55), pin: true, scrub: .6, anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 4, onRefresh: layout
           }
         });
         const go = i => {
@@ -4098,10 +4118,10 @@
           [...T, ...M, ...C, ...S].forEach(e => e.removeAttribute('style')); gal.style.removeProperty('--ch'); gal.style.removeProperty('--cw'); gal.style.removeProperty('--gb')
         };
       });
-      ScrollTrigger.refresh();
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => ScrollTrigger.refresh());
+      ScrollTrigger.sort(); ScrollTrigger.refresh();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { ScrollTrigger.sort(); ScrollTrigger.refresh() });
     }
-    addEventListener('load', () => { if (window.ScrollTrigger) ScrollTrigger.refresh() });
+    addEventListener('load', () => { if (window.ScrollTrigger) { ScrollTrigger.sort(); ScrollTrigger.refresh() } });
     try {
       renderProjects('All');
     } catch (err) {
@@ -4110,11 +4130,17 @@
     $('#flt').onclick = e => { const b = e.target.closest('button'); if (!b) return; $$('#flt button').forEach(x => x.classList.remove('on')); b.classList.add('on'); showAll = false; renderProjects(b.dataset.f) };
     $('#pmoreBtn').onclick = () => {
       showAll = !showAll;
-      // jump back to the top of the section so the arc gallery restarts from the first project
-      const sec = $('#projects'), top = sec.getBoundingClientRect().top + scrollY;
       renderProjects(curFilter, true);
-      scrollTo({ top, behavior: 'auto' });
-      if (window.ScrollTrigger) ScrollTrigger.refresh();
+      if (window.ScrollTrigger) {
+        ScrollTrigger.sort();
+        ScrollTrigger.refresh();
+        const galleryTrigger = ScrollTrigger.getById('gal');
+        const top = galleryTrigger ? galleryTrigger.start : $('#projects').offsetTop;
+        // Start at the pinned gallery itself, not above it in the section heading.
+        scrollTo({ top, behavior: 'auto' });
+      } else {
+        scrollTo({ top: $('#projects').offsetTop, behavior: 'auto' });
+      }
     };
 
     /* ---------- modal ---------- */
@@ -4415,7 +4441,7 @@
           defaults: { ease: 'power2.inOut' },
           scrollTrigger: {
             trigger: sec, start: 'top top', end: '+=170%', scrub: .25, pin: true, pinSpacing: true,
-            anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 1,
+            anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 5,
             onEnter: () => { if (intro.isActive()) intro.progress(1, true); wave.pause() },
             onUpdate: self => { if (self.progress > .04) { if (!wave.paused()) wave.pause() } else if (!intro.isActive() && intro.progress() === 1 && wave.paused()) wave.play() }
           }
@@ -4467,10 +4493,10 @@
           }
         };
         render();
-        ScrollTrigger.create({ trigger: sec, start: 'top 95%', end: 'top top', scrub: true, onUpdate: s => { st.enter = easeIn(s.progress); render() }, onRefresh: s => { st.enter = easeIn(s.progress); render() } });
+        ScrollTrigger.create({ trigger: sec, start: 'top 95%', end: 'top top', scrub: true, refreshPriority: 3, onUpdate: s => { st.enter = easeIn(s.progress); render() }, onRefresh: s => { st.enter = easeIn(s.progress); render() } });
         gsap.to(st, {
           p: 1, ease: 'none', onUpdate: render,
-          scrollTrigger: { trigger: sec, start: 'top top', end: '+=320%', pin: true, scrub: .5, anticipatePin: 1, invalidateOnRefresh: true }
+          scrollTrigger: { trigger: sec, start: 'top top', end: '+=320%', pin: true, scrub: .5, anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 3 }
         });
         addEventListener('resize', render);
         return () => {
@@ -4504,8 +4530,9 @@
         box.append(copy, num);
         const numT = num.querySelector('.cen-t');
 
-        const S = .2, MOVE = 1.2, L = { W: 0, H: 0, gap: 0, leftW: 0 };
-        let idx = 0, target = 0, busy = false, copyTl = null, st = null, hold = null;
+        const S = .2, MOVE = .55, L = { W: 0, H: 0, gap: 0, leftW: 0 };
+        let idx = 0, copyTl = null, st = null;
+        let pointerFrame = 0, pointerX = 0, pointerY = 0;
 
         const layout = () => {
           const vw = root.clientWidth, vh = innerHeight;
@@ -4533,17 +4560,48 @@
           return { x: x0 - L.gap - L.W * sm, y: 0, scale: sm, opacity: k === -1 ? 1 : 0 };
         };
 
-        const place = animate => {
+        const place = (animate, dur = MOVE) => {
           cards.forEach((c, i) => {
             const k = i - idx, t = spot(k);
             c.style.zIndex = k === 0 ? 3 : (Math.abs(k) === 1 ? 2 : 1);
             c.style.pointerEvents = Math.abs(k) > 1 ? 'none' : 'auto';
-            if (animate) gsap.to(c, { ...t, duration: MOVE, ease: 'power3.inOut', overwrite: 'auto' });
+            if (animate) gsap.to(c, { ...t, duration: dur, ease: 'power3.inOut', overwrite: 'auto' });
             else gsap.set(c, { ...t, transformOrigin: '0 0' });
           });
           const h = numT.offsetHeight / n;
-          if (animate) gsap.to(numT, { y: -idx * h, duration: MOVE * .8, ease: 'power3.inOut', overwrite: 'auto' });
+          if (animate) gsap.to(numT, { y: -idx * h, duration: dur * .8, ease: 'power3.inOut', overwrite: 'auto' });
           else gsap.set(numT, { y: -idx * h });
+        };
+
+        const resetTilt = () => {
+          cards.forEach(c => {
+            c.style.setProperty('--ce-rx', '0deg');
+            c.style.setProperty('--ce-ry', '0deg');
+          });
+        };
+        const updateTilt = () => {
+          pointerFrame = 0;
+          const card = cards[idx], rect = card.getBoundingClientRect();
+          if (!rect.width || !rect.height) return;
+          if (pointerX < rect.left || pointerX > rect.right || pointerY < rect.top || pointerY > rect.bottom) {
+            card.style.setProperty('--ce-rx', '0deg');
+            card.style.setProperty('--ce-ry', '0deg');
+            return;
+          }
+          const x = (pointerX - rect.left) / rect.width - .5;
+          const y = (pointerY - rect.top) / rect.height - .5;
+          card.style.setProperty('--ce-rx', `${(-y * 5).toFixed(2)}deg`);
+          card.style.setProperty('--ce-ry', `${(x * 7).toFixed(2)}deg`);
+        };
+        const onPointerMove = e => {
+          pointerX = e.clientX;
+          pointerY = e.clientY;
+          if (!pointerFrame) pointerFrame = requestAnimationFrame(updateTilt);
+        };
+        const onPointerLeave = () => {
+          if (pointerFrame) cancelAnimationFrame(pointerFrame);
+          pointerFrame = 0;
+          resetTilt();
         };
 
         const fill = i => {
@@ -4559,20 +4617,24 @@
             .fromTo(parts, { yPercent: 115 * dir }, { yPercent: 0, duration: .8, stagger: .07, ease: 'power3.out' });
         };
 
-        // the scroll sets a target; the queue moves toward it one certificate at a time, so none is ever skipped
-        const advance = () => {
-          if (busy || idx === target) return;
-          const dir = target > idx ? 1 : -1; idx += dir; busy = true; place(true); swap(idx, dir);
-          hold = gsap.delayedCall(MOVE * .8, () => { busy = false; advance() });
+        const go = i => {
+          if (i === idx) return;
+          const dir = i > idx ? 1 : -1;
+          idx = i;
+          place(true, MOVE);
+          swap(i, dir);
         };
-        const go = i => { target = i; advance() };
+        const finish = i => {   // section left while the queue was still moving: settle on the right certificate at once
+          idx = i; if (copyTl) copyTl.kill();
+          fill(i); gsap.set([mM, mT, mD, mB], { yPercent: 0 }); place(false);
+        };
 
         layout(); fill(0); place(false);
 
         const steps = n - 1;
         st = ScrollTrigger.create({
-          trigger: sec, start: 'top top', end: '+=' + (steps * 100) + '%', pin: true, anticipatePin: 1, invalidateOnRefresh: true,
-          snap: { snapTo: 1 / steps, duration: { min: .3, max: .7 }, delay: .15, ease: 'power1.inOut' },
+          trigger: sec, start: 'top top', end: '+=' + (steps * 100) + '%', pin: true, anticipatePin: 1, invalidateOnRefresh: true, refreshPriority: 2,
+          onLeave: () => finish(steps), onLeaveBack: () => finish(0),
           onUpdate: self => go(Math.min(steps, Math.max(0, Math.round(self.progress * steps))))
         });
 
@@ -4584,14 +4646,19 @@
           if (i !== idx) { e.stopPropagation(); toStep(i) }
         };
         box.addEventListener('click', onClick, true);
+        box.addEventListener('pointermove', onPointerMove, { passive: true });
+        box.addEventListener('pointerleave', onPointerLeave, { passive: true });
 
         const relayout = () => { layout(); place(false) };
         addEventListener('resize', relayout);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { relayout(); ScrollTrigger.refresh() });
 
         return () => {
-          if (copyTl) copyTl.kill(); if (hold) hold.kill();
+          if (copyTl) copyTl.kill();
           root.classList.remove('ce-on'); removeEventListener('resize', relayout); box.removeEventListener('click', onClick, true);
+          box.removeEventListener('pointermove', onPointerMove); box.removeEventListener('pointerleave', onPointerLeave);
+          if (pointerFrame) cancelAnimationFrame(pointerFrame);
+          resetTilt();
           copy.remove(); num.remove();
           sec.style.removeProperty('--cel'); sec.style.removeProperty('--cemt'); box.removeAttribute('style');
           cards.forEach(c => { c.classList.add('rv'); c.tabIndex = 0; c.removeAttribute('style') });
@@ -4729,25 +4796,29 @@
       if (window.ScrollTrigger) ScrollTrigger.addEventListener('refresh', measure);
       if ('ResizeObserver' in window) new ResizeObserver(debouncedMeasure).observe(document.body);
 
-      /* cinematic glide when jumping between stations (nav, buttons, back-to-top) */
-      let tw = null;
-      const stop = () => { if (tw) { tw.kill(); tw = null } root.style.scrollBehavior = '' };
-      function flyTo(target) {
-        stop(); const from = scrollY, dist = Math.abs(target - from); if (dist < 4) return;
-        const p = { y: from }; root.style.scrollBehavior = 'auto';
-        tw = gsap.to(p, { y: target, duration: clamp(.8 + dist / 2200, 1, 2.8), ease: 'power3.inOut', onUpdate: () => scrollTo(0, p.y), onComplete: stop });
-      }
-      ['wheel', 'touchstart', 'keydown'].forEach(ev => addEventListener(ev, stop, { passive: true }));
+      /* section jumps need ScrollTrigger's stable start positions because pinned
+         sections report offsetTop as zero while they are active */
+      const stationTop = t => {
+        if (t.id === 'home') return 0;
+        if (window.ScrollTrigger) {
+          const gallery = $('#gal');
+          const triggers = ScrollTrigger.getAll();
+          const trigger = triggers.find(st => st.pin === t || (t.id === 'projects' && st.pin === gallery))
+            || triggers.find(st => st.trigger === t);
+          if (trigger) return trigger.start;
+        }
+        return t.getBoundingClientRect().top + scrollY;
+      };
       document.addEventListener('click', e => {
         const a = e.target.closest('a[href^="#"]'); if (!a || a.getAttribute('href').length < 2) return;
         const t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
         e.preventDefault();
         const nav = document.querySelector('nav');
         const navPad = nav ? (nav.offsetHeight + (parseFloat(getComputedStyle(nav).top) || 16) + 16) : 72;
-        const target = Math.max(0, off(t).t - (t.id === 'home' ? 0 : navPad));
-        flyTo(target);
+        const target = Math.max(0, stationTop(t) - (t.id === 'home' ? 0 : navPad));
+        scrollTo({ top: target, behavior: 'auto' });
       });
-      $('#top').onclick = () => flyTo(0);
+      $('#top').onclick = () => scrollTo({ top: 0, behavior: 'auto' });
     })();
   </script>
   <script>
@@ -4757,12 +4828,12 @@
       if (matchMedia('(prefers-reduced-motion: reduce)').matches || !matchMedia('(hover: hover) and (pointer: fine)').matches) return;
       const root = document.documentElement, cv = document.createElement('canvas'); cv.id = 'pfx'; cv.setAttribute('aria-hidden', 'true'); document.body.appendChild(cv);
       const cx = cv.getContext('2d'), MAX = 40; let W = 0, H = 0, dpr = 1, lx = -1, ly = -1, run = false, last = 0;
-      let pal = ['#00f0ff', '#3b82f6', '#8b5cf6'];
+      let pal = ['#9b7bff', '#6a3fe0', '#3A0CA3'];
       const P = [];
       function size() { dpr = Math.min(devicePixelRatio || 1, 1.25); W = innerWidth; H = innerHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); cx.setTransform(dpr, 0, 0, dpr, 0, 0); }
       function colors() {
         const dark = root.dataset.theme !== 'light';
-        pal = dark ? ['#00f0ff', '#3b82f6', '#8b5cf6'] : ['#0284c7', '#2563eb', '#7c3aed'];
+        pal = dark ? ['#9b7bff', '#6a3fe0', '#3A0CA3'] : ['#0284c7', '#2563eb', '#7c3aed'];
       }
       size(); colors(); addEventListener('resize', size, { passive: true });
       new MutationObserver(colors).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
