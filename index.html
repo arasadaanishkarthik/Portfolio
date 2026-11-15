@@ -31,16 +31,6 @@
     href="https://fonts.googleapis.com/css2?family=Allura&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Anton&family=Playfair+Display:wght@600;700;800&family=Cinzel:wght@500;600;700&family=Rye&display=swap"
     rel="stylesheet">
   <style>
-    @font-face {
-      font-family: 'Bavaria Gates';
-      src: url('fonts/BavariaGates.woff2') format('woff2'),
-        url('fonts/BavariaGates.woff') format('woff'),
-        url('fonts/BavariaGates.ttf') format('truetype');
-      font-weight: 400 900;
-      font-style: normal;
-      font-display: swap;
-    }
-
     :root[data-theme=dark] {
       /* Obsidian Glow: #050505 base, #3A0CA3 accent */
       --bg: #050505;
@@ -54,12 +44,13 @@
       --glow: rgba(58, 12, 163, .45);
       --gl: rgba(14, 8, 28, .78);
       --bd: rgba(255, 255, 255, .09);
-      --sh: 0 16px 36px rgba(0, 0, 0, .5)
+      --sh: 0 16px 36px rgba(0, 0, 0, .5);
+      --page-bg-image: none
     }
 
     :root[data-theme=light] {
-      --bg: #fff;
-      --bg2: #fff;
+      --bg: rgba(255, 255, 255, .36);
+      --bg2: rgba(255, 255, 255, .36);
       --tx: #090d16;
       --tx2: #475569;
       --mu: #64748b;
@@ -67,9 +58,10 @@
       --a2: #7c3aed;
       --cy: #0284c7;
       --glow: rgba(37, 99, 235, .2);
-      --gl: rgba(255, 255, 255, .92);
+      --gl: rgba(255, 255, 255, .76);
       --bd: rgba(15, 23, 42, .09);
-      --sh: 0 12px 30px rgba(15, 23, 42, .08)
+      --sh: 0 12px 30px rgba(15, 23, 42, .08);
+      --page-bg-image: linear-gradient(rgba(255, 248, 242, .76), rgba(255, 248, 242, .84)), url('assets/images/pexels-eva-bronzini-7605679.jpg')
     }
 
     :root {
@@ -96,7 +88,11 @@
     }
 
     body {
-      background: var(--bg) !important;
+      background-color: var(--bg) !important;
+      background-image: var(--page-bg-image) !important;
+      background-position: center;
+      background-size: cover;
+      background-attachment: fixed;
       color: var(--tx);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
@@ -668,6 +664,80 @@
       transform: translateY(-3px)
     }
 
+    /* Hero actions use a lightweight sweep instead of the heavier liquid-metal ring. */
+    #home .btns a {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease, border-color .35s ease, color .35s ease;
+    }
+
+    #home .btns a > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    #home .btns .lm-ring {
+      display: none !important;
+    }
+
+    #home .btns .cta::before {
+      content: '';
+      position: absolute;
+      inset: -60% -30%;
+      z-index: 0;
+      background: linear-gradient(110deg, transparent 38%, rgba(255, 255, 255, .42) 50%, transparent 62%);
+      transform: translateX(-75%) rotate(8deg);
+      transition: transform .7s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    #home .btns .cta:hover::before,
+    #home .btns .cta:focus-visible::before {
+      transform: translateX(75%) rotate(8deg);
+    }
+
+    #home .btns .cta i {
+      transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    #home .btns .cta:hover i,
+    #home .btns .cta:focus-visible i {
+      transform: translateX(5px);
+    }
+
+    #home .btns .out::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cy) 0%, transparent);
+      transition: box-shadow .35s ease;
+    }
+
+    #home .btns .out:hover::before,
+    #home .btns .out:focus-visible::before {
+      box-shadow: inset 0 0 0 1px var(--cy), 0 0 18px color-mix(in srgb, var(--cy) 28%, transparent);
+    }
+
+    #home .btns .out i {
+      transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    #home .btns .out:hover i,
+    #home .btns .out:focus-visible i {
+      transform: translateY(3px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #home .btns a,
+      #home .btns .cta::before,
+      #home .btns .cta i,
+      #home .btns .out i {
+        transition: none;
+      }
+    }
+
     .soc {
       display: flex;
       gap: .9rem;
@@ -692,11 +762,14 @@
     }
 
     .sb .a {
+      position: relative;
+      z-index: 1;
       transition: .4s
     }
 
     .sb .b {
       position: absolute;
+      z-index: 1;
       opacity: 0;
       transform: scale(.5);
       font-size: 1.25rem;
@@ -716,6 +789,53 @@
     .sb:hover .b {
       opacity: 1;
       transform: none
+    }
+
+    /* Glassmorphism social links: soft refraction, sheen and a restrained hover lift. */
+    #home .soc .sb {
+      isolation: isolate;
+      border: 1px solid color-mix(in srgb, var(--tx) 18%, transparent) !important;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--gl) 78%, transparent), color-mix(in srgb, var(--cy) 8%, transparent)) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 8px 20px rgba(0, 0, 0, .14) !important;
+      backdrop-filter: blur(14px) saturate(135%);
+      -webkit-backdrop-filter: blur(14px) saturate(135%);
+      transition: transform .4s cubic-bezier(.22, 1, .36, 1), border-color .35s ease, box-shadow .4s ease, color .35s ease;
+    }
+
+    #home .soc .sb::before {
+      content: '';
+      position: absolute;
+      inset: -80% -35%;
+      z-index: 0;
+      background: linear-gradient(110deg, transparent 38%, rgba(255, 255, 255, .28) 50%, transparent 62%);
+      transform: translateX(-75%) rotate(8deg);
+      transition: transform .8s cubic-bezier(.22, 1, .36, 1);
+      pointer-events: none;
+    }
+
+    #home .soc .sb:hover,
+    #home .soc .sb:focus-visible {
+      border-color: color-mix(in srgb, var(--cy) 70%, transparent) !important;
+      color: var(--tx);
+      transform: translateY(-5px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .24), 0 12px 28px color-mix(in srgb, var(--cy) 22%, transparent) !important;
+    }
+
+    #home .soc .sb:hover::before,
+    #home .soc .sb:focus-visible::before {
+      transform: translateX(75%) rotate(8deg);
+    }
+
+    #home .soc .sb > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #home .soc .sb,
+      #home .soc .sb::before {
+        transition: none;
+      }
     }
 
     .hv {
@@ -1915,6 +2035,22 @@
       resize: vertical
     }
 
+    #contactMessage {
+      min-height: 140px;
+      padding: 1rem;
+      border: 1px solid color-mix(in srgb, var(--cy) 62%, var(--bd));
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--gl) 88%, var(--cy) 4%);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cy) 10%, transparent),
+        0 0 18px color-mix(in srgb, var(--cy) 10%, transparent);
+    }
+
+    #contactMessage:focus {
+      border-color: var(--cy);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--cy) 30%, transparent),
+        0 0 22px color-mix(in srgb, var(--cy) 22%, transparent);
+    }
+
     #ok {
       position: absolute;
       inset: 0;
@@ -2999,9 +3135,25 @@
     }
 
     body {
-      background: var(--bg);
-      /* follows light / dark theme */
       overflow-x: clip;
+    }
+
+    :root[data-theme=dark] body {
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+
+    :root[data-theme=light] body {
+      background-color: rgba(255, 255, 255, .36) !important;
+      background-image: var(--page-bg-image) !important;
+    }
+
+    :root[data-theme=dark] {
+      background-color: #050505 !important;
+    }
+
+    :root[data-theme=light] {
+      background-color: #fff8f2 !important;
     }
 
     section,
@@ -3459,6 +3611,108 @@
       background-color: var(--bg);
       background-image: none;
     }
+
+    /* Chrome Text: liquid chrome hero name (dark mode only). Real text stays selectable underneath. */
+    .hname { position: relative }
+
+    .ct-canvas {
+      display: none;
+      position: absolute;
+      pointer-events: none;
+      z-index: 1
+    }
+
+    html.ct-on[data-theme=dark] .ct-canvas { display: block }
+
+    html.ct-on[data-theme=dark] .hname h1,
+    html.ct-on[data-theme=dark] .hname h1 * {
+      color: transparent !important;
+      -webkit-text-fill-color: transparent !important;
+      background: none !important
+    }
+
+    html.ct-on[data-theme=dark] .hname h1::selection,
+    html.ct-on[data-theme=dark] .hname h1 *::selection {
+      background: rgba(255, 255, 255, .28)
+    }
+
+    /* Keep the hero name readable when the optional chrome renderer is unavailable. */
+    html.ct-on[data-theme=dark] .ct-canvas {
+      display: none !important
+    }
+
+    html.ct-on[data-theme=dark] .hname h1,
+    html.ct-on[data-theme=dark] .hname h1 * {
+      color: transparent !important;
+      -webkit-text-fill-color: transparent !important;
+      background: linear-gradient(180deg, #ffffff 0%, #9da8b7 28%, #ffffff 47%, #5f6875 65%, #f5f7fa 100%) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important;
+      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .6)) drop-shadow(0 5px 8px rgba(0, 0, 0, .7))
+    }
+
+    html.ct-on[data-theme=dark] #n2,
+    html.ct-on[data-theme=dark] #n2 * {
+      color: transparent !important;
+      -webkit-text-fill-color: transparent !important;
+      background: linear-gradient(180deg, #ffffff 0%, #b8c2ce 30%, #ffffff 48%, #687382 66%, #f8fafc 100%) !important;
+      -webkit-background-clip: text !important;
+      background-clip: text !important
+    }
+
+    /* Liquid Metal Button: flowing chrome ring on the hero buttons. Face follows the theme. */
+    html.lm-on[data-theme=dark] { --lm-face: #0b0b0d; --lm-ink: #f5f5f7; --lm-shadow: 0 10px 28px rgba(0, 0, 0, .45) }
+    html.lm-on[data-theme=light] { --lm-face: #ffffff; --lm-ink: #0b0b0d; --lm-shadow: 0 8px 22px rgba(0, 0, 0, .12) }
+
+    html.lm-on .lm {
+      position: relative;
+      isolation: isolate;
+      background: var(--lm-face) !important;
+      color: var(--lm-ink) !important;
+      box-shadow: var(--lm-shadow) !important;
+      border: 0 !important
+    }
+
+    html.lm-on .lm:hover { color: var(--lm-ink) !important }
+    html.lm-on .lm .a,
+    html.lm-on .lm .b { color: var(--lm-ink) !important }
+
+    .lm-ring {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 0
+    }
+
+    /* no WebGL: a static CSS chrome ring stands in */
+    html.lm-on .lm-css {
+      border: 2px solid transparent !important;
+      background:
+        linear-gradient(var(--lm-face), var(--lm-face)) padding-box,
+        conic-gradient(from 20deg, #6b6e75, #f6f7fa, #7b7e86, #ffffff, #5f6269, #eceef2, #6b6e75) border-box !important
+    }
+
+    /* Keep the hero social links glassy even when the shared button enhancer adds .lm. */
+    html.lm-on #home .soc .sb {
+      min-width: 0 !important;
+      flex: 0 0 auto !important;
+      border: 1px solid color-mix(in srgb, var(--tx) 18%, transparent) !important;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--gl) 78%, transparent), color-mix(in srgb, var(--cy) 8%, transparent)) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .16), 0 8px 20px rgba(0, 0, 0, .14) !important;
+    }
+
+    html.lm-on #home .soc .sb:nth-child(1) { width: 108px !important; }
+    html.lm-on #home .soc .sb:nth-child(2) { width: 116px !important; }
+    html.lm-on #home .soc .sb:nth-child(3) { width: 98px !important; }
+
+    html.lm-on #home .soc .sb:hover,
+    html.lm-on #home .soc .sb:focus-visible {
+      border-color: color-mix(in srgb, var(--cy) 70%, transparent) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .24), 0 12px 28px color-mix(in srgb, var(--cy) 22%, transparent) !important;
+    }
   </style>
 </head>
 
@@ -3541,7 +3795,7 @@
         <div id="prof">
           <div class="glow"></div>
           <div class="imgc">
-            <img id="heroPic" src="assets/images/anish-portrait.webp" alt="Portrait of Anish Karthik in a navy suit" width="1109"
+            <img id="heroPic" src="anish-portrait.webp" alt="Portrait of Anish Karthik in a navy suit" width="1109"
               height="1418" decoding="async" fetchpriority="high">
           </div>
           <div id="plabel" class="mono"><i></i><span>REACT MODE</span></div>
@@ -3639,11 +3893,11 @@
         <h2>Let's create something<br><span class="hl">meaningful.</span></h2>
         <p>Have an idea, project, or opportunity? Let's build it.</p>
         <form id="form" novalidate><label for="contactName">Name</label><input id="contactName" name="name" type="text"
-            placeholder="Name" autocomplete="name" minlength="2" maxlength="100" required><label for="contactEmail">Email</label><input
-            id="contactEmail" name="email" type="email" placeholder="Email" autocomplete="email" maxlength="254" required><label
-            for="contactSubject">Subject</label><input id="contactSubject" name="subject" type="text" placeholder="Subject"
-            maxlength="160" required><label for="contactMessage">Message</label><textarea id="contactMessage" name="message"
-            placeholder="Message" minlength="10" maxlength="5000" required></textarea>
+           autocomplete="name" minlength="2" maxlength="100" required><label for="contactEmail">Email (optional)</label><input
+           id="contactEmail" name="email" type="email" autocomplete="email" maxlength="254"><label
+           for="contactPhone">Phone number (optional)</label><input id="contactPhone" name="phone" type="tel" inputmode="tel"
+            autocomplete="tel" maxlength="20" pattern="[0-9+()\-\s]{7,20}"><label for="contactMessage">Message</label><textarea id="contactMessage" name="message"
+             maxlength="5000" required></textarea>
           <label class="sr-only" for="contactCompany">Company</label><input id="contactCompany" name="company" type="text"
             tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0"
             maxlength="100">
@@ -3703,7 +3957,7 @@
 
     /* ---------- render ---------- */
     $('#links').innerHTML = sections.map(s => `<a href="#${s[0]}" data-s="${s[0]}">${s[1]}</a>`).join('');
-    const soc = [[P.github, "GitHub", "fab fa-github"], [P.linkedin, "LinkedIn", "fab fa-linkedin"], ["mailto:" + P.email, "Email", "fas fa-envelope"]].map(s => `<a class="sb" href="${s[0]}" target="_blank" rel="noopener"><span class="a">${s[1]}</span><span class="b"><i class="${s[2]}"></i></span></a>`).join('');
+    const soc = [[P.github, "GitHub", "fab fa-github", ' target="_blank" rel="noopener"'], [P.linkedin, "LinkedIn", "fab fa-linkedin", ' target="_blank" rel="noopener"'], ["mailto:" + P.email, "Email", "fas fa-envelope", ""]].map(s => `<a class="sb" href="${s[0]}"${s[3]} aria-label="${s[1]}"><span class="a">${s[1]}</span><span class="b" aria-hidden="true"><i class="${s[2]}"></i></span></a>`).join('');
     $('#hs').innerHTML = soc; $('#fs').innerHTML = soc;
     $('#cd').innerHTML = `<a href="mailto:${P.email}"><i class="fas fa-envelope"></i> ${P.email}</a><a href="${P.linkedin}" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a><a href="${P.github}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>`;
     $('#pcount').textContent = '0' + projects.length + '+ BUILDS DEPLOYED';
@@ -3735,29 +3989,29 @@
 
     /* ---------- predefined project artwork from project pics / local assets ---------- */
     const REAL = {
-      "Finance-Brunch": encodeURI("project pics/Modern personal finance dashboard.png"),
-      "Rakhi4Cousins": encodeURI("project pics/Ornate Rakhi in Festive Glow.png"),
-      "Celebrate.it": encodeURI("project pics/Golden Gallery of Celebration.png"),
-      "Family Website Public": "assets/images/projects/family_archive_concept.jpg",
-      "AI Wealth Manager": "assets/images/projects/ai_wealth_concept.jpg",
-      "Krupa's Dental": encodeURI("project pics/Modern Teal Dental Treatment Room.png"),
-      "RealEstate": encodeURI("project pics/Golden Sunset Luxury Development.png"),
-      "TripTastic": "assets/images/projects/triptastic.png",
-      "GrantSys": encodeURI("project pics/Modern Grant Management Dashboard.png"),
-      "Stockflow": encodeURI("project pics/Warehouse Inventory Dashboard.png"),
-      "Food-Management": "assets/images/projects/food_sense_concept.jpg",
-      "The Final Clue": encodeURI("project pics/Antique Detective Desk with Treasure Map.png")
+      "Finance-Brunch": encodeURI("assets/images/projects/optimized/Modern personal finance dashboard.webp"),
+      "Rakhi4Cousins": encodeURI("assets/images/projects/optimized/Ornate Rakhi in Festive Glow.webp"),
+      "Celebrate.it": encodeURI("assets/images/projects/optimized/Golden Gallery of Celebration.webp"),
+      "Family Website Public": "assets/images/projects/optimized/family_archive_concept.webp",
+      "AI Wealth Manager": "assets/images/projects/optimized/ai_wealth_concept.webp",
+      "Krupa's Dental": encodeURI("assets/images/projects/optimized/Modern Teal Dental Treatment Room.webp"),
+      "RealEstate": encodeURI("assets/images/projects/optimized/Golden Sunset Luxury Development.webp"),
+      "TripTastic": "assets/images/projects/optimized/triptastic.webp",
+      "GrantSys": encodeURI("assets/images/projects/optimized/Modern Grant Management Dashboard.webp"),
+      "Stockflow": encodeURI("assets/images/projects/optimized/Warehouse Inventory Dashboard.webp"),
+      "Food-Management": "assets/images/projects/optimized/food_sense_concept.webp",
+      "The Final Clue": encodeURI("assets/images/projects/optimized/Antique Detective Desk with Treasure Map.webp")
     };
 
     const BACKUP_LOCAL = {
-      "Finance-Brunch": "assets/images/projects/finance_brunch_concept.jpg",
-      "Rakhi4Cousins": "assets/images/projects/rakhi_3d_concept.jpg",
-      "Celebrate.it": "assets/images/projects/celebrate_it_concept.jpg",
-      "Krupa's Dental": "assets/images/projects/Krupas dental.png",
-      "RealEstate": "assets/images/projects/Real Estate.png",
-      "GrantSys": "assets/images/projects/grantsys_concept.jpg",
-      "Stockflow": "assets/images/projects/stockflow_concept.jpg",
-      "The Final Clue": "assets/images/projects/final_clue_concept.jpg"
+      "Finance-Brunch": "assets/images/projects/optimized/finance_brunch_concept.webp",
+      "Rakhi4Cousins": "assets/images/projects/optimized/rakhi_3d_concept.webp",
+      "Celebrate.it": "assets/images/projects/optimized/celebrate_it_concept.webp",
+      "Krupa's Dental": "assets/images/projects/optimized/Krupas dental.webp",
+      "RealEstate": "assets/images/projects/optimized/Real Estate.webp",
+      "GrantSys": "assets/images/projects/optimized/grantsys_concept.webp",
+      "Stockflow": "assets/images/projects/optimized/stockflow_concept.webp",
+      "The Final Clue": "assets/images/projects/optimized/final_clue_concept.webp"
     };
     const artCache = new Map();
     function art(motif, name) {
@@ -4177,7 +4431,7 @@
       formStatus.className = '';
       if (!form.checkValidity()) {
         formStatus.className = 'error';
-        formStatus.textContent = 'Please complete all required fields with a valid email address.';
+        formStatus.textContent = 'Please enter your name and a message. If you add an email or phone number, make sure it is valid.';
         form.reportValidity();
         return;
       }
@@ -4200,6 +4454,14 @@
         formStatus.textContent = error.message || 'Unable to send your message right now. Please try again.';
       } finally {
         submit.disabled = false;
+      }
+    });
+
+    /* Enter in the message box sends; Shift+Enter adds a new line */
+    $('#contactMessage').addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+        e.preventDefault();
+        form.requestSubmit();
       }
     });
 
@@ -4892,6 +5154,667 @@
       requestAnimationFrame(frame);
     })();
   </script>
-</body>
+  <script>
+    /* Chrome Text: liquid chrome for the hero name.
+       A distance field turns each glyph into a round metal tube, and a WebGL shader
+       reflects a moving studio off it. No dependencies. Dark mode only.
+       Rebuilds only when text, font or size changes, sleeps off screen,
+       and holds still under reduced motion. */
+    (function () {
+      'use strict';
 
+      /* props, same names as the React component */
+      var CFG = {
+        bevel: 0.7,
+        shine: 2.0,
+        contrast: 0.7,
+        lightAngle: 179,
+        lightDrift: 0.25,
+        tint: '#e4e8ee',
+        sparkles: 3,
+        pointerLight: false
+      };
+
+      var host = document.querySelector('.hname');
+      var nodes = host ? [].slice.call(host.querySelectorAll('h1')) : [];
+      if (!host || !nodes.length) return;
+
+      var root = document.documentElement;
+      var reduceMq = matchMedia('(prefers-reduced-motion: reduce)');
+      var canvas = document.createElement('canvas');
+      canvas.className = 'ct-canvas';
+      canvas.setAttribute('aria-hidden', 'true');
+
+      var gl = null, prog = null, tex = null, loc = {};
+      var dim = { w: 0, h: 0, r: 8, sz: 24 };
+      var pts = [];
+      var ready = false, running = false, raf = 0, visible = true, timer = 0;
+      var t0 = performance.now();
+      var ptr = { x: 0, y: 0, tx: 0, ty: 0, on: false };
+      var scratch = document.createElement('canvas').getContext('2d');
+
+      var VS = 'attribute vec2 aPos;varying vec2 vUv;' +
+        'void main(){vUv=vec2(aPos.x*0.5+0.5,0.5-aPos.y*0.5);gl_Position=vec4(aPos,0.0,1.0);}';
+
+      var FS = [
+        '#ifdef GL_FRAGMENT_PRECISION_HIGH',
+        'precision highp float;',
+        '#else',
+        'precision mediump float;',
+        '#endif',
+        'uniform sampler2D uTex;',
+        'uniform vec2 uRes;',
+        'uniform float uR, uSz, uTime, uShine, uContrast, uAngle, uDrift, uPtrOn, uSpN;',
+        'uniform vec3 uTint;',
+        'uniform vec2 uPtr;',
+        'uniform vec3 uSp[8];',
+        'varying vec2 vUv;',
+
+        'float H(vec2 uv){vec4 c=texture2D(uTex,uv);return (c.r*65280.0+c.g*255.0)/65535.0;}',
+        'float g(float x,float w){float q=x/w;return exp(-q*q);}',
+
+        /* procedural studio: sky, dark horizon, ground bounce, softbox and strip lights */
+        'float studio(vec2 d){',
+        '  float sky=smoothstep(-0.3,0.8,d.y);',
+        '  float v=mix(0.05,0.9,sky);',
+        '  v*=1.0-0.92*g(d.y+0.06,0.1);',
+        '  v+=0.5*g(d.y+0.55,0.14);',
+        '  float lim=1.0-smoothstep(0.45,1.0,abs(d.x));',
+        '  v+=1.1*g(d.y-0.42,0.06)*lim;',
+        '  v+=0.9*g(d.x+0.5,0.035)*(1.0-smoothstep(0.15,0.95,abs(d.y-0.05)));',
+        '  v+=0.8*g(d.x-0.72,0.03)*(1.0-smoothstep(0.15,0.95,abs(d.y+0.05)));',
+        '  return v;',
+        '}',
+
+        'void main(){',
+        '  float cov=texture2D(uTex,vUv).a;',
+        '  vec2 px=1.0/uRes;',
+        '  float h=H(vUv);',
+        '  float hx=H(vUv+vec2(px.x,0.0))-H(vUv-vec2(px.x,0.0));',
+        '  float hy=H(vUv+vec2(0.0,px.y))-H(vUv-vec2(0.0,px.y));',
+        '  vec2 gr=vec2(hx,hy)*uR*0.5;',
+        '  vec3 n=normalize(vec3(-gr.x,gr.y,1.0));',
+        '  vec3 r=reflect(vec3(0.0,0.0,-1.0),n);',
+
+        '  float a=radians(uAngle);',
+        '  float ca=cos(a),sa=sin(a);',
+        '  vec2 d=mat2(ca,-sa,sa,ca)*r.xy;',
+        '  d+=(vUv-0.5)*vec2(0.7,0.3);',
+        '  d+=uDrift*vec2(sin(uTime*0.55),0.6*cos(uTime*0.41))*0.5;',
+        '  vec3 L=normalize(vec3(sin(a)*0.55,cos(a)*0.55,0.85));',
+        '  if(uPtrOn>0.5){',
+        '    vec2 pd=uPtr-vUv*uRes;',
+        '    L=normalize(vec3(pd.x,-pd.y,uRes.y*0.9));',
+        '    d+=((uPtr/uRes)-0.5)*vec2(1.0,-1.0)*0.6;',
+        '  }',
+
+        '  float e=studio(d);',
+        '  e=(e-0.5)*(0.55+uContrast*1.5)+0.5;',
+        '  e=max(e,0.07);',
+        '  e*=mix(0.4,1.0,smoothstep(0.0,0.25,h));',
+        '  vec3 Hh=normalize(L+vec3(0.0,0.0,1.0));',
+        '  float spec=pow(max(dot(n,Hh),0.0),64.0)*uShine*0.6;',
+        '  vec3 col=uTint*e*(0.7+0.15*uShine)+vec3(spec);',
+        '  col=clamp(col,0.0,1.0);',
+
+        '  float sp=0.0;',
+        '  for(int i=0;i<8;i++){',
+        '    if(float(i)<uSpN){',
+        '      vec3 s=uSp[i];',
+        '      vec2 dd=(vUv-s.xy)*uRes;',
+        '      float core=exp(-dot(dd,dd)/(uSz*uSz*0.05));',
+        '      float ax=max(0.0,1.0-abs(dd.x)/uSz)*exp(-abs(dd.y)/(uSz*0.06));',
+        '      float ay=max(0.0,1.0-abs(dd.y)/uSz)*exp(-abs(dd.x)/(uSz*0.06));',
+        '      sp+=(core+(ax+ay)*0.9)*s.z;',
+        '    }',
+        '  }',
+
+        '  float al=clamp(max(cov,min(sp,1.0)),0.0,1.0);',
+        '  vec3 rgb=min(col*cov+vec3(sp),vec3(al));',
+        '  gl_FragColor=vec4(rgb,al);',
+        '}'
+      ].join('\n');
+
+      function compile(type, src) {
+        var s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+        return s;
+      }
+
+      function initGL() {
+        try {
+          gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, powerPreference: 'low-power' });
+          if (!gl) return false;
+          prog = gl.createProgram();
+          gl.attachShader(prog, compile(gl.VERTEX_SHADER, VS));
+          gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
+          gl.linkProgram(prog);
+          if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+          gl.useProgram(prog);
+          var buf = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+          var a = gl.getAttribLocation(prog, 'aPos');
+          gl.enableVertexAttribArray(a);
+          gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+          ['uTex', 'uRes', 'uR', 'uSz', 'uTime', 'uShine', 'uContrast', 'uAngle', 'uDrift', 'uTint', 'uPtr', 'uPtrOn', 'uSp', 'uSpN']
+            .forEach(function (n) { loc[n] = gl.getUniformLocation(prog, n); });
+          return true;
+        } catch (err) {
+          return false;
+        }
+      }
+
+      function hexToRgb(hex) {
+        var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex) || [0, 'ff', 'ff', 'ff'];
+        return [parseInt(m[1], 16) / 255, parseInt(m[2], 16) / 255, parseInt(m[3], 16) / 255];
+      }
+      var tint = hexToRgb(CFG.tint);
+
+      /* ---------- measure glyph boxes from the real DOM text ---------- */
+      function measure() {
+        var hs = host.style, pT = hs.transform, pTr = hs.transition;
+        hs.transition = 'none';
+        hs.transform = 'none';
+        var hr = host.getBoundingClientRect();
+        var chars = [], minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9, fs = 0;
+        var range = document.createRange();
+
+        nodes.forEach(function (el) {
+          var cs = getComputedStyle(el);
+          var size = parseFloat(cs.fontSize);
+          fs = Math.max(fs, size);
+          scratch.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + size + 'px ' + cs.fontFamily;
+          var mt = scratch.measureText('Hg');
+          var asc = mt.fontBoundingBoxAscent != null ? mt.fontBoundingBoxAscent : size * 0.85;
+          var upper = cs.textTransform === 'uppercase';
+          var tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+          var n;
+          while ((n = tw.nextNode())) {
+            var txt = n.nodeValue;
+            for (var i = 0; i < txt.length; i++) {
+              var c = txt.charAt(i);
+              if (/\s/.test(c)) continue;
+              range.setStart(n, i);
+              range.setEnd(n, i + 1);
+              var rc = range.getClientRects();
+              if (!rc.length) continue;
+              var b = rc[0];
+              var x = b.left - hr.left, top = b.top - hr.top;
+              chars.push({ c: upper ? c.toUpperCase() : c, x: x, y: top + asc, style: cs.fontStyle, weight: cs.fontWeight, family: cs.fontFamily, size: size });
+              minX = Math.min(minX, x); maxX = Math.max(maxX, x + b.width);
+              minY = Math.min(minY, top); maxY = Math.max(maxY, b.bottom - hr.top);
+            }
+          }
+        });
+
+        hs.transform = pT;
+        hs.transition = pTr;
+        return { chars: chars, minX: minX, minY: minY, maxX: maxX, maxY: maxY, fs: fs };
+      }
+
+      /* ---------- Felzenszwalb squared euclidean distance transform ---------- */
+      var INF = 1e20;
+      function dt1(f, n, d, v, z) {
+        var k = 0, q, s;
+        v[0] = 0; z[0] = -INF; z[1] = INF;
+        for (q = 1; q < n; q++) {
+          s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]);
+          while (s <= z[k]) {
+            k--;
+            s = ((f[q] + q * q) - (f[v[k]] + v[k] * v[k])) / (2 * q - 2 * v[k]);
+          }
+          k++; v[k] = q; z[k] = s; z[k + 1] = INF;
+        }
+        k = 0;
+        for (q = 0; q < n; q++) {
+          while (z[k + 1] < q) k++;
+          d[q] = (q - v[k]) * (q - v[k]) + f[v[k]];
+        }
+      }
+
+      function edt(f, w, h) {
+        var m = Math.max(w, h) + 1;
+        var col = new Float64Array(m), out = new Float64Array(m), v = new Int32Array(m), z = new Float64Array(m + 1);
+        var x, y;
+        for (x = 0; x < w; x++) {
+          for (y = 0; y < h; y++) col[y] = f[y * w + x];
+          dt1(col, h, out, v, z);
+          for (y = 0; y < h; y++) f[y * w + x] = out[y];
+        }
+        for (y = 0; y < h; y++) {
+          for (x = 0; x < w; x++) col[x] = f[y * w + x];
+          dt1(col, w, out, v, z);
+          for (x = 0; x < w; x++) f[y * w + x] = out[x];
+        }
+      }
+
+      /* ---------- build: glyph mask, tube height field, texture ---------- */
+      function build() {
+        if (!gl || gl.isContextLost()) return false;
+        var m = measure();
+        if (!m.chars.length) return false;
+
+        var fs = m.fs;
+        var s = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+        var pad = Math.ceil(fs * 0.3);
+        var cw = Math.ceil(m.maxX - m.minX) + pad * 2;
+        var chh = Math.ceil(m.maxY - m.minY) + pad * 2;
+        while (cw * chh * s * s > 3e6 && s > 1) s = Math.max(1, s - 0.25);
+        var W = Math.round(cw * s), Hh = Math.round(chh * s);
+        if (W < 2 || Hh < 2 || W > gl.getParameter(gl.MAX_TEXTURE_SIZE) || Hh > gl.getParameter(gl.MAX_TEXTURE_SIZE)) return false;
+
+        var mc = document.createElement('canvas');
+        mc.width = W; mc.height = Hh;
+        var cx = mc.getContext('2d', { willReadFrequently: true });
+        cx.fillStyle = '#fff';
+        cx.textBaseline = 'alphabetic';
+        m.chars.forEach(function (gph) {
+          cx.font = gph.style + ' ' + gph.weight + ' ' + (gph.size * s) + 'px ' + gph.family;
+          cx.fillText(gph.c, (gph.x - m.minX + pad) * s, (gph.y - m.minY + pad) * s);
+        });
+        var alpha = cx.getImageData(0, 0, W, Hh).data;
+
+        var N = W * Hh, i;
+        var f = new Float64Array(N);
+        for (i = 0; i < N; i++) f[i] = alpha[i * 4 + 3] >= 128 ? INF : 0;
+        edt(f, W, Hh);
+
+        var R = Math.max(3, CFG.bevel * fs * s * 0.1);
+        var ht = new Float32Array(N);
+        for (i = 0; i < N; i++) {
+          if (alpha[i * 4 + 3] < 128) continue;
+          var t = Math.min(Math.max(Math.sqrt(f[i]) - 0.5, 0), R) / R;
+          ht[i] = Math.sqrt(1 - (1 - t) * (1 - t));
+        }
+
+        /* one light blur pass removes pixel stepping from the distance field */
+        var tmp = new Float32Array(N), x, y;
+        for (y = 0; y < Hh; y++) for (x = 0; x < W; x++) {
+          var o = y * W + x;
+          tmp[o] = (ht[y * W + Math.max(x - 1, 0)] + 2 * ht[o] + ht[y * W + Math.min(x + 1, W - 1)]) / 4;
+        }
+        for (y = 0; y < Hh; y++) for (x = 0; x < W; x++) {
+          var o2 = y * W + x;
+          ht[o2] = (tmp[Math.max(y - 1, 0) * W + x] + 2 * tmp[o2] + tmp[Math.min(y + 1, Hh - 1) * W + x]) / 4;
+        }
+
+        var data = new Uint8Array(N * 4);
+        for (i = 0; i < N; i++) {
+          var q = Math.round(ht[i] * 65535);
+          data[i * 4] = q >> 8;
+          data[i * 4 + 1] = q & 255;
+          data[i * 4 + 3] = alpha[i * 4 + 3];
+        }
+
+        /* sparkle spots sit on the tube ridges */
+        pts = [];
+        for (var tries = 0; tries < 8000 && pts.length < 160; tries++) {
+          var p = (Math.random() * N) | 0;
+          if (ht[p] > 0.6) pts.push([((p % W) + 0.5) / W, (Math.floor(p / W) + 0.5) / Hh]);
+        }
+
+        if (tex) gl.deleteTexture(tex);
+        tex = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, Hh, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+        canvas.width = W;
+        canvas.height = Hh;
+        canvas.style.left = (m.minX - pad) + 'px';
+        canvas.style.top = (m.minY - pad) + 'px';
+        canvas.style.width = (W / s) + 'px';
+        canvas.style.height = (Hh / s) + 'px';
+
+        dim = { w: W, h: Hh, r: R, sz: fs * s * 0.16 };
+        ready = true;
+        return true;
+      }
+
+      /* ---------- draw ---------- */
+      var spData = new Float32Array(24);
+      function sparkle(t) {
+        var n = Math.min(8, Math.max(0, CFG.sparkles | 0));
+        if (!pts.length || reduceMq.matches) { return 0; }
+        for (var i = 0; i < n; i++) {
+          var period = 2.6 + i * 0.7;
+          var ph = t / period + i * 1.3;
+          var cyc = Math.floor(ph), fr = ph - cyc;
+          var inten = fr < 0.35 ? Math.pow(Math.sin(Math.PI * fr / 0.35), 2) : 0;
+          var idx = (((cyc * 73856093) ^ (i * 19349663)) >>> 0) % pts.length;
+          spData[i * 3] = pts[idx][0];
+          spData[i * 3 + 1] = pts[idx][1];
+          spData[i * 3 + 2] = inten;
+        }
+        return n;
+      }
+
+      function draw(t) {
+        if (!ready || !gl || gl.isContextLost()) return;
+        var still = reduceMq.matches;
+        gl.viewport(0, 0, dim.w, dim.h);
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+
+        var usePtr = CFG.pointerLight && ptr.on && !still;
+        if (usePtr) {
+          ptr.x += (ptr.tx - ptr.x) * 0.12;
+          ptr.y += (ptr.ty - ptr.y) * 0.12;
+          var rc = canvas.getBoundingClientRect();
+          gl.uniform2f(loc.uPtr, (ptr.x - rc.left) * dim.w / rc.width, (ptr.y - rc.top) * dim.h / rc.height);
+        }
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.uniform1i(loc.uTex, 0);
+        gl.uniform2f(loc.uRes, dim.w, dim.h);
+        gl.uniform1f(loc.uR, dim.r);
+        gl.uniform1f(loc.uSz, dim.sz);
+        gl.uniform1f(loc.uTime, still ? 0 : t);
+        gl.uniform1f(loc.uShine, CFG.shine);
+        gl.uniform1f(loc.uContrast, CFG.contrast);
+        gl.uniform1f(loc.uAngle, CFG.lightAngle);
+        gl.uniform1f(loc.uDrift, still ? 0 : CFG.lightDrift);
+        gl.uniform3f(loc.uTint, tint[0], tint[1], tint[2]);
+        gl.uniform1f(loc.uPtrOn, usePtr ? 1 : 0);
+        gl.uniform1f(loc.uSpN, sparkle(t));
+        gl.uniform3fv(loc.uSp, spData);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      }
+
+      /* ---------- loop: sleeps off screen, in a hidden tab, in light mode, or with reduced motion ---------- */
+      function isDark() { return root.getAttribute('data-theme') !== 'light'; }
+      function now() { return (performance.now() - t0) / 1000; }
+      function frame() {
+        raf = 0;
+        draw(now());
+        if (running) raf = requestAnimationFrame(frame);
+      }
+      function start() {
+        if (running || reduceMq.matches || !visible || document.hidden || !ready || !isDark()) return;
+        running = true;
+        raf = requestAnimationFrame(frame);
+      }
+      function stop() {
+        running = false;
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+      }
+
+      function refresh() {
+        clearTimeout(timer);
+        stop();
+        if (!isDark()) { root.classList.remove('ct-on'); return; }
+        if (build()) {
+          root.classList.add('ct-on');
+          draw(now());
+          start();
+        } else {
+          root.classList.remove('ct-on');
+        }
+      }
+      function refreshSoon() {
+        clearTimeout(timer);
+        timer = setTimeout(refresh, 120);
+      }
+
+      /* ---------- boot ---------- */
+      if (!initGL()) return;
+      host.appendChild(canvas);
+
+      canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); ready = false; stop(); });
+      canvas.addEventListener('webglcontextrestored', function () { if (initGL()) refresh(); });
+
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(function (en) {
+          visible = en[0].isIntersecting;
+          if (visible) start(); else stop();
+        }).observe(host);
+      }
+      document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+      if ('ResizeObserver' in window) new ResizeObserver(refreshSoon).observe(host);
+      window.addEventListener('resize', refreshSoon, { passive: true });
+      new MutationObserver(refreshSoon).observe(host, { childList: true, characterData: true, subtree: true });
+      new MutationObserver(refresh).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+      if (reduceMq.addEventListener) reduceMq.addEventListener('change', refresh);
+
+      if (CFG.pointerLight) {
+        window.addEventListener('pointermove', function (e) {
+          if (!ptr.on) { ptr.x = e.clientX; ptr.y = e.clientY; }
+          ptr.tx = e.clientX; ptr.ty = e.clientY; ptr.on = true;
+        }, { passive: true });
+        document.addEventListener('mouseleave', function () { ptr.on = false; });
+      }
+
+      if (document.fonts) {
+        document.fonts.addEventListener('loadingdone', refreshSoon);
+        Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 1500); })]).then(refresh);
+      } else {
+        refresh();
+      }
+    })();
+  </script>
+  <script>
+    /* Liquid Metal Button: a WebGL shader pours bright chrome stripes around the button edge,
+       with a thin rainbow sheen where they meet. Hover speeds the flow and a press gives a short surge.
+       The shader pauses off screen, reduced motion holds it still, and without WebGL a CSS ring stands in. */
+    (function () {
+      'use strict';
+
+      var CFG = { metal: 'silver', flowSpeed: 1, iridescence: 0.6, rim: 2 };
+      var METALS = { silver: [0.88, 0.90, 0.94], gold: [1.0, 0.82, 0.45], rose: [1.0, 0.72, 0.68] };
+      var metal = METALS[CFG.metal] || METALS.silver;
+
+      var root = document.documentElement;
+      var els = [].slice.call(document.querySelectorAll('#home .btns a'));
+        if (!els.length) return;
+      var reduceMq = matchMedia('(prefers-reduced-motion: reduce)');
+
+      var VS = 'attribute vec2 aPos;void main(){gl_Position=vec4(aPos,0.0,1.0);}';
+      var FS = [
+        '#ifdef GL_FRAGMENT_PRECISION_HIGH',
+        'precision highp float;',
+        '#else',
+        'precision mediump float;',
+        '#endif',
+        'uniform vec2 uRes;',
+        'uniform float uRing,uRadius,uPhase,uSurge,uIri,uRim,uDark,uN1,uN2;',
+        'uniform vec3 uMetal;',
+        'float sdRound(vec2 p,vec2 b,float r){vec2 q=abs(p)-b+r;return length(max(q,0.0))+min(max(q.x,q.y),0.0)-r;}',
+        'void main(){',
+        '  vec2 p=vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)-0.5*uRes;',
+        '  float r=min(uRadius,0.5*min(uRes.x,uRes.y));',
+        '  float d=sdRound(p,0.5*uRes,r);',
+        '  float cov=clamp(0.5-d,0.0,1.0)*clamp(d+uRing+0.5,0.0,1.0);',
+        '  if(cov<=0.001){gl_FragColor=vec4(0.0);return;}',
+        '  float t=clamp(-d/uRing,0.0,1.0);',
+        '  float TAU=6.28318530718;',
+        '  float a=atan(p.y/(0.5*uRes.y),p.x/(0.5*uRes.x))/TAU;',
+        '  float warp=0.5*sin(TAU*a*2.0+uPhase*0.30)+0.3*sin(TAU*a*3.0-uPhase*0.21);',
+        '  float w1=sin(TAU*a*uN1-uPhase+warp*1.8+t*1.3);',
+        '  float w2=sin(TAU*a*uN2+uPhase*0.7-warp*1.4-t*0.9);',
+        '  float m1=0.5+0.5*w1,m2=0.5+0.5*w2;',
+        '  float s1=smoothstep(0.55,0.95,m1);',
+        '  float s2=smoothstep(0.6,0.97,m2);',
+        '  float body=0.10+0.14*(0.5+0.5*w1*w2);',
+        '  float tone=body+0.85*s1+0.6*s2;',
+        '  tone+=pow(1.0-t,2.5)*0.18*uRim;',
+        '  tone*=mix(0.6,1.0,1.0-smoothstep(0.7,1.0,t));',
+        '  tone+=uSurge*0.3*(s1+s2);',
+        '  float meet=1.0-smoothstep(0.0,0.22,abs(w1-w2));',
+        '  float mask=meet*smoothstep(0.15,0.7,max(m1,m2));',
+        '  vec3 rain=0.5+0.5*cos(TAU*(vec3(0.0,0.33,0.67)+(w1+w2)*0.25+t*0.3+uPhase*0.05));',
+        '  vec3 col=uMetal*tone;',
+        '  col=mix(col,rain,clamp(uIri*mask*0.8,0.0,1.0));',
+        '  col*=mix(0.6,1.0,uDark);',
+        '  col=clamp(col,0.0,1.0);',
+        '  gl_FragColor=vec4(col*cov,cov);',
+        '}'
+      ].join('\n');
+
+      var NAMES = ['uRes', 'uRing', 'uRadius', 'uPhase', 'uSurge', 'uIri', 'uRim', 'uDark', 'uN1', 'uN2', 'uMetal'];
+
+      function compile(gl, type, src) {
+        var s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+        return s;
+      }
+
+      function Ring(el, index) {
+        this.el = el;
+        this.ok = false;
+        this.visible = true;
+        this.hover = false;
+        this.surge = 0;
+        this.speed = CFG.flowSpeed;
+        this.phase = 1.7 + index * 2.3;
+        this.w = 0; this.h = 0; this.dpr = 1; this.n1 = 3; this.n2 = 5; this.radius = 0;
+        this.canvas = document.createElement('canvas');
+        this.canvas.className = 'lm-ring';
+        this.canvas.setAttribute('aria-hidden', 'true');
+        el.classList.add('lm');
+        el.insertBefore(this.canvas, el.firstChild);
+        if (this.initGL()) { el.classList.add('lm-gl'); this.ok = true; } else this.fallback();
+      }
+
+      Ring.prototype.fallback = function () {
+        this.ok = false;
+        this.el.classList.remove('lm-gl');
+        this.el.classList.add('lm-css');
+        if (this.canvas.parentNode) this.canvas.parentNode.removeChild(this.canvas);
+      };
+
+      Ring.prototype.initGL = function () {
+        try {
+          var gl = this.canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true, antialias: false, powerPreference: 'low-power' });
+          if (!gl) return false;
+          var prog = gl.createProgram();
+          gl.attachShader(prog, compile(gl, gl.VERTEX_SHADER, VS));
+          gl.attachShader(prog, compile(gl, gl.FRAGMENT_SHADER, FS));
+          gl.linkProgram(prog);
+          if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return false;
+          gl.useProgram(prog);
+          var buf = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+          var a = gl.getAttribLocation(prog, 'aPos');
+          gl.enableVertexAttribArray(a);
+          gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+          this.loc = {};
+          for (var i = 0; i < NAMES.length; i++) this.loc[NAMES[i]] = gl.getUniformLocation(prog, NAMES[i]);
+          this.gl = gl;
+          var self = this;
+          this.canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); self.fallback(); });
+          return true;
+        } catch (err) {
+          return false;
+        }
+      };
+
+      Ring.prototype.resize = function () {
+        if (!this.ok) return;
+        var w = this.el.offsetWidth, h = this.el.offsetHeight;
+        if (!w || !h) return;
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        this.w = Math.round(w * dpr); this.h = Math.round(h * dpr); this.dpr = dpr;
+        this.canvas.width = this.w; this.canvas.height = this.h;
+        var br = parseFloat(getComputedStyle(this.el).borderTopLeftRadius);
+        this.radius = (isNaN(br) ? h / 2 : br) * dpr;
+        this.n1 = Math.max(3, Math.round(2 + (w / h) * 1.4));
+        this.n2 = this.n1 + 2;
+      };
+
+      Ring.prototype.step = function (dt) {
+        var target = CFG.flowSpeed * (this.hover ? 2.6 : 1) + this.surge * 4;
+        this.speed += (target - this.speed) * Math.min(1, dt * 6);
+        this.phase += dt * this.speed * 0.9;
+        this.surge = Math.max(0, this.surge - dt / 0.7);
+      };
+
+      Ring.prototype.draw = function (dark) {
+        var gl = this.gl;
+        if (!this.ok || !this.w || gl.isContextLost()) return;
+        var L = this.loc;
+        gl.viewport(0, 0, this.w, this.h);
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform2f(L.uRes, this.w, this.h);
+        gl.uniform1f(L.uRing, 2 * this.dpr);
+        gl.uniform1f(L.uRadius, this.radius);
+        gl.uniform1f(L.uPhase, this.phase);
+        gl.uniform1f(L.uSurge, this.surge);
+        gl.uniform1f(L.uIri, CFG.iridescence);
+        gl.uniform1f(L.uRim, CFG.rim);
+        gl.uniform1f(L.uDark, dark);
+        gl.uniform1f(L.uN1, this.n1);
+        gl.uniform1f(L.uN2, this.n2);
+        gl.uniform3f(L.uMetal, metal[0], metal[1], metal[2]);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      };
+
+      var rings = els.map(function (el, i) { return new Ring(el, i); });
+      var raf = 0, last = 0;
+      function darkNow() { return root.getAttribute('data-theme') !== 'light' ? 1 : 0; }
+      function drawAll() { var d = darkNow(); rings.forEach(function (r) { r.draw(d); }); }
+
+      function tick(ts) {
+        raf = 0;
+        var dt = Math.min(0.05, (ts - last) / 1000 || 0.016);
+        last = ts;
+        var d = darkNow(), any = false;
+        rings.forEach(function (r) {
+          if (!r.ok || !r.visible) return;
+          any = true;
+          r.step(dt);
+          r.draw(d);
+        });
+        if (any && !document.hidden && !reduceMq.matches) raf = requestAnimationFrame(tick);
+      }
+      function wake() {
+        if (raf || reduceMq.matches || document.hidden) return;
+        last = performance.now();
+        raf = requestAnimationFrame(tick);
+      }
+
+      rings.forEach(function (r) {
+        if (!r.ok) return;
+        var el = r.el;
+        el.addEventListener('pointerenter', function () { r.hover = true; wake(); });
+        el.addEventListener('pointerleave', function () { r.hover = false; });
+        el.addEventListener('focus', function () { r.hover = true; wake(); });
+        el.addEventListener('blur', function () { r.hover = false; });
+        el.addEventListener('pointerdown', function () { r.surge = 1; wake(); });
+        el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { r.surge = 1; wake(); } });
+        if ('ResizeObserver' in window) {
+          new ResizeObserver(function () { r.resize(); r.draw(darkNow()); }).observe(el);
+        }
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (en) {
+            r.visible = en[0].isIntersecting;
+            if (r.visible) wake();
+          }).observe(el);
+        }
+        r.resize();
+      });
+
+      root.classList.add('lm-on');
+      drawAll();
+      wake();
+
+      new MutationObserver(drawAll).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) wake(); });
+      window.addEventListener('resize', function () { rings.forEach(function (r) { r.resize(); }); drawAll(); }, { passive: true });
+      if (reduceMq.addEventListener) reduceMq.addEventListener('change', function () { drawAll(); wake(); });
+    })();
+  </script>
+</body>
 </html>
