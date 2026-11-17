@@ -84,7 +84,13 @@
 
     html {
       scroll-behavior: smooth;
-      overflow-x: clip
+      overflow-x: clip;
+      scrollbar-width: none
+    }
+
+    html::-webkit-scrollbar {
+      width: 0;
+      height: 0
     }
 
     body {
@@ -2982,12 +2988,6 @@
         padding: .45rem .55rem;
       }
 
-      #cord {
-        transform: scale(.8);
-        transform-origin: top right;
-        right: .15rem;
-      }
-
       .wrap {
         width: min(100% - 1.25rem, 1200px);
       }
@@ -3166,10 +3166,6 @@
       z-index: 1000;
     }
 
-    #cord {
-      z-index: 1100;
-    }
-
     #top {
       z-index: 999;
     }
@@ -3240,16 +3236,6 @@
         right: .35rem;
         width: 30px;
         height: 30px;
-      }
-
-      #cord {
-        right: .35rem;
-        transform: scale(.78);
-        transform-origin: top right;
-      }
-
-      .cd-tip {
-        display: none;
       }
 
       .hero {
@@ -3893,10 +3879,12 @@
         <h2>Let's create something<br><span class="hl">meaningful.</span></h2>
         <p>Have an idea, project, or opportunity? Let's build it.</p>
         <form id="form" novalidate><label for="contactName">Name</label><input id="contactName" name="name" type="text"
-           autocomplete="name" minlength="2" maxlength="100" required><label for="contactEmail">Email (optional)</label><input
-           id="contactEmail" name="email" type="email" autocomplete="email" maxlength="254"><label
+           autocomplete="name" minlength="2" maxlength="100" required><label for="contactEmail">Email</label><input
+           id="contactEmail" name="email" type="email" autocomplete="email" maxlength="254" required><label
+           for="contactSubject">Subject</label><input id="contactSubject" name="subject" type="text"
+           autocomplete="off" minlength="2" maxlength="160" required><label
            for="contactPhone">Phone number (optional)</label><input id="contactPhone" name="phone" type="tel" inputmode="tel"
-            autocomplete="tel" maxlength="20" pattern="[0-9+()\-\s]{7,20}"><label for="contactMessage">Message</label><textarea id="contactMessage" name="message"
+            autocomplete="tel" maxlength="20" pattern="[0-9+()\s-]{7,20}"><label for="contactMessage">Message</label><textarea id="contactMessage" name="message"
              maxlength="5000" required></textarea>
           <label class="sr-only" for="contactCompany">Company</label><input id="contactCompany" name="company" type="text"
             tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-10000px;width:1px;height:1px;opacity:0"
@@ -3957,9 +3945,10 @@
 
     /* ---------- render ---------- */
     $('#links').innerHTML = sections.map(s => `<a href="#${s[0]}" data-s="${s[0]}">${s[1]}</a>`).join('');
-    const soc = [[P.github, "GitHub", "fab fa-github", ' target="_blank" rel="noopener"'], [P.linkedin, "LinkedIn", "fab fa-linkedin", ' target="_blank" rel="noopener"'], ["mailto:" + P.email, "Email", "fas fa-envelope", ""]].map(s => `<a class="sb" href="${s[0]}"${s[3]} aria-label="${s[1]}"><span class="a">${s[1]}</span><span class="b" aria-hidden="true"><i class="${s[2]}"></i></span></a>`).join('');
+    const emailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(P.email)}`;
+    const soc = [[P.github, "GitHub", "fab fa-github", ' target="_blank" rel="noopener"'], [P.linkedin, "LinkedIn", "fab fa-linkedin", ' target="_blank" rel="noopener"'], [emailComposeUrl, "Email", "fas fa-envelope", ' target="_blank" rel="noopener"']].map(s => `<a class="sb" href="${s[0]}"${s[3]} aria-label="${s[1]}"><span class="a">${s[1]}</span><span class="b" aria-hidden="true"><i class="${s[2]}"></i></span></a>`).join('');
     $('#hs').innerHTML = soc; $('#fs').innerHTML = soc;
-    $('#cd').innerHTML = `<a href="mailto:${P.email}"><i class="fas fa-envelope"></i> ${P.email}</a><a href="${P.linkedin}" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a><a href="${P.github}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>`;
+    $('#cd').innerHTML = `<a href="${emailComposeUrl}" target="_blank" rel="noopener"><i class="fas fa-envelope"></i> ${P.email}</a><a href="${P.linkedin}" target="_blank" rel="noopener"><i class="fab fa-linkedin"></i> LinkedIn</a><a href="${P.github}" target="_blank" rel="noopener"><i class="fab fa-github"></i> GitHub</a>`;
     $('#pcount').textContent = '0' + projects.length + '+ BUILDS DEPLOYED';
     $('#yr').textContent = new Date().getFullYear();
     /* skill cards = 3D tilt-to-front cards */
@@ -4431,7 +4420,7 @@
       formStatus.className = '';
       if (!form.checkValidity()) {
         formStatus.className = 'error';
-        formStatus.textContent = 'Please enter your name and a message. If you add an email or phone number, make sure it is valid.';
+        formStatus.textContent = 'Please enter your name, email, subject, and message. If you add a phone number, make sure it is valid.';
         form.reportValidity();
         return;
       }
@@ -4445,6 +4434,16 @@
           body: JSON.stringify(Object.fromEntries(new FormData(form)))
         });
         const result = await response.json().catch(() => ({}));
+        if (response.status === 404 || response.status === 405) {
+          const values = Object.fromEntries(new FormData(form));
+          const fallbackUrl = `${emailComposeUrl}&su=${encodeURIComponent(values.subject)}&body=${encodeURIComponent(`Name: ${values.name}\nEmail: ${values.email}\nPhone: ${values.phone || 'Not provided'}\n\n${values.message}`)}`;
+          const composeWindow = window.open(fallbackUrl, '_blank', 'noopener');
+          if (!composeWindow) window.location.assign(fallbackUrl);
+          form.reset();
+          formStatus.className = 'success';
+          formStatus.textContent = 'Your email draft is ready. Please send it from Gmail.';
+          return;
+        }
         if (!response.ok) throw new Error(result.error || 'Unable to send your message right now.');
         form.reset();
         formStatus.className = 'success';
@@ -4630,7 +4629,7 @@
       }
       if (cur !== spy.l) {
         navLinksList.forEach(a => {
-          const on = a.dataset.s === cur;
+          const on = a.dataset.s === cur && a.dataset.s !== 'certifications';
           a.classList.toggle('on', on);
           if (on) {
             a.setAttribute('aria-current', 'page');
@@ -5075,12 +5074,14 @@
         const a = e.target.closest('a[href^="#"]'); if (!a || a.getAttribute('href').length < 2) return;
         const t = document.getElementById(a.getAttribute('href').slice(1)); if (!t) return;
         e.preventDefault();
+        history.pushState(null, '', a.getAttribute('href'));
         const nav = document.querySelector('nav');
         const navPad = nav ? (nav.offsetHeight + (parseFloat(getComputedStyle(nav).top) || 16) + 16) : 72;
         const target = Math.max(0, stationTop(t) - (t.id === 'home' ? 0 : navPad));
-        scrollTo({ top: target, behavior: 'auto' });
+        document.documentElement.scrollTop = target;
+        spy();
       });
-      $('#top').onclick = () => scrollTo({ top: 0, behavior: 'auto' });
+      $('#top').onclick = () => { document.documentElement.scrollTop = 0; };
     })();
   </script>
   <script>
